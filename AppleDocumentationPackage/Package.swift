@@ -10,14 +10,20 @@ let package = Package(
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "AppleDocumentationPackage",
-            targets: ["AppleDocumentation"]),
+            targets: [
+                "AppleDocumentation", "AppleDocumentationAPI"
+            ]),
     ],
     targets: [
         .target(
             name: "AppleDocumentation"),
 
-        .testTarget(
-            name: "AppleDocumentationTests",
+        .target(
+            name: "AppleDocumentationAPI",
             dependencies: ["AppleDocumentation"]),
+
+            .testTarget(
+                name: "AppleDocumentationAPITests",
+                dependencies: ["AppleDocumentationAPI"])
     ]
 )
