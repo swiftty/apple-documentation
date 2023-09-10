@@ -1,3 +1,4 @@
+// swiftlint:disable line_length
 import XCTest
 import Foundation
 import AppleDocumentation
@@ -35,7 +36,8 @@ final class TechnologyTests: XCTestCase {
         """.data(using: .utf8) ?? Data()
 
         typealias DiffAvailability = Technology.DiffAvailability
-        let diff = DiffAvailability(try JSONDecoder().decode([DiffAvailability.Key: DiffAvailability.Payload].self, from: json))
+        let data = try JSONDecoder().decode([DiffAvailability.Key: DiffAvailability.Payload].self, from: json)
+        let diff = DiffAvailability(data)
         XCTAssertEqual(diff.count, 3)
         XCTAssertEqual(diff.sorted().map(\.key), [.beta, .minor, .major])
 
@@ -57,9 +59,11 @@ final class TechnologyTests: XCTestCase {
     func test_Technologies_changes() async throws {
         let url = try XCTUnwrap(URL(string: "https://developer.apple.com/tutorials/data/diffs/documentation/technologies.json?changes=latest_minor"))
         let (data, _) = try await URLSession.shared.data(from: url)
-        
+
         let changes = try decodeTechnologyChanges(from: data)
-        
+
         XCTAssertGreaterThanOrEqual(changes.count, 0)
     }
 }
+
+// swiftlint:enable line_length

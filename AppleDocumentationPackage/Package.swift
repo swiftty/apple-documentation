@@ -12,7 +12,11 @@ let package = Package(
             name: "AppleDocumentationPackage",
             targets: [
                 "AppleDocumentation", "AppleDocumentationAPI"
-            ]),
+            ])
+    ],
+    dependencies: [
+        .package(url: "https://github.com/swiftty/XcodeGenBinary.git", from: "2.37.0"),
+        .package(url: "https://github.com/swiftty/SwiftLintBinary.git", branch: "main")
     ],
     targets: [
         .target(
@@ -22,8 +26,17 @@ let package = Package(
             name: "AppleDocumentationAPI",
             dependencies: ["AppleDocumentation"]),
 
-            .testTarget(
-                name: "AppleDocumentationAPITests",
-                dependencies: ["AppleDocumentationAPI"])
+        .testTarget(
+            name: "AppleDocumentationAPITests",
+            dependencies: ["AppleDocumentationAPI"])
     ]
 )
+
+package.targets.forEach {
+    var plugins = $0.plugins ?? []
+
+    plugins += [
+        .plugin(name: "SwiftLintPlugin", package: "SwiftLintBinary")
+    ]
+    $0.plugins = plugins
+}

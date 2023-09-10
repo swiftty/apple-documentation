@@ -137,7 +137,7 @@ extension Technology {
 
         private var items: [Technology.Identifier: Change]
 
-        public init(_ values: [Technology.Identifier : Change]) {
+        public init(_ values: [Technology.Identifier: Change]) {
             items = values
         }
 

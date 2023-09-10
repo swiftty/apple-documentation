@@ -1,0 +1,13 @@
+excluded:
+  - "**/*/.build"
+
+identifier_name:
+  excluded:
+    - c
+    - i
+    - t
+    - to
+
+nesting:
+  type_level:
+    warning: 3
