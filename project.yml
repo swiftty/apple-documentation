@@ -1,0 +1,25 @@
+name: apple-documentation
+
+include:
+  - path: xcodegen/project.base.yml
+    relativePaths: false
+
+options:
+  bundleIdPrefix: com.swiftty.apple-documentation
+  developmentLanguage: ja
+
+packages:
+  AppleDocumentationPackage:
+    path: AppleDocumentationPackage
+
+targets:
+  App:
+    templates:
+      - Application
+    settings:
+      base:
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+      configs:
+        Debug:
+          PRODUCT_BUNDLE_IDENTIFIER: com.swiftty.apple-documentation.App-debug
+          INFOPLIST_PREPROCESS: YES

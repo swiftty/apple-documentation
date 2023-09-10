@@ -1,0 +1,27 @@
+# base settings
+# configs
+configs:
+  Debug: debug
+  Release: release
+
+# settings
+settings:
+  base:
+    VERSIONING_SYSTEM: apple-generic
+  configs:
+    Debug:
+      OTHER_SWIFT_FLAGS: -DDEBUG
+
+# template
+targetTemplates:
+  Platform:
+    platform: iOS
+
+  Application:
+    type: application
+    templates:
+      - Platform
+    settings:
+      base:
+        TARGETED_DEVICE_FAMILY: 1,2,6
+        DEVELOPMENT_TEAM: B2TD54U4MA
