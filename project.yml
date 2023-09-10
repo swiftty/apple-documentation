@@ -23,3 +23,16 @@ targets:
         Debug:
           PRODUCT_BUNDLE_IDENTIFIER: com.swiftty.apple-documentation.App-debug
           INFOPLIST_PREPROCESS: YES
+    sources:
+      - App
+      - path: project.yml
+        group: Configurations
+        buildPhase: none
+      - path: .swiftlint.yml
+        group: Configurations
+        buildPhase: none
+    dependencies:
+      - package: AppleDocumentationPackage
+        product: AppleDocumentationPackage
+      - package: AppleDocumentationPackage
+        product: AppleDocumentationApp

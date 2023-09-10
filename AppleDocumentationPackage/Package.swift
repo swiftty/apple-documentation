@@ -12,7 +12,11 @@ let package = Package(
             name: "AppleDocumentationPackage",
             targets: [
                 "AppleDocumentation", "AppleDocumentationAPI"
-            ])
+            ]),
+
+        .library(
+            name: "AppleDocumentationApp",
+            targets: ["AppUI"])
     ],
     dependencies: [
         .package(url: "https://github.com/swiftty/XcodeGenBinary.git", from: "2.37.0"),
@@ -28,7 +32,10 @@ let package = Package(
 
         .testTarget(
             name: "AppleDocumentationAPITests",
-            dependencies: ["AppleDocumentationAPI"])
+            dependencies: ["AppleDocumentationAPI"]),
+
+        .target(
+            name: "AppUI")
     ]
 )
 
