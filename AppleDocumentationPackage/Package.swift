@@ -3,20 +3,62 @@
 
 import PackageDescription
 
+enum Feature {
+    case app
+    case dependencies
+    case pages
+
+    var path: String {
+        switch self {
+        case .app: "Sources/App"
+        case .dependencies: "Sources/App/Dependencies"
+        case .pages: "Sources/App/Pages"
+        }
+    }
+}
+
+extension Target {
+    static func target(
+        feature: Feature,
+        name: String,
+        dependencies: [Dependency] = [],
+        exclude: [String] = [],
+        sources: [String]? = nil,
+        resources: [Resource]? = nil,
+        publicHeadersPath: String? = nil,
+        packageAccess: Bool = true,
+        cSettings: [CSetting]? = nil,
+        cxxSettings: [CXXSetting]? = nil,
+        swiftSettings: [SwiftSetting]? = nil,
+        linkerSettings: [LinkerSetting]? = nil,
+        plugins: [PluginUsage]? = nil
+    ) -> Target {
+        return .target(
+            name: name,
+            dependencies: dependencies,
+            path: feature.path + "/" + name,
+            exclude: exclude,
+            sources: sources,
+            resources: resources,
+            publicHeadersPath: publicHeadersPath,
+            packageAccess: packageAccess,
+            cSettings: cSettings,
+            cxxSettings: cxxSettings,
+            swiftSettings: swiftSettings,
+            linkerSettings: linkerSettings,
+            plugins: plugins
+        )
+    }
+}
+
 let package = Package(
     name: "AppleDocumentationPackage",
     platforms: [.iOS(.v17)],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
-        .library(
-            name: "AppleDocumentationPackage",
-            targets: [
-                "AppleDocumentation", "AppleDocumentationAPI"
-            ]),
-
         .library(
             name: "AppleDocumentationApp",
-            targets: ["AppUI"])
+            targets: ["AppResolver"]
+        )
     ],
     dependencies: [
         .package(url: "https://github.com/swiftty/XcodeGenBinary.git", from: "2.37.0"),
@@ -24,18 +66,82 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "AppleDocumentation"),
+            name: "AppleDocumentation"
+        ),
 
         .target(
             name: "AppleDocumentationAPI",
-            dependencies: ["AppleDocumentation"]),
+            dependencies: ["AppleDocumentation"]
+        ),
 
         .testTarget(
             name: "AppleDocumentationAPITests",
-            dependencies: ["AppleDocumentationAPI"]),
+            dependencies: ["AppleDocumentationAPI"]
+        ),
+
+        // app
+        .target(
+            feature: .app,
+            name: "AppResolver",
+            dependencies: [
+                "Router",
+                "AppleDocClientLive",
+                "RootPage",
+                "AllTechnologiesPage"
+            ]
+        ),
 
         .target(
-            name: "AppUI")
+            feature: .app,
+            name: "UIComponent"
+        ),
+
+        // dependencies
+        .target(
+            feature: .dependencies,
+            name: "Router",
+            dependencies: [
+                "AppleDocumentation"
+            ]
+        ),
+
+        .target(
+            feature: .dependencies,
+            name: "AppleDocClient",
+            dependencies: [
+                "AppleDocumentation"
+            ]
+        ),
+
+        .target(
+            feature: .dependencies,
+            name: "AppleDocClientLive",
+            dependencies: [
+                "AppleDocClient",
+                "AppleDocumentation",
+                "AppleDocumentationAPI"
+            ]
+        ),
+
+        // pages
+        .target(
+            feature: .pages,
+            name: "RootPage",
+            dependencies: [
+                "Router",
+                "UIComponent"
+            ]
+        ),
+
+        .target(
+            feature: .pages,
+            name: "AllTechnologiesPage",
+            dependencies: [
+                "Router",
+                "AppleDocClient",
+                "UIComponent"
+            ]
+        )
     ]
 )
 

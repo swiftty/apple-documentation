@@ -1,7 +1,7 @@
 import Foundation
 import AppleDocumentation
 
-func decodeTechnologies(from data: Data) throws -> (
+public func decodeTechnologies(from data: Data) throws -> (
     technologies: [Technology],
     diffAvailability: Technology.DiffAvailability
 ) {
