@@ -14,6 +14,7 @@ public struct App: SwiftUI.App {
     public var body: some Scene {
         WindowGroup {
             RootPage()
+                .preferredColorScheme(.dark)
                 .environment(\.router, appDelegate.router)
                 .environment(\.appleDocClient, appDelegate.appleDocClient)
         }

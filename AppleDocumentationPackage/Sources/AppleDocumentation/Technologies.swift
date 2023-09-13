@@ -21,7 +21,7 @@ public struct Technology {
         }
     }
 
-    public struct Destination {
+    public struct Destination: Hashable {
         public var identifier: Identifier
         public var title: String
         public var url: String
@@ -32,6 +32,14 @@ public struct Technology {
             self.title = title
             self.url = url
             self.abstract = abstract
+        }
+
+        public static func == (lhs: Self, rhs: Self) -> Bool {
+            lhs.identifier == rhs.identifier
+        }
+
+        public func hash(into hasher: inout Hasher) {
+            hasher.combine(identifier)
         }
     }
 

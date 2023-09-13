@@ -57,7 +57,10 @@ let package = Package(
     products: [
         .library(
             name: "AppleDocumentationApp",
-            targets: ["AppResolver"]
+            targets: [
+                "AppResolver",
+                "AllTechnologiesPage"
+            ]
         )
     ],
     dependencies: [
