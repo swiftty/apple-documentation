@@ -1,0 +1,68 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Filter on this page" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filter on this page"
+          }
+        }
+      }
+    },
+    "No results found" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No results found"
+          }
+        }
+      }
+    },
+    "No results found Try changing or removing text." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No results found Try changing or removing text."
+          }
+        }
+      }
+    },
+    "Showing %lld results" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Showing %lld result"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "Showing %lld results"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Technologies" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Technologies"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

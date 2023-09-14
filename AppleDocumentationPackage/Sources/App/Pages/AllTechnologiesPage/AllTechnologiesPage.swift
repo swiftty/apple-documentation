@@ -10,10 +10,11 @@ public struct AllTechnologiesPage: View {
 
     private var technologies: [Technology] {
         if filterText.isEmpty {
-            allTechnologies ?? []
+            return allTechnologies ?? []
         } else {
-            allTechnologies?
-                .filter { $0.title.contains(filterText) }
+            let filterText = filterText.lowercased()
+            return allTechnologies?
+                .filter { $0.title.lowercased().contains(filterText) }
             ?? []
         }
     }
@@ -34,7 +35,7 @@ public struct AllTechnologiesPage: View {
             }
         }
         .overlay {
-            if technologies.isEmpty {
+            if !isLoading && technologies.isEmpty {
                 emptyContent()
             }
         }

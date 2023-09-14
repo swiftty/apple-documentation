@@ -53,6 +53,7 @@ extension Target {
 
 let package = Package(
     name: "AppleDocumentationPackage",
+    defaultLocalization: "en",
     platforms: [.iOS(.v17)],
     products: [
         .library(
