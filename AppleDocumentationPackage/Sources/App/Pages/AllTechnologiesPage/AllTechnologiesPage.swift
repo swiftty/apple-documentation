@@ -6,6 +6,7 @@ public struct AllTechnologiesPage: View {
     @Environment(\.appleDocClient) var appleDocClient
 
     @State private var allTechnologies: [Technology]?
+    @State private var diffAvailability: Technology.DiffAvailability?
     @State private var filterText = ""
 
     private var technologies: [Technology] {
@@ -45,9 +46,27 @@ public struct AllTechnologiesPage: View {
             prompt: Text("Filter on this page")
         )
         .navigationTitle("Technologies")
+        .toolbar {
+            let isEmpty = diffAvailability?.isEmpty ?? true
+            if !isEmpty {
+                ToolbarItem(placement: .primaryAction) {
+                    Menu {
+                        diffContent()
+                    } label: {
+                        Label(
+                            "Show API Changes",
+                            systemImage: "line.3.horizontal.decrease.circle"
+                        )
+                    }
+                }
+            }
+        }
         .task {
             do {
-                allTechnologies = try await appleDocClient.allTechnologies
+                (allTechnologies, diffAvailability) = try await (
+                    appleDocClient.allTechnologies,
+                    appleDocClient.diffAvailability
+                )
             } catch {}
         }
     }
@@ -112,6 +131,45 @@ public struct AllTechnologiesPage: View {
         }
         .padding(-16)
     }
+
+    @ViewBuilder
+    private func diffContent() -> some View {
+        Button {
+
+        } label: {
+            Text("Current APIs")
+        }
+
+        if let beta = diffAvailability?[.beta] {
+            Button {
+
+            } label: {
+                Text(beta.title)
+            }
+        }
+
+        if let minor = diffAvailability?[.minor] {
+            Button {
+
+            } label: {
+                Text(minor.title)
+            }
+        }
+
+        if let major = diffAvailability?[.major] {
+            Button {
+
+            } label: {
+                Text(major.title)
+            }
+        }
+    }
+}
+
+extension Technology.DiffAvailability.Payload {
+    var title: String {
+        "\(versions.from) - \(versions.to)"
+    }
 }
 
 // swiftlint:disable line_length
@@ -137,6 +195,9 @@ public struct AllTechnologiesPage: View {
                                 )
                             )
                         ]
+                    },
+                    diffAvailability: {
+                        .init([:])
                     }
                  )
             )

@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Current APIs" : {
+
+    },
     "Filter on this page" : {
       "localizations" : {
         "en" : {
@@ -30,6 +33,9 @@
           }
         }
       }
+    },
+    "Show API Changes" : {
+
     },
     "Showing %lld results" : {
       "localizations" : {
