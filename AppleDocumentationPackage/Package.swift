@@ -2,6 +2,7 @@
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
+import CompilerPluginSupport
 
 enum Feature {
     case app
@@ -54,7 +55,7 @@ extension Target {
 let package = Package(
     name: "AppleDocumentationPackage",
     defaultLocalization: "en",
-    platforms: [.iOS(.v17)],
+    platforms: [.iOS(.v17), .macOS(.v10_15)],
     products: [
         .library(
             name: "AppleDocumentationApp",
@@ -65,12 +66,15 @@ let package = Package(
         )
     ],
     dependencies: [
+        .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.0"),
+
         .package(url: "https://github.com/swiftty/XcodeGenBinary.git", from: "2.37.0"),
         .package(url: "https://github.com/swiftty/SwiftLintBinary.git", branch: "main")
     ],
     targets: [
         .target(
-            name: "AppleDocumentation"
+            name: "AppleDocumentation",
+            dependencies: ["SupportMacros"]
         ),
 
         .target(
@@ -81,6 +85,27 @@ let package = Package(
         .testTarget(
             name: "AppleDocumentationAPITests",
             dependencies: ["AppleDocumentationAPI"]
+        ),
+
+        .target(
+            name: "SupportMacros",
+            dependencies: ["SupportMacrosPlugin"]
+        ),
+
+        .macro(
+            name: "SupportMacrosPlugin",
+            dependencies: [
+                .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+                .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
+            ]
+        ),
+
+        .testTarget(
+            name: "SupportMacrosPluginTests",
+            dependencies: [
+                "SupportMacrosPlugin",
+                .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax")
+            ]
         ),
 
         // app

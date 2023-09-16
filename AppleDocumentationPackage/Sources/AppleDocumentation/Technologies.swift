@@ -1,4 +1,5 @@
 import Foundation
+import SupportMacros
 
 public struct Technology {
     public var title: String
@@ -12,27 +13,20 @@ public struct Technology {
         self.tags = tags
         self.destination = destination
     }
+}
 
+extension Technology {
+    @ImplicitInit
     public struct Identifier: Hashable, RawRepresentable {
         public var rawValue: String
-
-        public init(rawValue: String) {
-            self.rawValue = rawValue
-        }
     }
 
+    @ImplicitInit
     public struct Destination: Hashable {
         public var identifier: Identifier
         public var title: String
         public var url: String
         public var abstract: String
-
-        public init(identifier: Identifier, title: String, url: String, abstract: String) {
-            self.identifier = identifier
-            self.title = title
-            self.url = url
-            self.abstract = abstract
-        }
 
         public static func == (lhs: Self, rhs: Self) -> Bool {
             lhs.identifier == rhs.identifier
