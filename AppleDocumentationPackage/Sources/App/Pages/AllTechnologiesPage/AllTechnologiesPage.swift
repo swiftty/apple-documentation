@@ -1,8 +1,10 @@
 import SwiftUI
+import Router
 import AppleDocumentation
 import AppleDocClient
 
 public struct AllTechnologiesPage: View {
+    @Environment(\.router) var router
     @Environment(\.appleDocClient) var appleDocClient
 
     @State private var allTechnologies: [Technology]?
@@ -45,7 +47,6 @@ public struct AllTechnologiesPage: View {
             placement: .navigationBarDrawer(displayMode: .always),
             prompt: Text("Filter on this page")
         )
-        .navigationTitle("Technologies")
         .toolbar {
             let isEmpty = diffAvailability?.isEmpty ?? true
             if !isEmpty {
@@ -60,6 +61,10 @@ public struct AllTechnologiesPage: View {
                     }
                 }
             }
+        }
+        .navigationTitle("Technologies")
+        .navigationDestination(for: Technology.Destination.self) { destination in
+            router.route(for: .technologyDetail(for: destination))
         }
         .task {
             do {

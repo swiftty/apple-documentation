@@ -1,0 +1,36 @@
+{
+  "configurations" : [
+    {
+      "id" : "125B2DAA-FBAB-403B-BEA0-F628AFC6D1FC",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:apple-documentation.xcodeproj",
+      "identifier" : "3882AAE92FD2859397E60C15",
+      "name" : "App"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:AppleDocumentationPackage",
+        "identifier" : "AppleDocumentationAPITests",
+        "name" : "AppleDocumentationAPITests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:AppleDocumentationPackage",
+        "identifier" : "SupportMacrosPluginTests",
+        "name" : "SupportMacrosPluginTests"
+      }
+    }
+  ],
+  "version" : 1
+}

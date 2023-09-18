@@ -55,13 +55,15 @@ extension Target {
 let package = Package(
     name: "AppleDocumentationPackage",
     defaultLocalization: "en",
-    platforms: [.iOS(.v17), .macOS(.v10_15)],
+    platforms: [.iOS(.v17), .macOS(.v13)],
     products: [
         .library(
             name: "AppleDocumentationApp",
             targets: [
                 "AppResolver",
-                "AllTechnologiesPage"
+                "RootPage",
+                "AllTechnologiesPage",
+                "TechnologyDetailPage"
             ]
         )
     ],
@@ -116,7 +118,8 @@ let package = Package(
                 "Router",
                 "AppleDocClientLive",
                 "RootPage",
-                "AllTechnologiesPage"
+                "AllTechnologiesPage",
+                "TechnologyDetailPage"
             ]
         ),
 
@@ -165,6 +168,16 @@ let package = Package(
         .target(
             feature: .pages,
             name: "AllTechnologiesPage",
+            dependencies: [
+                "Router",
+                "AppleDocClient",
+                "UIComponent"
+            ]
+        ),
+
+        .target(
+            feature: .pages,
+            name: "TechnologyDetailPage",
             dependencies: [
                 "Router",
                 "AppleDocClient",

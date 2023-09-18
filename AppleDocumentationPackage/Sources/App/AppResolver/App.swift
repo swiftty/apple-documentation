@@ -5,6 +5,7 @@ import AppleDocClient
 import AppleDocClientLive
 import RootPage
 import AllTechnologiesPage
+import TechnologyDetailPage
 
 public struct App: SwiftUI.App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
@@ -32,6 +33,9 @@ private struct RoutingProviderImpl: RoutingProvider {
         switch target {
         case is Routings.AllTechnologiesPage:
             AllTechnologiesPage()
+
+        case let page as Routings.TechnologyDetailPage:
+            TechnologyDetailPage(destination: page.destination)
 
         default:
             Text("unhandled route: \(String(describing: target))")
