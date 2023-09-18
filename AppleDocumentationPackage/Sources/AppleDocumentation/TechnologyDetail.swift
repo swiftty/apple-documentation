@@ -4,11 +4,89 @@ import SupportMacros
 @ImplicitInit
 public struct TechnologyDetail {
     public var metadata: Metadata
-    public var abstract: [Abstract]
-    public var primaryContentSections: [PrimaryContent]
-    public var topicSections: [Topic]
+    public var abstract: [InlineContent]
+    public var primaryContents: [PrimaryContent]
+    public var topics: [Topic]
     public var seeAlso: [SeeAlso]
     public var references: [Technology.Identifier: Reference]
+}
+
+public protocol InlineContent {}
+
+public enum InlineContents {
+    @ImplicitInit
+    public struct Text: InlineContent {
+        public var text: String
+    }
+
+    @ImplicitInit
+    public struct CodeVoice: InlineContent {
+        public var code: String
+    }
+
+    @ImplicitInit
+    public struct Strong: InlineContent {
+        public var contents: [InlineContent]
+    }
+
+    @ImplicitInit
+    public struct Reference: InlineContent {
+        public var identifier: Technology.Identifier
+        public var isActive: Bool
+    }
+
+    @ImplicitInit
+    public struct Image: InlineContent {
+        public var identifier: Technology.Identifier
+    }
+
+    @ImplicitInit
+    public struct InlineHead: InlineContent {
+        public var contents: [InlineContent]
+    }
+
+    @ImplicitInit
+    public struct Unknown: InlineContent {
+        public var type: String
+    }
+}
+
+public protocol BlockContent {}
+
+public enum BlockContents {
+    @ImplicitInit
+    public struct Paragraph: BlockContent {
+        public var contents: [InlineContent]
+    }
+
+    @ImplicitInit
+    public struct Heading: BlockContent {
+        public var level: Int
+        public var anchor: String
+        public var text: String
+    }
+
+    @ImplicitInit
+    public struct Aside: BlockContent {
+        public var style: String
+        public var name: String?
+        public var contents: [BlockContent]
+    }
+
+    @ImplicitInit
+    public struct UnorderedList: BlockContent {
+        public var items: [Item]
+
+        @ImplicitInit
+        public struct Item {
+            public var content: [BlockContent]
+        }
+    }
+
+    @ImplicitInit
+    public struct Unknown: BlockContent {
+        public var type: String
+    }
 }
 
 extension TechnologyDetail {
@@ -29,49 +107,9 @@ extension TechnologyDetail {
         }
     }
 
-    public enum Abstract {
-        case text(String)
-        case reference(Reference)
-
-        @ImplicitInit
-        public struct Reference {
-            public var identifier: Technology.Identifier
-            public var isActive: Bool
-        }
-    }
-
-    public enum PrimaryContent {
-        case content([Content])
-
-        public enum Content {
-            case heading(Heading)
-            case paragraph([InlineContent])
-            case aside([InlineContent])
-            case unorderedList([InlineContent])
-
-            @ImplicitInit
-            public struct Heading {
-                public var level: Int
-                public var anchor: String
-                public var text: String
-            }
-
-            public enum InlineContent {
-                case text(String)
-                case codeVoice(String)
-                case image(Technology.Identifier)
-                case reference(Reference)
-                case strong([InlineContent])
-                case inlineHead([InlineContent])
-
-                @ImplicitInit
-                // swiftlint:disable:next nesting
-                public struct Reference {
-                    public var identifier: Technology.Identifier
-                    public var isActive: Bool
-                }
-            }
-        }
+    @ImplicitInit
+    public struct PrimaryContent {
+        public var content: [BlockContent]
     }
 
     public enum Topic {
@@ -99,9 +137,9 @@ extension TechnologyDetail {
         public var url: String
         public var kind: String?
         public var role: String?
-        public var abstract: [Abstract]
+        public var abstract: [InlineContent]
         public var fragments: [Fragment]
-        public var navigatorTitle: [Abstract]
+        public var navigatorTitle: [InlineContent]
 
         @ImplicitInit
         public struct Fragment {

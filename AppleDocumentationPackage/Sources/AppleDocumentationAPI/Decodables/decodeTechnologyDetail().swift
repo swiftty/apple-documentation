@@ -9,7 +9,6 @@ public func decodeTechnologyDetail(from data: Data) throws -> TechnologyDetail {
 private struct Result: Decodable {
     var technologyDetail: TechnologyDetail
 
-    // swiftlint:disable:next function_body_length
     init(from decoder: Decoder) throws {
         let detail = try RawTechnologyDetail(from: decoder)
         technologyDetail = TechnologyDetail(
@@ -26,27 +25,11 @@ private struct Result: Decodable {
                     )
                 } ?? [],
                 externalID: detail.metadata.externalID),
-            abstract: detail.abstract.map {
-                $0.toAbstract()
+            abstract: detail.abstract.map(\.inlineContent),
+            primaryContents: detail.primaryContentSections.map {
+                .init(content: $0.content.map(\.blockContent))
             },
-            primaryContentSections: detail.primaryContentSections.map {
-                .content($0.content?.map {
-                    switch $0 {
-                    case .heading(let heading):
-                        .heading(.init(level: heading.level, anchor: heading.anchor, text: heading.text))
-
-                    case .paragraph(let paragraph):
-                        .paragraph(paragraph.toInlineContent())
-
-                    case .aside(let aside):
-                        .aside(aside.content.flatMap { $0.toInlineContent() })
-
-                    case .unorderedList(let list):
-                        .unorderedList(list.items.flatMap { $0.content.flatMap { $0.toInlineContent() } })
-                    }
-                } ?? [])
-            },
-            topicSections: detail.topicSections.map {
+            topics: detail.topicSections.map {
                 switch $0 {
                 case .taskGroup(let group):
                     .taskGroup(.init(title: group.title, identifiers: group.identifiers, anchor: group.anchor))
@@ -62,9 +45,7 @@ private struct Result: Decodable {
                     url: $0.url,
                     kind: $0.kind,
                     role: $0.role,
-                    abstract: $0.abstract?.map {
-                        $0.toAbstract()
-                    } ?? [],
+                    abstract: $0.abstract?.map(\.inlineContent) ?? [],
                     fragments: $0.fragments?.map {
                         .init(text: $0.text, kind: {
                             switch $0 {
@@ -74,23 +55,24 @@ private struct Result: Decodable {
                             }
                         }($0.kind))
                     } ?? [],
-                    navigatorTitle: $0.navigatorTitle?.map {
-                        $0.toAbstract()
-                    } ?? []
+                    navigatorTitle: $0.navigatorTitle?.map(\.inlineContent) ?? []
                 )
             }
         )
     }
 }
 
-// swiftlint:disable nesting
 private struct RawTechnologyDetail: Decodable {
     var metadata: RawMetadata
-    var abstract: [RawAbstract]
-    var primaryContentSections: [RawPrimaryContent]
+    var abstract: [RawInlineContent]
+    var primaryContentSections: [PrimaryContentSection]
     var topicSections: [RawTopic]
     var seeAlsoSections: [RawSeeAlso]?
     var references: [Technology.Identifier: RawReference]
+
+    struct PrimaryContentSection: Decodable {
+        var content: [RawBlockContent]
+    }
 }
 
 private struct RawMetadata: Decodable {
@@ -108,20 +90,92 @@ private struct RawMetadata: Decodable {
     }
 }
 
-private enum RawAbstract: Decodable {
-    case text(Text)
-    case reference(Reference)
+private enum RawBlockContent: Decodable {
+    case paragraph(Paragraph)
+    case heading(Heading)
+    case aside(Aside)
+    case unorderedList(UnorderedList)
+    case unknown(String)
+
+    struct Paragraph: Decodable {
+        var inlineContent: [RawInlineContent]
+    }
+
+    struct Heading: Decodable {
+        var level: Int
+        var anchor: String
+        var text: String
+    }
+
+    struct Aside: Decodable {
+        var style: String
+        var name: String?
+        var content: [RawBlockContent]
+    }
+
+    struct UnorderedList: Decodable {
+        var items: [Item]
+
+        struct Item: Decodable {
+            var content: [RawBlockContent]
+        }
+    }
 
     private enum CodingKeys: CodingKey {
         case type
     }
 
-    enum AbstractType: String, RawRepresentable, Decodable {
-        case text, reference
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        let type = try c.decode(String.self, forKey: .type)
+        self = try switch type {
+        case "paragraph": .paragraph(.init(from: decoder))
+        case "heading": .heading(.init(from: decoder))
+        case "aside": .aside(.init(from: decoder))
+        case "unorderedList": .unorderedList(.init(from: decoder))
+        default: .unknown(type)
+        }
     }
+
+    var blockContent: BlockContent {
+        switch self {
+        case .paragraph(let paragraph):
+            BlockContents.Paragraph(contents: paragraph.inlineContent.map(\.inlineContent))
+
+        case .heading(let heading):
+            BlockContents.Heading(level: heading.level, anchor: heading.anchor, text: heading.text)
+
+        case .aside(let aside):
+            BlockContents.Aside(style: aside.style, name: aside.name, contents: aside.content.map(\.blockContent))
+
+        case .unorderedList(let list):
+            BlockContents.UnorderedList(items: list.items.map { .init(content: $0.content.map(\.blockContent)) })
+
+        case .unknown(let type):
+            BlockContents.Unknown(type: type)
+        }
+    }
+}
+
+private enum RawInlineContent: Decodable {
+    case text(Text)
+    case codeVoice(CodeVoice)
+    case image(Image)
+    case reference(Reference)
+    case strong(Strong)
+    case inlineHead(InlineHead)
+    case unknown(String)
 
     struct Text: Decodable {
         var text: String
+    }
+
+    struct CodeVoice: Decodable {
+        var code: String
+    }
+
+    struct Image: Decodable {
+        var identifier: Technology.Identifier
     }
 
     struct Reference: Decodable {
@@ -129,173 +183,54 @@ private enum RawAbstract: Decodable {
         var isActive: Bool
     }
 
+    struct Strong: Decodable {
+        var inlineContent: [RawInlineContent]
+    }
+
+    struct InlineHead: Decodable {
+        var inlineContent: [RawInlineContent]
+    }
+
+    private enum CodingKeys: CodingKey {
+        case type
+    }
+
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
-        switch try c.decode(AbstractType.self, forKey: .type) {
-        case .text:
-            self = try .text(Text(from: decoder))
-
-        case .reference:
-            self = try .reference(Reference(from: decoder))
+        let type = try c.decode(String.self, forKey: .type)
+        self = try switch type {
+        case "text": .text(.init(from: decoder))
+        case "codeVoice": .codeVoice(.init(from: decoder))
+        case "image": .image(.init(from: decoder))
+        case "reference": .reference(.init(from: decoder))
+        case "strong": .strong(.init(from: decoder))
+        case "inlineHead": .inlineHead(.init(from: decoder))
+        default: .unknown(type)
         }
     }
 
-    func toAbstract() -> TechnologyDetail.Abstract {
+    var inlineContent: InlineContent {
         switch self {
         case .text(let text):
-            return .text(text.text)
+            InlineContents.Text(text: text.text)
+
+        case .codeVoice(let code):
+            InlineContents.CodeVoice(code: code.code)
+
+        case .image(let image):
+            InlineContents.Image(identifier: image.identifier)
 
         case .reference(let ref):
-            return .reference(.init(identifier: ref.identifier, isActive: ref.isActive))
-        }
-    }
-}
+            InlineContents.Reference(identifier: ref.identifier, isActive: ref.isActive)
 
-private struct RawPrimaryContent: Decodable {
-    var content: [Content]?
+        case .strong(let strong):
+            InlineContents.Strong(contents: strong.inlineContent.map(\.inlineContent))
 
-    enum Content: Decodable {
-        case heading(Heading)
-        case paragraph(Paragraph)
-        case aside(Aside)
-        case unorderedList(UnorderedList)
+        case .inlineHead(let head):
+            InlineContents.InlineHead(contents: head.inlineContent.map(\.inlineContent))
 
-        enum Kind: String, RawRepresentable, Decodable {
-            case heading
-            case paragraph
-            case aside
-            case unorderedList
-        }
-
-        private enum CodingKeys: CodingKey {
-            case type
-        }
-
-        struct Heading: Decodable {
-            var level: Int
-            var anchor: String
-            var text: String
-        }
-
-        struct Paragraph: Decodable {
-            var inlineContent: [InlineContent]
-
-            enum InlineContent: Decodable {
-                case text(Text)
-                case codeVoice(CodeVoice)
-                case image(Image)
-                case reference(Reference)
-                case strong(Paragraph)
-                case inlineHead(Paragraph)
-
-                enum Kind: String, RawRepresentable, Decodable {
-                    case text
-                    case codeVoice
-                    case image
-                    case reference
-                    case strong
-                    case inlineHead
-                }
-
-                private enum CodingKeys: CodingKey {
-                    case type
-                }
-
-                struct Text: Decodable {
-                    var text: String
-                }
-
-                struct CodeVoice: Decodable {
-                    var code: String
-                }
-
-                struct Image: Decodable {
-                    var identifier: Technology.Identifier
-                }
-
-                struct Reference: Decodable {
-                    var identifier: Technology.Identifier
-                    var isActive: Bool
-                }
-
-                init(from decoder: Decoder) throws {
-                    let c = try decoder.container(keyedBy: CodingKeys.self)
-                    switch try c.decode(Kind.self, forKey: .type) {
-                    case .text:
-                        self = try .text(Text(from: decoder))
-
-                    case .codeVoice:
-                        self = try .codeVoice(CodeVoice(from: decoder))
-
-                    case .image:
-                        self = try .image(Image(from: decoder))
-
-                    case .reference:
-                        self = try .reference(Reference(from: decoder))
-
-                    case .strong:
-                        self = try .strong(Paragraph(from: decoder))
-
-                    case .inlineHead:
-                        self = try .inlineHead(Paragraph(from: decoder))
-                    }
-                }
-            }
-
-            func toInlineContent() -> [TechnologyDetail.PrimaryContent.Content.InlineContent] {
-                inlineContent.map {
-                    switch $0 {
-                    case .text(let text):
-                        .text(text.text)
-
-                    case .codeVoice(let code):
-                        .codeVoice(code.code)
-
-                    case .image(let image):
-                        .image(image.identifier)
-
-                    case .reference(let ref):
-                        .reference(.init(identifier: ref.identifier, isActive: ref.isActive))
-
-                    case .strong(let paragraph):
-                        .strong(paragraph.toInlineContent())
-
-                    case .inlineHead(let paragraph):
-                        .inlineHead(paragraph.toInlineContent())
-                    }
-                }
-            }
-        }
-
-        struct Aside: Decodable {
-            var name: String?
-            var style: String
-            var content: [Paragraph]
-        }
-
-        struct UnorderedList: Decodable {
-            var items: [Item]
-
-            struct Item: Decodable {
-                var content: [Paragraph]
-            }
-        }
-
-        init(from decoder: Decoder) throws {
-            let c = try decoder.container(keyedBy: CodingKeys.self)
-            switch try c.decode(Kind.self, forKey: .type) {
-            case .heading:
-                self = try .heading(Heading(from: decoder))
-
-            case .paragraph:
-                self = try .paragraph(Paragraph(from: decoder))
-
-            case .aside:
-                self = try .aside(Aside(from: decoder))
-
-            case .unorderedList:
-                self = try .unorderedList(UnorderedList(from: decoder))
-            }
+        case .unknown(let type):
+            InlineContents.Unknown(type: type)
         }
     }
 }
@@ -339,9 +274,9 @@ private struct RawReference: Decodable {
     var kind: String?
     var role: String?
     var url: String
-    var abstract: [RawAbstract]?
+    var abstract: [RawInlineContent]?
     var fragments: [RawFragment]?
-    var navigatorTitle: [RawAbstract]?
+    var navigatorTitle: [RawInlineContent]?
 }
 
 private struct RawFragment: Decodable {
@@ -352,5 +287,3 @@ private struct RawFragment: Decodable {
         case text, keyword, identifier
     }
 }
-
-// swiftlint:enable nesting
