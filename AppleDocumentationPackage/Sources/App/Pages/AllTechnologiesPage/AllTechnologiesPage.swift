@@ -181,31 +181,28 @@ extension Technology.DiffAvailability.Payload {
 #Preview {
     NavigationStack {
         AllTechnologiesPage()
-            .environment(
-                \.appleDocClient,
-                 AppleDocClient(
-                    allTechnologies: {
-                        [
-                            .init(
-                                title: "Accelerate",
-                                languages: [.swift],
-                                tags: ["UI"],
-                                destination: .init(
-                                    identifier: .init(rawValue: "swiftui"),
-                                    title: "swiftui",
-                                    url: "",
-                                    abstract: """
+            .transformEnvironment(\.appleDocClient) { client in
+                client.props.allTechnologies = {
+                    [
+                        .init(
+                            title: "Accelerate",
+                            languages: [.swift],
+                            tags: ["UI"],
+                            destination: .init(
+                                identifier: .init(rawValue: "swiftui"),
+                                title: "swiftui",
+                                url: "",
+                                abstract: """
                                     Make large-scale mathematical computations and image calculations, optimized for high performance and low energy consumption.
                                     """
-                                )
                             )
-                        ]
-                    },
-                    diffAvailability: {
-                        .init([:])
-                    }
-                 )
-            )
+                        )
+                    ]
+                }
+                client.props.diffAvailability = {
+                    .init([:])
+                }
+            }
     }
 }
 // swiftlint:enable line_length
