@@ -142,19 +142,19 @@ private enum RawBlockContent: Decodable {
     var blockContent: BlockContent {
         switch self {
         case .paragraph(let paragraph):
-            BlockContents.Paragraph(contents: paragraph.inlineContent.map(\.inlineContent))
+            .paragraph(.init(contents: paragraph.inlineContent.map(\.inlineContent)))
 
         case .heading(let heading):
-            BlockContents.Heading(level: heading.level, anchor: heading.anchor, text: heading.text)
+            .heading(.init(level: heading.level, anchor: heading.anchor, text: heading.text))
 
         case .aside(let aside):
-            BlockContents.Aside(style: aside.style, name: aside.name, contents: aside.content.map(\.blockContent))
+            .aside(.init(style: aside.style, name: aside.name, contents: aside.content.map(\.blockContent)))
 
         case .unorderedList(let list):
-            BlockContents.UnorderedList(items: list.items.map { .init(content: $0.content.map(\.blockContent)) })
+            .unorderedList(.init(items: list.items.map { .init(content: $0.content.map(\.blockContent)) }))
 
         case .unknown(let type):
-            BlockContents.Unknown(type: type)
+            .unknown(.init(type: type))
         }
     }
 }
@@ -214,25 +214,25 @@ private enum RawInlineContent: Decodable {
     var inlineContent: InlineContent {
         switch self {
         case .text(let text):
-            InlineContents.Text(text: text.text)
+            .text(.init(text: text.text))
 
         case .codeVoice(let code):
-            InlineContents.CodeVoice(code: code.code)
+            .codeVoice(.init(code: code.code))
 
         case .image(let image):
-            InlineContents.Image(identifier: image.identifier)
+            .image(.init(identifier: image.identifier))
 
         case .reference(let ref):
-            InlineContents.Reference(identifier: ref.identifier, isActive: ref.isActive)
+            .reference(.init(identifier: ref.identifier, isActive: ref.isActive))
 
         case .strong(let strong):
-            InlineContents.Strong(contents: strong.inlineContent.map(\.inlineContent))
+            .strong(.init(contents: strong.inlineContent.map(\.inlineContent)))
 
         case .inlineHead(let head):
-            InlineContents.InlineHead(contents: head.inlineContent.map(\.inlineContent))
+            .inlineHead(.init(contents: head.inlineContent.map(\.inlineContent)))
 
         case .unknown(let type):
-            InlineContents.Unknown(type: type)
+            .unknown(.init(type: type))
         }
     }
 }

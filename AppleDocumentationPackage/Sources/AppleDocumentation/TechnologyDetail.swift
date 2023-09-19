@@ -12,80 +12,90 @@ public struct TechnologyDetail {
     public var diffAvailability: Technology.DiffAvailability
 }
 
-public protocol InlineContent {}
+public enum InlineContent: Hashable {
+    case text(Text)
+    case codeVoice(CodeVoice)
+    case strong(Strong)
+    case reference(Reference)
+    case image(Image)
+    case inlineHead(InlineHead)
+    case unknown(Unknown)
 
-public enum InlineContents {
     @ImplicitInit
-    public struct Text: InlineContent {
+    public struct Text: Hashable {
         public var text: String
     }
 
     @ImplicitInit
-    public struct CodeVoice: InlineContent {
+    public struct CodeVoice: Hashable {
         public var code: String
     }
 
     @ImplicitInit
-    public struct Strong: InlineContent {
+    public struct Strong: Hashable {
         public var contents: [InlineContent]
     }
 
     @ImplicitInit
-    public struct Reference: InlineContent {
+    public struct Reference: Hashable {
         public var identifier: Technology.Identifier
         public var isActive: Bool
     }
 
     @ImplicitInit
-    public struct Image: InlineContent {
+    public struct Image: Hashable {
         public var identifier: Technology.Identifier
     }
 
     @ImplicitInit
-    public struct InlineHead: InlineContent {
+    public struct InlineHead: Hashable {
         public var contents: [InlineContent]
     }
 
     @ImplicitInit
-    public struct Unknown: InlineContent {
+    public struct Unknown: Hashable {
         public var type: String
     }
 }
 
-public protocol BlockContent {}
+public enum BlockContent: Hashable {
+    case paragraph(Paragraph)
+    case heading(Heading)
+    case aside(Aside)
+    case unorderedList(UnorderedList)
+    case unknown(Unknown)
 
-public enum BlockContents {
     @ImplicitInit
-    public struct Paragraph: BlockContent {
+    public struct Paragraph: Hashable {
         public var contents: [InlineContent]
     }
 
     @ImplicitInit
-    public struct Heading: BlockContent {
+    public struct Heading: Hashable {
         public var level: Int
         public var anchor: String
         public var text: String
     }
 
     @ImplicitInit
-    public struct Aside: BlockContent {
+    public struct Aside: Hashable {
         public var style: String
         public var name: String?
         public var contents: [BlockContent]
     }
 
     @ImplicitInit
-    public struct UnorderedList: BlockContent {
+    public struct UnorderedList: Hashable {
         public var items: [Item]
 
         @ImplicitInit
-        public struct Item {
+        public struct Item: Hashable {
             public var content: [BlockContent]
         }
     }
 
     @ImplicitInit
-    public struct Unknown: BlockContent {
+    public struct Unknown: Hashable {
         public var type: String
     }
 }
