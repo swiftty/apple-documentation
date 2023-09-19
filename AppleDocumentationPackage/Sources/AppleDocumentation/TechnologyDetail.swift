@@ -9,6 +9,7 @@ public struct TechnologyDetail {
     public var topics: [Topic]
     public var seeAlso: [SeeAlso]
     public var references: [Technology.Identifier: Reference]
+    public var diffAvailability: Technology.DiffAvailability
 }
 
 public protocol InlineContent {}

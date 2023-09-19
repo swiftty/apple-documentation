@@ -57,7 +57,8 @@ private struct Result: Decodable {
                     } ?? [],
                     navigatorTitle: $0.navigatorTitle?.map(\.inlineContent) ?? []
                 )
-            }
+            },
+            diffAvailability: .init(detail.diffAvailability ?? [:])
         )
     }
 }
@@ -69,6 +70,7 @@ private struct RawTechnologyDetail: Decodable {
     var topicSections: [RawTopic]
     var seeAlsoSections: [RawSeeAlso]?
     var references: [Technology.Identifier: RawReference]
+    var diffAvailability: [Technology.DiffAvailability.Key: Technology.DiffAvailability.Payload]?
 
     struct PrimaryContentSection: Decodable {
         var content: [RawBlockContent]
