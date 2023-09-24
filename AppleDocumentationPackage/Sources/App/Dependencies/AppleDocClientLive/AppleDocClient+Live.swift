@@ -43,8 +43,14 @@ private actor DataContainer {
         print("fetch started...")
 
         let url = URL(string: "https://developer.apple.com/tutorials/data/documentation/technologies.json")!
-        let (data, _) = try await session.data(from: url)
-        (technologies, diffAvailablity) = try decodeTechnologies(from: data)
+        do {
+            let (data, _) = try await session.data(from: url)
+            (technologies, diffAvailablity) = try decodeTechnologies(from: data)
+        } catch {
+            print("fetch failed.", error)
+            throw error
+        }
+        print("fetch finished.")
     }
 
     func fetchTechnologyDetail(for path: String) async throws {
@@ -53,7 +59,13 @@ private actor DataContainer {
         print("fetch detail[\(path)] started...")
 
         let url = URL(string: "https://developer.apple.com/tutorials/data/\(path).json")!
-        let (data, _) = try await session.data(from: url)
-        details[path] = try decodeTechnologyDetail(from: data)
+        do {
+            let (data, _) = try await session.data(from: url)
+            details[path] = try decodeTechnologyDetail(from: data)
+        } catch {
+            print("fetch detail[\(path)] failed.", url, error)
+            throw error
+        }
+        print("fetch detail[\(path)] finished.")
     }
 }

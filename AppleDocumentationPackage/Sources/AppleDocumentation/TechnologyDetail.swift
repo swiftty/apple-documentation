@@ -135,17 +135,17 @@ extension TechnologyDetail {
     }
 
     @ImplicitInit
-    public struct SeeAlso {
+    public struct SeeAlso: Hashable {
         public var title: String
         public var generated: Bool
         public var identifiers: [Technology.Identifier]
     }
 
     @ImplicitInit
-    public struct Reference {
+    public struct Reference: Hashable {
         public var identifier: Technology.Identifier
         public var title: String
-        public var url: String
+        public var url: String?
         public var kind: String?
         public var role: String?
         public var abstract: [InlineContent]
@@ -153,12 +153,12 @@ extension TechnologyDetail {
         public var navigatorTitle: [InlineContent]
 
         @ImplicitInit
-        public struct Fragment {
+        public struct Fragment: Hashable {
             public var text: String
             public var kind: Kind
 
             public enum Kind {
-                case keyword, text, identifier
+                case keyword, text, identifier, label
             }
         }
     }

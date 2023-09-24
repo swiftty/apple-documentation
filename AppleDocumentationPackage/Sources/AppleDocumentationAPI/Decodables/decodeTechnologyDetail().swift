@@ -52,6 +52,7 @@ private struct Result: Decodable {
                             case .identifier: .identifier
                             case .keyword: .keyword
                             case .text: .text
+                            case .label: .label
                             }
                         }($0.kind))
                     } ?? [],
@@ -275,7 +276,7 @@ private struct RawReference: Decodable {
     var type: String
     var kind: String?
     var role: String?
-    var url: String
+    var url: String?
     var abstract: [RawInlineContent]?
     var fragments: [RawFragment]?
     var navigatorTitle: [RawInlineContent]?
@@ -286,6 +287,6 @@ private struct RawFragment: Decodable {
     var kind: Kind
 
     enum Kind: String, RawRepresentable, Decodable {
-        case text, keyword, identifier
+        case text, keyword, identifier, label
     }
 }

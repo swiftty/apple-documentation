@@ -179,6 +179,8 @@ let package = Package(
             feature: .pages,
             name: "TechnologyDetailPage",
             dependencies: [
+                "SupportMacros",
+
                 "Router",
                 "AppleDocClient",
                 "UIComponent"

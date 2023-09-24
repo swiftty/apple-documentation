@@ -4,6 +4,7 @@ import SwiftSyntaxMacros
 @main
 struct Plugin: CompilerPlugin {
     let providingMacros: [Macro.Type] = [
-        ImplicitInitMacro.self
+        ImplicitInitMacro.self,
+        SwiftUIEnvironmentMacro.self
     ]
 }
