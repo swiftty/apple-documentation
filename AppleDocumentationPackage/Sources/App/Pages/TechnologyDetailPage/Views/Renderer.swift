@@ -14,9 +14,13 @@ extension NSAttributedString.Key {
     static let inlineContent = NSAttributedString.Key("AppleDoc::InlineContent")
 }
 
-extension InlineContent: View {
-    public var body: some View {
-        UITextViewRenderer(content: self)
+struct InlineContentView: View {
+    let contents: [InlineContent]
+
+    var body: some View {
+        UITextViewRenderer(contents: contents)
+            .border(.red)
+            .environment(\.uiFont, .systemFont(ofSize: 18, weight: .regular))
     }
 }
 
@@ -35,21 +39,25 @@ private struct Cache {
     }
 }
 
-private extension InlineContent {
+private extension [InlineContent] {
     func attributedString(environment: EnvironmentValues, cache: inout Cache) -> NSAttributedString {
         let string = NSMutableAttributedString()
-        buildAttributedString(into: string, environment: environment, cache: &cache)
+        for content in self {
+            content.buildAttributedString(into: string, environment: environment, cache: &cache)
+        }
 
         let foregroundColor = environment.colorScheme == .dark ? UIColor.white : .black
-        string.addAttributes(
-            [.foregroundColor: foregroundColor],
-            range: NSRange(location: 0, length: string.length)
-        )
+        string.addAttributes([
+            .foregroundColor: foregroundColor,
+            .font: environment.uiFont ?? .systemFont(ofSize: 16)
+        ], range: NSRange(location: 0, length: string.length))
         return string
     }
+}
 
+private extension InlineContent {
     // swiftlint:disable:next cyclomatic_complexity
-    private func buildAttributedString(
+    func buildAttributedString(
         into string: NSMutableAttributedString,
         environment: EnvironmentValues,
         cache: inout Cache
@@ -96,30 +104,34 @@ private extension InlineContent {
 
 // MARK: -
 private struct UITextViewRenderer: UIViewRepresentable {
-    let content: InlineContent
+    let contents: [InlineContent]
 
     func makeUIView(context: Context) -> UITextView {
-        let view = UITextView()
+        let view = TextView()
         view.isScrollEnabled = false
         view.isEditable = false
         view.isSelectable = true
         view.textContainerInset = .zero
         view.textContainer.lineFragmentPadding = 0
-
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }
 
     func updateUIView(_ uiView: UITextView, context: Context) {
-        print("changed")
-        uiView.attributedText = content.attributedString(
+        uiView.attributedText = contents.attributedString(
             environment: context.environment,
             cache: &context.coordinator.cache
         )
     }
 
     func sizeThatFits(_ proposal: ProposedViewSize, uiView: UITextView, context: Context) -> CGSize? {
-        var size = uiView.contentSize
+        var size = uiView.systemLayoutSizeFitting(
+            CGSize(width: proposal.width ?? 0, height: UIView.noIntrinsicMetric),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        )
         size.width = proposal.width ?? size.width
+        print(size, proposal)
         return size
     }
 
@@ -129,6 +141,12 @@ private struct UITextViewRenderer: UIViewRepresentable {
 
     class Coordinator {
         var cache = Cache()
+    }
+
+    private class TextView: UITextView {
+        override var intrinsicContentSize: CGSize {
+            contentSize
+        }
     }
 }
 
@@ -192,10 +210,10 @@ private final class UnknownAttachment: Attachment<UnknownAttachment.ViewProvider
             view.addSubview(label)
             label.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
-                label.topAnchor.constraint(equalTo: view.topAnchor, constant: 2),
-                view.bottomAnchor.constraint(equalTo: label.bottomAnchor, constant: 2),
-                label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 4),
-                view.trailingAnchor.constraint(equalTo: label.trailingAnchor, constant: 4)
+                label.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: 2),
+                label.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 6),
+                view.trailingAnchor.constraint(equalTo: label.trailingAnchor, constant: 6)
             ])
             return view
         }()
@@ -211,32 +229,40 @@ private final class UnknownAttachment: Attachment<UnknownAttachment.ViewProvider
             proposedLineFragment: CGRect,
             position: CGPoint
         ) -> CGRect {
-            let size = containerView.systemLayoutSizeFitting(proposedLineFragment.size)
-            let y = (proposedLineFragment.height - size.height) / 2
-            return CGRect(origin: .init(x: 0, y: y), size: size)
-        }
-    }
-}
-
-struct PreviewContainer: View {
-    @State var isOn = false
-    var body: some View {
-        VStack {
-            Toggle(isOn: $isOn, label: {
-                Text("Label")
-            })
-            InlineContent.text(.init(text: "Construct and manage a graphical, event-driven user interface for your macOS app."))
-//            InlineContent.inlineHead(.init(contents: [
-//                .text(.init(text: "Hello\(isOn ? "?" : "!")")),
-//                .text(.init(text: "🌏")),
-//                .text(.init(text: "world")),
-//                .unknown(.init(type: "foo")),
-//                .text(.init(text: "!!!!"))
-//            ]))
+            var size = containerView.systemLayoutSizeFitting(proposedLineFragment.size)
+            size.height = proposedLineFragment.height
+            return CGRect(origin: .zero, size: size)
         }
     }
 }
 
 #Preview {
-    PreviewContainer()
+    struct PreviewContainer: View {
+        @State var isOn = false
+        var body: some View {
+            VStack {
+                Toggle(isOn: $isOn, label: {
+                    Text("Label")
+                })
+
+                InlineContentView(contents: [
+                    .text(.init(text: """
+                    Construct and manage a graphical, event-driven user interface for your macOS app.
+                    """)),
+                    .inlineHead(.init(contents: [
+                        .text(.init(text: """
+                        Construct and manage a graphical, event-driven user interface for your macOS app. \
+                        Hello\(isOn ? "?" : "!")
+                        """)),
+                        .text(.init(text: "🌏")),
+                        .text(.init(text: "world")),
+                        .unknown(.init(type: "foo")),
+                        .text(.init(text: "!!!!"))
+                    ]))
+                ])
+            }
+        }
+    }
+
+    return PreviewContainer()
 }

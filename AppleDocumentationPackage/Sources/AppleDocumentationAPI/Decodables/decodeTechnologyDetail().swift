@@ -9,6 +9,7 @@ public func decodeTechnologyDetail(from data: Data) throws -> TechnologyDetail {
 private struct Result: Decodable {
     var technologyDetail: TechnologyDetail
 
+    // swiftlint:disable:next function_body_length
     init(from decoder: Decoder) throws {
         let detail = try RawTechnologyDetail(from: decoder)
         technologyDetail = TechnologyDetail(

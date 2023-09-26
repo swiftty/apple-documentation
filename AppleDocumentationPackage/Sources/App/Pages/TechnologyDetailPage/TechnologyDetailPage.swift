@@ -15,21 +15,42 @@ public struct TechnologyDetailPage: View {
 
     public var body: some View {
         if let detail {
-            VStack {
-                Text(detail.metadata.title)
+            ScrollView {
+                VStack {
+                    InlineContentView(contents: detail.abstract)
 
-                ForEach(detail.abstract, id: \.self) { content in
-                    content
+                    ForEach(detail.primaryContents.map(\.content), id: \.self) { blocks in
+                        BlockContentView(blocks: blocks)
+                    }
                 }
-
-                Spacer()
             }
+            .navigationTitle(detail.metadata.title)
         } else {
             ProgressView()
                 .progressViewStyle(.circular)
                 .task {
                     detail = try? await appleDocClient.technologyDetail(for: destination.url)
                 }
+        }
+    }
+}
+
+private struct BlockContentView: View {
+    var blocks: [BlockContent]
+
+    var body: some View {
+        ForEach(blocks, id: \.self) { block in
+            switch block {
+            case .paragraph(let paragraph):
+                InlineContentView(contents: paragraph.contents)
+
+            case .heading(let heading):
+                Text(heading.text)
+                    .font(.title3.bold())
+
+            default:
+                EmptyView()
+            }
         }
     }
 }
