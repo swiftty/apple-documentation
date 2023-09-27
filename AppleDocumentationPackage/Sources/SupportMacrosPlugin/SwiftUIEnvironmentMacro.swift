@@ -11,7 +11,8 @@ extension SwiftUIEnvironmentMacro: PeerMacro {
         providingPeersOf declaration: some DeclSyntaxProtocol,
         in context: some MacroExpansionContext
     ) throws -> [DeclSyntax] {
-        guard let variable = declaration.as(VariableDeclSyntax.self)?.bindings.first?.as(PatternBindingSyntax.self) else {
+        guard let variable = declaration.as(VariableDeclSyntax.self)?.bindings.first?
+            .as(PatternBindingSyntax.self) else {
             throw Error.cannotApplicable
         }
         guard let type = variable.typeAnnotation?.type.trimmed else {
@@ -39,7 +40,8 @@ extension SwiftUIEnvironmentMacro: AccessorMacro {
         providingAccessorsOf declaration: some DeclSyntaxProtocol,
         in context: some MacroExpansionContext
     ) throws -> [AccessorDeclSyntax] {
-        guard let variable = declaration.as(VariableDeclSyntax.self)?.bindings.first?.as(PatternBindingSyntax.self) else {
+        guard let variable = declaration.as(VariableDeclSyntax.self)?.bindings.first?
+            .as(PatternBindingSyntax.self) else {
             throw Error.cannotApplicable
         }
         let name = variable.pattern.trimmed
