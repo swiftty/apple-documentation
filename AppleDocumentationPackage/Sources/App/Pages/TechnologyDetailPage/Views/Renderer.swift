@@ -78,6 +78,15 @@ private extension InlineContent {
             text.addAttributes([:], range: range)
             string.append(text)
 
+        case .emphasis(let emphasis):
+            let text = NSMutableAttributedString()
+            for content in emphasis.contents {
+                content.buildAttributedString(into: text, environment: environment, cache: &cache)
+            }
+            let range = NSRange(location: 0, length: text.length)
+            text.addAttributes([:], range: range)
+            string.append(text)
+
         case .reference(let reference):
             guard let ref = environment.references[reference.identifier] else { return }
 

@@ -16,6 +16,7 @@ public enum InlineContent: Hashable {
     case text(Text)
     case codeVoice(CodeVoice)
     case strong(Strong)
+    case emphasis(Emphasis)
     case reference(Reference)
     case image(Image)
     case inlineHead(InlineHead)
@@ -33,6 +34,11 @@ public enum InlineContent: Hashable {
 
     @ImplicitInit
     public struct Strong: Hashable {
+        public var contents: [InlineContent]
+    }
+
+    @ImplicitInit
+    public struct Emphasis: Hashable {
         public var contents: [InlineContent]
     }
 
@@ -105,7 +111,7 @@ extension TechnologyDetail {
     public struct Metadata {
         public var title: String
         public var role: String
-        public var roleHeading: String
+        public var roleHeading: String?
         public var platforms: [Platform]
         public var externalID: String?
 
@@ -113,7 +119,7 @@ extension TechnologyDetail {
         public struct Platform {
             public var name: String
             public var introducedAt: String
-            public var current: String
+            public var current: String?
             public var beta: Bool
         }
     }
@@ -144,13 +150,13 @@ extension TechnologyDetail {
     @ImplicitInit
     public struct Reference: Hashable {
         public var identifier: Technology.Identifier
-        public var title: String
+        public var title: String?
         public var url: String?
         public var kind: String?
         public var role: String?
         public var abstract: [InlineContent]
         public var fragments: [Fragment]
-        public var navigatorTitle: [InlineContent]
+        public var navigatorTitle: [Fragment]
 
         @ImplicitInit
         public struct Fragment: Hashable {
@@ -158,7 +164,8 @@ extension TechnologyDetail {
             public var kind: Kind
 
             public enum Kind {
-                case keyword, text, identifier, label
+                case keyword, text, identifier, label, typeIdentifier, genericParameter
+                case externalParam, attribute
             }
         }
     }

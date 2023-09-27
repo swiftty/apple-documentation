@@ -9,7 +9,6 @@ public func decodeTechnologyDetail(from data: Data) throws -> TechnologyDetail {
 private struct Result: Decodable {
     var technologyDetail: TechnologyDetail
 
-    // swiftlint:disable:next function_body_length
     init(from decoder: Decoder) throws {
         let detail = try RawTechnologyDetail(from: decoder)
         technologyDetail = TechnologyDetail(
@@ -27,11 +26,13 @@ private struct Result: Decodable {
                 } ?? [],
                 externalID: detail.metadata.externalID),
             abstract: detail.abstract.map(\.inlineContent),
-            primaryContents: detail.primaryContentSections.map {
+            primaryContents: detail.primaryContentSections?.map {
                 .init(content: $0.content.map(\.blockContent))
-            },
-            topics: detail.topicSections.map {
+            } ?? [],
+            topics: detail.topicSections.compactMap {
                 switch $0 {
+                case .document:
+                    nil
                 case .taskGroup(let group):
                     .taskGroup(.init(title: group.title, identifiers: group.identifiers, anchor: group.anchor))
                 }
@@ -47,17 +48,8 @@ private struct Result: Decodable {
                     kind: $0.kind,
                     role: $0.role,
                     abstract: $0.abstract?.map(\.inlineContent) ?? [],
-                    fragments: $0.fragments?.map {
-                        .init(text: $0.text, kind: {
-                            switch $0 {
-                            case .identifier: .identifier
-                            case .keyword: .keyword
-                            case .text: .text
-                            case .label: .label
-                            }
-                        }($0.kind))
-                    } ?? [],
-                    navigatorTitle: $0.navigatorTitle?.map(\.inlineContent) ?? []
+                    fragments: $0.fragments?.map(\.fragment) ?? [],
+                    navigatorTitle: $0.navigatorTitle?.map(\.fragment) ?? []
                 )
             },
             diffAvailability: .init(detail.diffAvailability ?? [:])
@@ -68,7 +60,7 @@ private struct Result: Decodable {
 private struct RawTechnologyDetail: Decodable {
     var metadata: RawMetadata
     var abstract: [RawInlineContent]
-    var primaryContentSections: [PrimaryContentSection]
+    var primaryContentSections: [PrimaryContentSection]?
     var topicSections: [RawTopic]
     var seeAlsoSections: [RawSeeAlso]?
     var references: [Technology.Identifier: RawReference]
@@ -82,14 +74,14 @@ private struct RawTechnologyDetail: Decodable {
 private struct RawMetadata: Decodable {
     var title: String
     var role: String
-    var roleHeading: String
+    var roleHeading: String?
     var platforms: [RawPlatform]?
     var externalID: String?
 
     struct RawPlatform: Decodable {
         var name: String
         var introducedAt: String
-        var current: String
+        var current: String?
         var beta: Bool?
     }
 }
@@ -167,6 +159,7 @@ private enum RawInlineContent: Decodable {
     case image(Image)
     case reference(Reference)
     case strong(Strong)
+    case emphasis(Emphasis)
     case inlineHead(InlineHead)
     case unknown(String)
 
@@ -191,6 +184,10 @@ private enum RawInlineContent: Decodable {
         var inlineContent: [RawInlineContent]
     }
 
+    struct Emphasis: Decodable {
+        var inlineContent: [RawInlineContent]
+    }
+
     struct InlineHead: Decodable {
         var inlineContent: [RawInlineContent]
     }
@@ -208,6 +205,7 @@ private enum RawInlineContent: Decodable {
         case "image": .image(.init(from: decoder))
         case "reference": .reference(.init(from: decoder))
         case "strong": .strong(.init(from: decoder))
+        case "emphasis": .emphasis(.init(from: decoder))
         case "inlineHead": .inlineHead(.init(from: decoder))
         default: .unknown(type)
         }
@@ -230,6 +228,9 @@ private enum RawInlineContent: Decodable {
         case .strong(let strong):
             .strong(.init(contents: strong.inlineContent.map(\.inlineContent)))
 
+        case .emphasis(let emphasis):
+            .emphasis(.init(contents: emphasis.inlineContent.map(\.inlineContent)))
+
         case .inlineHead(let head):
             .inlineHead(.init(contents: head.inlineContent.map(\.inlineContent)))
 
@@ -240,10 +241,16 @@ private enum RawInlineContent: Decodable {
 }
 
 private enum RawTopic: Decodable {
+    case document(Document)
     case taskGroup(TaskGroup)
 
     enum Kind: String, RawRepresentable, Decodable {
         case taskGroup
+    }
+
+    struct Document: Decodable {
+        var title: String
+        var identifiers: [Technology.Identifier]
     }
 
     struct TaskGroup: Decodable {
@@ -258,9 +265,12 @@ private enum RawTopic: Decodable {
 
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
-        switch try c.decode(Kind.self, forKey: .kind) {
+        self = switch try c.decodeIfPresent(Kind.self, forKey: .kind) {
         case .taskGroup:
-            self = try .taskGroup(TaskGroup(from: decoder))
+            try .taskGroup(TaskGroup(from: decoder))
+
+        case nil:
+            try .document(Document(from: decoder))
         }
     }
 }
@@ -273,14 +283,14 @@ private struct RawSeeAlso: Decodable {
 
 private struct RawReference: Decodable {
     var identifier: Technology.Identifier
-    var title: String
+    var title: String?
     var type: String
     var kind: String?
     var role: String?
     var url: String?
     var abstract: [RawInlineContent]?
     var fragments: [RawFragment]?
-    var navigatorTitle: [RawInlineContent]?
+    var navigatorTitle: [RawFragment]?
 }
 
 private struct RawFragment: Decodable {
@@ -288,6 +298,21 @@ private struct RawFragment: Decodable {
     var kind: Kind
 
     enum Kind: String, RawRepresentable, Decodable {
-        case text, keyword, identifier, label
+        case text, keyword, identifier, label, typeIdentifier, genericParameter
+        case externalParam, attribute
+    }
+
+    var fragment: TechnologyDetail.Reference.Fragment {
+        let kind: TechnologyDetail.Reference.Fragment.Kind = switch kind {
+        case .text: .text
+        case .keyword: .keyword
+        case .identifier: .identifier
+        case .label: .label
+        case .typeIdentifier: .typeIdentifier
+        case .genericParameter: .genericParameter
+        case .externalParam: .externalParam
+        case .attribute: .attribute
+        }
+        return .init(text: text, kind: kind)
     }
 }
