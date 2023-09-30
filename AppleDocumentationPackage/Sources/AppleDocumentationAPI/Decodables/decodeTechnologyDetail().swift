@@ -49,7 +49,8 @@ private struct Result: Decodable {
                     role: $0.role,
                     abstract: $0.abstract?.map(\.inlineContent) ?? [],
                     fragments: $0.fragments?.map(\.fragment) ?? [],
-                    navigatorTitle: $0.navigatorTitle?.map(\.fragment) ?? []
+                    navigatorTitle: $0.navigatorTitle?.map(\.fragment) ?? [],
+                    variants: $0.variants?.map(\.variant) ?? []
                 )
             },
             diffAvailability: .init(detail.diffAvailability ?? [:])
@@ -291,6 +292,7 @@ private struct RawReference: Decodable {
     var abstract: [RawInlineContent]?
     var fragments: [RawFragment]?
     var navigatorTitle: [RawFragment]?
+    var variants: [RawImageVariant]?
 }
 
 private struct RawFragment: Decodable {
@@ -314,5 +316,29 @@ private struct RawFragment: Decodable {
         case .attribute: .attribute
         }
         return .init(text: text, kind: kind)
+    }
+}
+
+private struct RawImageVariant: Decodable {
+    var url: URL
+    var traits: [Trait]
+
+    enum Trait: String, RawRepresentable, Decodable {
+        case x1 = "1x", x2 = "2x"  // swiftlint:disable:this identifier_name
+        case light, dark
+    }
+
+    var variant: TechnologyDetail.Reference.ImageVariant {
+        TechnologyDetail.Reference.ImageVariant(
+            url: url,
+            traits: traits.map {
+                switch $0 {
+                case .x1: .x1
+                case .x2: .x2
+                case .dark: .dark
+                case .light: .light
+                }
+            }
+        )
     }
 }

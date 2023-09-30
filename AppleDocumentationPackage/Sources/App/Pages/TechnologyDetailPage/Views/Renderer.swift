@@ -1,5 +1,7 @@
 import SwiftUI
 import AppleDocumentation
+import Nuke
+import NukeExtensions
 import SupportMacros
 
 extension EnvironmentValues {
@@ -29,7 +31,7 @@ private struct Cache {
 
     mutating func attachment<T: NSTextAttachment>(
         for content: InlineContent, default: () -> T
-    ) -> NSTextAttachment {
+    ) -> T {
         if let attachment = attachments[content] as? T {
             return attachment
         }
@@ -39,11 +41,24 @@ private struct Cache {
     }
 }
 
+private protocol TextLayoutObserved: AnyObject {
+    func invalidateIntrinsicContentSize()
+}
+
 private extension [InlineContent] {
-    func attributedString(environment: EnvironmentValues, cache: inout Cache) -> NSAttributedString {
+    func attributedString(
+        environment: EnvironmentValues,
+        cache: inout Cache,
+        on textLayoutTarget: TextLayoutObserved
+    ) -> NSAttributedString {
         let string = NSMutableAttributedString()
         for content in self {
-            content.buildAttributedString(into: string, environment: environment, cache: &cache)
+            content.buildAttributedString(
+                into: string,
+                environment: environment,
+                cache: &cache,
+                on: textLayoutTarget
+            )
         }
 
         let foregroundColor = environment.colorScheme == .dark ? UIColor.white : .black
@@ -56,11 +71,12 @@ private extension [InlineContent] {
 }
 
 private extension InlineContent {
-    // swiftlint:disable:next cyclomatic_complexity
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     func buildAttributedString(
         into string: NSMutableAttributedString,
         environment: EnvironmentValues,
-        cache: inout Cache
+        cache: inout Cache,
+        on textLayoutTarget: TextLayoutObserved
     ) {
         switch self {
         case .text(let text):
@@ -72,7 +88,12 @@ private extension InlineContent {
         case .strong(let strong):
             let text = NSMutableAttributedString()
             for content in strong.contents {
-                content.buildAttributedString(into: text, environment: environment, cache: &cache)
+                content.buildAttributedString(
+                    into: text,
+                    environment: environment,
+                    cache: &cache,
+                    on: textLayoutTarget
+                )
             }
             let range = NSRange(location: 0, length: text.length)
             text.addAttributes([:], range: range)
@@ -81,22 +102,42 @@ private extension InlineContent {
         case .emphasis(let emphasis):
             let text = NSMutableAttributedString()
             for content in emphasis.contents {
-                content.buildAttributedString(into: text, environment: environment, cache: &cache)
+                content.buildAttributedString(
+                    into: text,
+                    environment: environment,
+                    cache: &cache,
+                    on: textLayoutTarget
+                )
             }
             let range = NSRange(location: 0, length: text.length)
             text.addAttributes([:], range: range)
             string.append(text)
 
         case .reference(let reference):
-            guard let ref = environment.references[reference.identifier] else { return }
+//            guard let ref = environment.references[reference.identifier] else { return }
+            let text = NSAttributedString(
+                string: reference.identifier.rawValue,
+                attributes: [.foregroundColor: UIColor.blue]
+            )
+            string.append(text)
 
         case .image(let image):
-            guard let ref = environment.references[image.identifier] else { return }
+            guard let ref = environment.references[image.identifier],
+                  let url = ref.variants.last?.url else { return }
+            let attachment: ImageAttachment = cache.attachment(for: self) {
+                ImageAttachment(target: url, targetView: textLayoutTarget)
+            }
+            string.append(NSAttributedString(attachment: attachment))
 
         case .inlineHead(let inlineHead):
             let text = NSMutableAttributedString()
             for content in inlineHead.contents {
-                content.buildAttributedString(into: text, environment: environment, cache: &cache)
+                content.buildAttributedString(
+                    into: text,
+                    environment: environment,
+                    cache: &cache,
+                    on: textLayoutTarget
+                )
             }
             let range = NSRange(location: 0, length: text.length)
             text.addAttributes([:], range: range)
@@ -104,7 +145,7 @@ private extension InlineContent {
 
         case .unknown(let unknown):
             let attachment = cache.attachment(for: self) {
-                UnknownAttachment(unknown: unknown)
+                UnknownAttachment(target: unknown, targetView: textLayoutTarget)
             }
             string.append(NSAttributedString(attachment: attachment))
         }
@@ -115,32 +156,38 @@ private extension InlineContent {
 private struct UITextViewRenderer: UIViewRepresentable {
     let contents: [InlineContent]
 
-    func makeUIView(context: Context) -> UITextView {
+    func makeUIView(context: Context) -> TextView {
         let view = TextView()
         view.isScrollEnabled = false
         view.isEditable = false
         view.isSelectable = true
         view.textContainerInset = .zero
         view.textContainer.lineFragmentPadding = 0
-        view.translatesAutoresizingMaskIntoConstraints = false
+        view.textContainer.heightTracksTextView = true
+        view.setContentHuggingPriority(.required, for: .vertical)
         return view
     }
 
-    func updateUIView(_ uiView: UITextView, context: Context) {
+    func updateUIView(_ uiView: TextView, context: Context) {
         uiView.attributedText = contents.attributedString(
             environment: context.environment,
-            cache: &context.coordinator.cache
+            cache: &context.coordinator.cache,
+            on: uiView
         )
     }
 
-    func sizeThatFits(_ proposal: ProposedViewSize, uiView: UITextView, context: Context) -> CGSize? {
+    func sizeThatFits(_ proposal: ProposedViewSize, uiView: TextView, context: Context) -> CGSize? {
+        let width: CGFloat = if let width = proposal.width {
+            width.isFinite ? width : .greatestFiniteMagnitude
+        } else {
+            0.0
+        }
         var size = uiView.systemLayoutSizeFitting(
-            CGSize(width: proposal.width ?? 0, height: UIView.noIntrinsicMetric),
+            CGSize(width: width, height: UIView.noIntrinsicMetric),
             withHorizontalFittingPriority: .required,
             verticalFittingPriority: .fittingSizeLevel
         )
-        size.width = proposal.width ?? size.width
-        print(size, proposal)
+        size.width = width > 0 ? width : size.width
         return size
     }
 
@@ -152,15 +199,52 @@ private struct UITextViewRenderer: UIViewRepresentable {
         var cache = Cache()
     }
 
-    private class TextView: UITextView {
+    final class TextView: UITextView, TextLayoutObserved {
         override var intrinsicContentSize: CGSize {
             contentSize
         }
     }
 }
 
-private class Attachment<ViewProvider: NSTextAttachmentViewProvider>: NSTextAttachment {
+private class AttachmentViewProvider<Target>: NSTextAttachmentViewProvider {
+    let target: Target
+    private(set) weak var targetView: TextLayoutObserved?
+    private(set) weak var parentView: UIView?
+
+    required init(
+        target: Target,
+        targetView: TextLayoutObserved?,
+        textAttachment: NSTextAttachment,
+        parentView: UIView?,
+        textLayoutManager: NSTextLayoutManager?,
+        location: NSTextLocation
+    ) {
+        self.target = target
+        self.targetView = targetView
+        self.parentView = parentView
+        super.init(
+            textAttachment: textAttachment,
+            parentView: parentView,
+            textLayoutManager: textLayoutManager,
+            location: location
+        )
+    }
+}
+
+private class Attachment<Target, ViewProvider: AttachmentViewProvider<Target>>: NSTextAttachment {
+    let target: Target
+    weak var targetView: TextLayoutObserved?
     private var viewProvider: ViewProvider?
+
+    init(target: Target, targetView: TextLayoutObserved) {
+        self.target = target
+        self.targetView = targetView
+        super.init(data: nil, ofType: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewProvider(
         for parentView: UIView?,
@@ -171,6 +255,8 @@ private class Attachment<ViewProvider: NSTextAttachmentViewProvider>: NSTextAtta
             return viewProvider
         }
         let provider = ViewProvider(
+            target: target,
+            targetView: targetView,
             textAttachment: self,
             parentView: parentView,
             textLayoutManager: textContainer?.textLayoutManager,
@@ -182,30 +268,67 @@ private class Attachment<ViewProvider: NSTextAttachmentViewProvider>: NSTextAtta
     }
 }
 
-private final class ImageAttachment: Attachment<ImageAttachment.ViewProvider> {
-    final class ViewProvider: NSTextAttachmentViewProvider {
+private final class ImageAttachment: Attachment<URL, ImageAttachment.ViewProvider> {
+    final class ViewProvider: AttachmentViewProvider<URL> {
+        private lazy var imageView = ImageView()
+        private var aspectSize: CGSize?
+        private weak var task: ImageTask?
 
+        override func loadView() {
+            view = imageView
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            imageView.layer.borderColor = UIColor.yellow.cgColor
+            imageView.layer.borderWidth = 1
+        }
+
+        @MainActor
+        override func attachmentBounds(
+            for attributes: [NSAttributedString.Key: Any],
+            location: NSTextLocation,
+            textContainer: NSTextContainer?,
+            proposedLineFragment: CGRect,
+            position: CGPoint
+        ) -> CGRect {
+            if let aspectSize {
+                return CGRect(
+                    origin: .zero,
+                    size: contentSize(in: proposedLineFragment.width, imageSize: aspectSize)
+                )
+            }
+            if task == nil {
+                task = loadImage(with: target, into: imageView) { [weak self] result in
+                    switch result {
+                    case .success(let response):
+                        self?.aspectSize = response.image.size
+                        self?.targetView?.invalidateIntrinsicContentSize()
+
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            }
+
+            return CGRect(
+                x: 0, y: 0,
+                width: proposedLineFragment.width,
+                height: proposedLineFragment.width * 3 / 4
+            )
+        }
+
+        private func contentSize(in width: CGFloat, imageSize: CGSize) -> CGSize {
+            let height = width * imageSize.height / imageSize.width
+            return CGSize(width: width, height: height)
+        }
+
+        private final class ImageView: UIImageView {}
     }
 }
 
-private final class UnknownAttachment: Attachment<UnknownAttachment.ViewProvider> {
-    let unknown: InlineContent.Unknown
-
-    init(unknown: InlineContent.Unknown) {
-        self.unknown = unknown
-        super.init(data: nil, ofType: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    final class ViewProvider: NSTextAttachmentViewProvider {
-        // swiftlint:disable:next force_cast
-        var unknown: InlineContent.Unknown { (textAttachment as! UnknownAttachment).unknown }
+private final class UnknownAttachment: Attachment<InlineContent.Unknown, UnknownAttachment.ViewProvider> {
+    final class ViewProvider: AttachmentViewProvider<InlineContent.Unknown> {
         private lazy var label: UILabel = {
             let label = UILabel()
-            label.text = "unhandled type: \(unknown.type)"
+            label.text = "unhandled type: \(target.type)"
             label.textColor = .white
             label.font = .systemFont(ofSize: 12, weight: .bold)
             return label

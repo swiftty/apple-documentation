@@ -68,6 +68,8 @@ let package = Package(
         )
     ],
     dependencies: [
+        .package(url: "https://github.com/kean/Nuke.git", from: "12.1.0"),
+
         .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.0"),
 
         .package(url: "https://github.com/swiftty/XcodeGenBinary.git", from: "2.37.0"),
@@ -171,7 +173,8 @@ let package = Package(
             dependencies: [
                 "Router",
                 "AppleDocClient",
-                "UIComponent"
+                "UIComponent",
+                .product(name: "NukeExtensions", package: "Nuke")
             ]
         ),
 

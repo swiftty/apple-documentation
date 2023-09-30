@@ -157,6 +157,7 @@ extension TechnologyDetail {
         public var abstract: [InlineContent]
         public var fragments: [Fragment]
         public var navigatorTitle: [Fragment]
+        public var variants: [ImageVariant]
 
         @ImplicitInit
         public struct Fragment: Hashable {
@@ -166,6 +167,17 @@ extension TechnologyDetail {
             public enum Kind {
                 case keyword, text, identifier, label, typeIdentifier, genericParameter
                 case externalParam, attribute
+            }
+        }
+
+        @ImplicitInit
+        public struct ImageVariant: Hashable {
+            public var url: URL
+            public var traits: [Trait]
+
+            public enum Trait: String, RawRepresentable, Hashable {
+                case x1 = "1x", x2 = "2x"  // swiftlint:disable:this identifier_name
+                case light, dark
             }
         }
     }

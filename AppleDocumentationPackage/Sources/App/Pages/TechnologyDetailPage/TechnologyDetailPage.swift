@@ -23,6 +23,7 @@ public struct TechnologyDetailPage: View {
                         BlockContentView(blocks: blocks)
                     }
                 }
+                .environment(\.references, detail.references)
             }
             .navigationTitle(detail.metadata.title)
         } else {
@@ -47,6 +48,14 @@ private struct BlockContentView: View {
             case .heading(let heading):
                 Text(heading.text)
                     .font(.title3.bold())
+
+            case .unorderedList(let list):
+                ForEach(list.items, id: \.self) { item in
+                    HStack(alignment: .top) {
+                        Text("・")
+                        BlockContentView(blocks: item.content)
+                    }
+                }
 
             default:
                 EmptyView()
