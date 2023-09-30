@@ -27,6 +27,8 @@ struct InlineContentView: View {
 }
 
 private struct Cache {
+    var attributes = Attributes()
+
     private var attachments: [InlineContent: NSTextAttachment] = [:]
 
     mutating func attachment<T: NSTextAttachment>(
@@ -38,6 +40,19 @@ private struct Cache {
         let attachment = `default`()
         attachments[content] = attachment
         return attachment
+    }
+
+    struct Attributes {
+        var fontSize: CGFloat = 17
+        var fontWeight: UIFont.Weight = .regular
+        var foregroundColor: UIColor = .lightText
+
+        var textAttributes: [NSAttributedString.Key: Any] {
+            return [
+                .font: UIFont.systemFont(ofSize: fontSize, weight: fontWeight),
+                .foregroundColor: foregroundColor
+            ]
+        }
     }
 }
 
@@ -51,8 +66,14 @@ private extension [InlineContent] {
         cache: inout Cache,
         on textLayoutTarget: TextLayoutObserved
     ) -> NSAttributedString {
+        let foregroundColor = environment.colorScheme == .dark ? UIColor.white : .black
+
         let string = NSMutableAttributedString()
         for content in self {
+            cache.attributes = .init(
+                fontSize: environment.uiFont?.pointSize ?? 16,
+                foregroundColor: foregroundColor
+            )
             content.buildAttributedString(
                 into: string,
                 environment: environment,
@@ -60,12 +81,6 @@ private extension [InlineContent] {
                 on: textLayoutTarget
             )
         }
-
-        let foregroundColor = environment.colorScheme == .dark ? UIColor.white : .black
-        string.addAttributes([
-            .foregroundColor: foregroundColor,
-            .font: environment.uiFont ?? .systemFont(ofSize: 16)
-        ], range: NSRange(location: 0, length: string.length))
         return string
     }
 }
@@ -80,12 +95,19 @@ private extension InlineContent {
     ) {
         switch self {
         case .text(let text):
-            string.append(NSAttributedString(string: text.text, attributes: [:]))
+            string.append(.init(
+                string: text.text,
+                attributes: cache.attributes.textAttributes
+            ))
 
         case .codeVoice(let codeVoice):
-            string.append(NSAttributedString(string: codeVoice.code, attributes: [:]))
+            string.append(.init(
+                string: codeVoice.code,
+                attributes: cache.attributes.textAttributes
+            ))
 
         case .strong(let strong):
+            cache.attributes.fontWeight = .bold
             let text = NSMutableAttributedString()
             for content in strong.contents {
                 content.buildAttributedString(
@@ -95,8 +117,6 @@ private extension InlineContent {
                     on: textLayoutTarget
                 )
             }
-            let range = NSRange(location: 0, length: text.length)
-            text.addAttributes([:], range: range)
             string.append(text)
 
         case .emphasis(let emphasis):
@@ -109,15 +129,19 @@ private extension InlineContent {
                     on: textLayoutTarget
                 )
             }
-            let range = NSRange(location: 0, length: text.length)
-            text.addAttributes([:], range: range)
             string.append(text)
 
         case .reference(let reference):
-//            guard let ref = environment.references[reference.identifier] else { return }
+            guard let ref = environment.references[reference.identifier] else { return }
+
+            cache.attributes.foregroundColor = .systemBlue
+
+            var attributes = cache.attributes.textAttributes
+            attributes[.link] = ref.url
+
             let text = NSAttributedString(
-                string: reference.identifier.rawValue,
-                attributes: [.foregroundColor: UIColor.blue]
+                string: ref.title ?? ref.fragments.map(\.text).joined(),
+                attributes: attributes
             )
             string.append(text)
 
@@ -127,9 +151,11 @@ private extension InlineContent {
             let attachment: ImageAttachment = cache.attachment(for: self) {
                 ImageAttachment(target: url, targetView: textLayoutTarget)
             }
-            string.append(NSAttributedString(attachment: attachment))
+            string.append(.init(attachment: attachment))
 
         case .inlineHead(let inlineHead):
+            cache.attributes.fontSize += 4
+
             let text = NSMutableAttributedString()
             for content in inlineHead.contents {
                 content.buildAttributedString(
@@ -139,15 +165,13 @@ private extension InlineContent {
                     on: textLayoutTarget
                 )
             }
-            let range = NSRange(location: 0, length: text.length)
-            text.addAttributes([:], range: range)
             string.append(text)
 
         case .unknown(let unknown):
             let attachment = cache.attachment(for: self) {
                 UnknownAttachment(target: unknown, targetView: textLayoutTarget)
             }
-            string.append(NSAttributedString(attachment: attachment))
+            string.append(.init(attachment: attachment))
         }
     }
 }
