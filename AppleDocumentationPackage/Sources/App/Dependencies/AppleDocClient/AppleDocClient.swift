@@ -39,8 +39,8 @@ public struct AppleDocClient {
         }
     }
 
-    public func technologyDetail(for path: String) async throws -> TechnologyDetail {
-        try await props.technologyDetail(path)
+    public func technologyDetail(for path: Technology.Destination.Value) async throws -> TechnologyDetail {
+        try await props.technologyDetail(path.rawValue)
     }
 }
 

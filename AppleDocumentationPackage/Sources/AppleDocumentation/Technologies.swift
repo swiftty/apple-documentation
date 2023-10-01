@@ -25,15 +25,12 @@ extension Technology {
     public struct Destination: Hashable {
         public var identifier: Identifier
         public var title: String
-        public var url: String
+        public var value: Value
         public var abstract: String
 
-        public static func == (lhs: Self, rhs: Self) -> Bool {
-            lhs.identifier == rhs.identifier
-        }
-
-        public func hash(into hasher: inout Hasher) {
-            hasher.combine(identifier)
+        @ImplicitInit
+        public struct Value: Hashable, RawRepresentable {
+            public var rawValue: String
         }
     }
 

@@ -10,21 +10,21 @@ import TechnologyDetailPage
 public struct App: SwiftUI.App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 
+    @State var router = Router(provider: RoutingProviderImpl())
+
     public init() {}
 
     public var body: some Scene {
         WindowGroup {
             RootPage()
                 .preferredColorScheme(.dark)
-                .environment(\.router, appDelegate.router)
+                .environment(router)
                 .environment(\.appleDocClient, appDelegate.appleDocClient)
         }
     }
 }
 
 private final class AppDelegate: UIResponder, UIApplicationDelegate {
-    lazy var router = Router(provider: RoutingProviderImpl())
-
     lazy var appleDocClient = AppleDocClient.live(session: .shared)
 }
 

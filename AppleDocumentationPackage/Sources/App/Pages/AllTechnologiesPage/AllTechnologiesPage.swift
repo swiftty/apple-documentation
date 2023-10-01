@@ -4,7 +4,7 @@ import AppleDocumentation
 import AppleDocClient
 
 public struct AllTechnologiesPage: View {
-    @Environment(\.router) var router
+    @Environment(Router.self) var router
     @Environment(\.appleDocClient) var appleDocClient
 
     @State private var allTechnologies: [Technology]?
@@ -63,9 +63,6 @@ public struct AllTechnologiesPage: View {
             }
         }
         .navigationTitle("Technologies")
-        .navigationDestination(for: Technology.Destination.self) { destination in
-            router.route(for: .technologyDetail(for: destination))
-        }
         .task {
             do {
                 (allTechnologies, diffAvailability) = try await (
@@ -80,7 +77,7 @@ public struct AllTechnologiesPage: View {
         LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
             Section {
                 ForEach(technologies, id: \.title) { tech in
-                    NavigationLink(value: tech.destination) {
+                    NavigationLink(value: tech.destination.value) {
                         TechnologyCell(
                             title: tech.title,
                             abstract: tech.destination.abstract,
@@ -192,7 +189,7 @@ extension Technology.DiffAvailability.Payload {
                             destination: .init(
                                 identifier: .init(rawValue: "swiftui"),
                                 title: "swiftui",
-                                url: "",
+                                value: .init(rawValue: ""),
                                 abstract: """
                                     Make large-scale mathematical computations and image calculations, optimized for high performance and low energy consumption.
                                     """

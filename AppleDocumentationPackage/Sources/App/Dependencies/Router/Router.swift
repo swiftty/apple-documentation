@@ -10,35 +10,27 @@ public protocol RoutingProvider {
     func route(for target: any Routing) -> ResultView
 }
 
-public struct Router {
+@Observable
+@MainActor
+public class Router {
+    public var navigationPath = NavigationPath()
+
     let router: @MainActor (any Routing) -> AnyView
 
-    @MainActor
+    init(router: @escaping (any Routing) -> AnyView) {
+        self.router = router
+    }
+
     public func route(for target: some Routing) -> some View {
         router(target)
     }
 }
 
 extension Router {
-    public init(provider: some RoutingProvider) {
+    public convenience init(provider: some RoutingProvider) {
         let route = provider.route(for:)
-        router = { target in
+        self.init(router: { target in
             AnyView(route(target))
-        }
-    }
-}
-
-extension EnvironmentValues {
-    private struct Key: EnvironmentKey {
-        static var defaultValue: Router {
-            Router { _ in
-                AnyView(EmptyView())
-            }
-        }
-    }
-
-    public var router: Router {
-        get { self[Key.self] }
-        set { self[Key.self] = newValue }
+        })
     }
 }

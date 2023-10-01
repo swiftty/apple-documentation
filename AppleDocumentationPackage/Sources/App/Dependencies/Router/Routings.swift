@@ -15,12 +15,12 @@ extension Routing where Self == Routings.AllTechnologiesPage {
 
 extension Routings {
     public struct TechnologyDetailPage: Routing {
-        public var destination: Technology.Destination
+        public var destination: Technology.Destination.Value
     }
 }
 
 extension Routing where Self == Routings.TechnologyDetailPage {
-    public static func technologyDetail(for destination: Technology.Destination) -> Self {
+    public static func technologyDetail(for destination: Technology.Destination.Value) -> Self {
         Self.init(destination: destination)
     }
 }

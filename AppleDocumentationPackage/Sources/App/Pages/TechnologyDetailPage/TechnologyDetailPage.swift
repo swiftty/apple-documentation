@@ -1,15 +1,17 @@
 import SwiftUI
 import AppleDocumentation
 import AppleDocClient
+import Router
 
 public struct TechnologyDetailPage: View {
+    @Environment(Router.self) var router
     @Environment(\.appleDocClient) var appleDocClient
 
-    let destination: Technology.Destination
+    let destination: Technology.Destination.Value
 
     @State private var detail: TechnologyDetail?
 
-    public init(destination: Technology.Destination) {
+    public init(destination: Technology.Destination.Value) {
         self.destination = destination
     }
 
@@ -26,11 +28,14 @@ public struct TechnologyDetailPage: View {
                 .environment(\.references, detail.references)
             }
             .navigationTitle(detail.metadata.title)
+            .environment(\.openDestination, OpenDestinationAction { identifier in
+                router.navigationPath.append(identifier)
+            })
         } else {
             ProgressView()
                 .progressViewStyle(.circular)
                 .task {
-                    detail = try? await appleDocClient.technologyDetail(for: destination.url)
+                    detail = try? await appleDocClient.technologyDetail(for: destination)
                 }
         }
     }
@@ -66,12 +71,7 @@ private struct BlockContentView: View {
 
 #Preview {
     TechnologyDetailPage(
-        destination: .init(
-            identifier: .init(rawValue: ""),
-            title: "",
-            url: "",
-            abstract: ""
-        )
+        destination: .init(rawValue: "")
     )
     .transformEnvironment(\.appleDocClient) { client in
         client.props.technologyDetail = { _ in

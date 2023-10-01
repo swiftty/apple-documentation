@@ -1,6 +1,24 @@
 import SwiftUI
 import AppleDocumentation
 import NukeUI
+import SupportMacros
+
+struct OpenDestinationAction {
+    private let handler: (Technology.Destination.Value) -> Void
+
+    init(perform handler: @escaping (Technology.Destination.Value) -> Void) {
+        self.handler = handler
+    }
+
+    func callAsFunction(_ identifier: Technology.Destination.Value) {
+        handler(identifier)
+    }
+}
+
+extension EnvironmentValues {
+    @SwiftUIEnvironment
+    var openDestination: OpenDestinationAction = .init(perform: { _ in })
+}
 
 struct TextView: View, Hashable {
     struct TextAttributes: Hashable {
@@ -43,6 +61,7 @@ extension TextView {
         let attributes: TextAttributes
 
         @Environment(\.references) var references
+        @Environment(\.openDestination) var openDestination
 
         var body: some View {
             ForEach(contents, id: \.self) { content in
@@ -72,6 +91,20 @@ extension TextView {
                     }
                 }
             }
+            .environment(\.openURL, OpenURLAction { url in
+                guard let identifier = decodeFromURL(url) else { return .discarded }
+                if identifier.hasPrefix("/") {
+                    openDestination(.init(rawValue: identifier))
+                    return .handled
+                }
+                guard let url = URL(string: identifier) else { return .discarded }
+                if url.scheme?.hasPrefix("http") ?? false {
+                    return .systemAction(url)
+                }
+
+                openDestination(.init(rawValue: identifier))
+                return .handled
+            })
         }
 
         private var contents: [Content] {
@@ -173,7 +206,7 @@ extension TextView {
             case .reference(let reference):
                 guard let ref = references[reference.identifier] else { return }
                 var attributes = attributes
-                attributes.link = ref.url.flatMap(URL.init(string:))
+                attributes.link = encodeToURL(ref.url)
                 if attributes.link == nil {
                     attributes.foregroundColor = .yellow
                 }
@@ -219,4 +252,19 @@ private struct AttributedText: Hashable {
             .italic(attributes.italic)
             .foregroundStyle(attributes.foregroundColor)
     }
+}
+
+private func encodeToURL(_ target: String?) -> URL? {
+    guard let target else { return nil }
+
+    var comps = URLComponents(string: "appledoc://")
+    comps?.queryItems = [
+        .init(name: "identifier", value: target)
+    ]
+    return comps?.url
+}
+
+private func decodeFromURL(_ url: URL) -> String? {
+    var comps = URLComponents(url: url, resolvingAgainstBaseURL: false)
+    return comps?.queryItems?.first(where: { $0.name == "identifier" })?.value
 }

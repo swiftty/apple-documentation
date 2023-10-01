@@ -131,7 +131,7 @@ private struct Result: Decodable {
                     destination: .init(
                         identifier: tech.destination.identifier,
                         title: topic.title,
-                        url: topic.url,
+                        value: .init(rawValue: topic.url),
                         abstract: abstract.text
                     )
                 )
