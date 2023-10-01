@@ -20,7 +20,7 @@ extension EnvironmentValues {
     var openDestination: OpenDestinationAction = .init(perform: { _ in })
 }
 
-struct TextView: View, Hashable {
+struct TextView: View {
     struct TextAttributes: Hashable {
         var font: Font = .body
         var bold: Bool = false
@@ -29,6 +29,8 @@ struct TextView: View, Hashable {
 
         var link: URL?
     }
+
+    @Environment(\.openURL) var openURL
 
     let block: BlockContent
     let attributes: TextAttributes
@@ -43,9 +45,7 @@ struct TextView: View, Hashable {
     }
 
     var body: some View {
-        InnerView(block: block, attributes: attributes)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .multilineTextAlignment(.leading)
+        InnerView(block: block, attributes: attributes, openURL: openURL)
     }
 }
 
@@ -53,12 +53,18 @@ extension TextView {
     private struct InnerView: View {
         private enum Content: Hashable {
             case paragraph([AttributedText])
-            case unorderedList([[TextView]])
+            case unorderedList([[ListItem]])
             case image(URL)
+
+            struct ListItem: Hashable {
+                var block: BlockContent
+                var attributes: TextAttributes
+            }
         }
 
         let block: BlockContent
         let attributes: TextAttributes
+        let openURL: OpenURLAction
 
         @Environment(\.references) var references
         @Environment(\.openDestination) var openDestination
@@ -77,7 +83,7 @@ extension TextView {
                             Text("•")
                             VStack {
                                 ForEach(items, id: \.self) { item in
-                                    item
+                                    InnerView(block: item.block, attributes: item.attributes, openURL: openURL)
                                 }
                             }
                         }
@@ -91,6 +97,8 @@ extension TextView {
                     }
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .multilineTextAlignment(.leading)
             .environment(\.openURL, OpenURLAction { url in
                 guard let identifier = decodeFromURL(url) else { return .discarded }
                 if identifier.hasPrefix("/") {
@@ -99,7 +107,8 @@ extension TextView {
                 }
                 guard let url = URL(string: identifier) else { return .discarded }
                 if url.scheme?.hasPrefix("http") ?? false {
-                    return .systemAction(url)
+                    openURL(url)
+                    return .handled
                 }
 
                 openDestination(.init(rawValue: identifier))
@@ -166,7 +175,7 @@ extension TextView {
             case .unorderedList(let unorderedList):
                 let list = unorderedList.items.map { item in
                     item.content.map {
-                        TextView($0, attributes: attributes)
+                        Content.ListItem(block: $0, attributes: attributes)
                     }
                 }
                 builder.insert(.unorderedList(list))
@@ -265,6 +274,6 @@ private func encodeToURL(_ target: String?) -> URL? {
 }
 
 private func decodeFromURL(_ url: URL) -> String? {
-    var comps = URLComponents(url: url, resolvingAgainstBaseURL: false)
+    let comps = URLComponents(url: url, resolvingAgainstBaseURL: false)
     return comps?.queryItems?.first(where: { $0.name == "identifier" })?.value
 }

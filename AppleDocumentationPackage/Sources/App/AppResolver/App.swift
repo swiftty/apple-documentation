@@ -4,6 +4,7 @@ import Router
 import AppleDocClient
 import AppleDocClientLive
 import RootPage
+import SafariPage
 import AllTechnologiesPage
 import TechnologyDetailPage
 
@@ -36,6 +37,9 @@ private struct RoutingProviderImpl: RoutingProvider {
 
         case let page as Routings.TechnologyDetailPage:
             TechnologyDetailPage(destination: page.destination)
+
+        case let page as Routings.SafariPage:
+            SafariPage(url: page.url)
 
         default:
             Text("unhandled route: \(String(describing: target))")

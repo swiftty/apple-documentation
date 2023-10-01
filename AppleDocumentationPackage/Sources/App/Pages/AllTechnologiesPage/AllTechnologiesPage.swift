@@ -77,7 +77,7 @@ public struct AllTechnologiesPage: View {
         LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
             Section {
                 ForEach(technologies, id: \.title) { tech in
-                    NavigationLink(value: tech.destination.value) {
+                    NavigationLink(for: .technologyDetail(for: tech.destination.value)) {
                         TechnologyCell(
                             title: tech.title,
                             abstract: tech.destination.abstract,

@@ -34,3 +34,15 @@ extension Router {
         })
     }
 }
+
+extension NavigationPath {
+    public mutating func push(_ target: some Routing) {
+        append(target)
+    }
+}
+
+extension NavigationLink where Destination == Never {
+    public init(for value: some Routing, @ViewBuilder label: () -> Label) {
+        self.init(value: value, label: label)
+    }
+}

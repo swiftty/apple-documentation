@@ -6,6 +6,7 @@ import Router
 public struct TechnologyDetailPage: View {
     @Environment(Router.self) var router
     @Environment(\.appleDocClient) var appleDocClient
+    @Environment(\.openURL) var openURL
 
     let destination: Technology.Destination.Value
 
@@ -28,8 +29,20 @@ public struct TechnologyDetailPage: View {
                 .environment(\.references, detail.references)
             }
             .navigationTitle(detail.metadata.title)
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        guard let url = URL(string: "https://developer.apple.com\(destination.rawValue)") else {
+                            return
+                        }
+                        openURL(url)
+                    } label: {
+                        Label("safari", systemImage: "safari")
+                    }
+                }
+            }
             .environment(\.openDestination, OpenDestinationAction { identifier in
-                router.navigationPath.append(identifier)
+                router.navigationPath.push(.technologyDetail(for: identifier))
             })
         } else {
             ProgressView()

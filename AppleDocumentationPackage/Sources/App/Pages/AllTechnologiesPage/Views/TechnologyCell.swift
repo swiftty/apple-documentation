@@ -57,6 +57,9 @@ struct TechnologyCell: View {
                 .stroke(lineWidth: 1)
                 .fill(isPressed ? .blue : .secondary)
         }
+        .contentShape(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+        )
     }
 }
 

@@ -8,7 +8,9 @@ identifier_name:
     - t
     - x
     - y
+    - id
     - to
+    - vc
 
 nesting:
   type_level:
