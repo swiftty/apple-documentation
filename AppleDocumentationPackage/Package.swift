@@ -69,6 +69,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/kean/Nuke.git", from: "12.1.0"),
+        .package(url: "https://github.com/apple/swift-algorithms.git", from: "1.0.0"),
 
         .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.0"),
 
@@ -83,7 +84,10 @@ let package = Package(
 
         .target(
             name: "AppleDocumentationAPI",
-            dependencies: ["AppleDocumentation"]
+            dependencies: [
+                "AppleDocumentation",
+                .product(name: "Algorithms", package: "swift-algorithms")
+            ]
         ),
 
         .testTarget(
@@ -173,8 +177,7 @@ let package = Package(
             dependencies: [
                 "Router",
                 "AppleDocClient",
-                "UIComponent",
-                .product(name: "NukeExtensions", package: "Nuke")
+                "UIComponent"
             ]
         ),
 
@@ -186,7 +189,9 @@ let package = Package(
 
                 "Router",
                 "AppleDocClient",
-                "UIComponent"
+                "UIComponent",
+
+                .product(name: "NukeExtensions", package: "Nuke")
             ]
         )
     ]

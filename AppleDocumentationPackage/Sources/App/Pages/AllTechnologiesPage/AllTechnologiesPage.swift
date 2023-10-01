@@ -83,7 +83,8 @@ public struct AllTechnologiesPage: View {
                     NavigationLink(value: tech.destination) {
                         TechnologyCell(
                             title: tech.title,
-                            abstract: tech.destination.abstract
+                            abstract: tech.destination.abstract,
+                            tags: tech.tags
                         )
                     }
                     .buttonStyle(TechnologyCell.ButtonStyle())

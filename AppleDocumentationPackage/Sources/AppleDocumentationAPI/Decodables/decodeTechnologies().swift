@@ -1,5 +1,6 @@
 import Foundation
 import AppleDocumentation
+import Algorithms
 
 public func decodeTechnologies(from data: Data) throws -> (
     technologies: [Technology],
@@ -126,7 +127,7 @@ private struct Result: Decodable {
                 return Technology(
                     title: tech.title,
                     languages: tech.languages,
-                    tags: tech.tags,
+                    tags: Array(tech.tags.uniqued()),
                     destination: .init(
                         identifier: tech.destination.identifier,
                         title: topic.title,
