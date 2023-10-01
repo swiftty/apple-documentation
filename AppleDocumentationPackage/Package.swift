@@ -191,6 +191,7 @@ let package = Package(
                 "AppleDocClient",
                 "UIComponent",
 
+                .product(name: "NukeUI", package: "Nuke"),
                 .product(name: "NukeExtensions", package: "Nuke")
             ]
         )

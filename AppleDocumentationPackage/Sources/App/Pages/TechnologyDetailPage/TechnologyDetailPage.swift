@@ -17,10 +17,10 @@ public struct TechnologyDetailPage: View {
         if let detail {
             ScrollView {
                 VStack {
-                    InlineContentView(contents: detail.abstract)
+                    TextView(detail.abstract)
 
-                    ForEach(detail.primaryContents.map(\.content), id: \.self) { blocks in
-                        BlockContentView(blocks: blocks)
+                    ForEach(detail.primaryContents.flatMap(\.content), id: \.self) { block in
+                        TextView(block)
                     }
                 }
                 .environment(\.references, detail.references)
