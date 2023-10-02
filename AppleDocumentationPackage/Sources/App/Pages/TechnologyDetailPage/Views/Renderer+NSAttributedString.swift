@@ -6,9 +6,6 @@ import SupportMacros
 
 extension EnvironmentValues {
     @SwiftUIEnvironment
-    var references: [Technology.Identifier: TechnologyDetail.Reference] = [:]
-
-    @SwiftUIEnvironment
     var uiFont: UIFont? = nil  // swiftlint:disable:this redundant_optional_initialization
 }
 

@@ -125,8 +125,21 @@ extension TechnologyDetail {
     }
 
     @ImplicitInit
-    public struct PrimaryContent {
+    public struct PrimaryContent: Hashable {
         public var content: [BlockContent]
+        public var declarations: [Declaration]
+        public var parameters: [Parameter]
+
+        @ImplicitInit
+        public struct Declaration: Hashable {
+            public var tokens: [Fragment]
+        }
+
+        @ImplicitInit
+        public struct Parameter: Hashable {
+            public var name: String
+            public var content: [BlockContent]
+        }
     }
 
     public enum Topic {
@@ -160,17 +173,6 @@ extension TechnologyDetail {
         public var variants: [ImageVariant]
 
         @ImplicitInit
-        public struct Fragment: Hashable {
-            public var text: String
-            public var kind: Kind
-
-            public enum Kind {
-                case keyword, text, identifier, label, typeIdentifier, genericParameter
-                case externalParam, attribute
-            }
-        }
-
-        @ImplicitInit
         public struct ImageVariant: Hashable {
             public var url: URL
             public var traits: [Trait]
@@ -179,6 +181,17 @@ extension TechnologyDetail {
                 case x1 = "1x", x2 = "2x"  // swiftlint:disable:this identifier_name
                 case light, dark
             }
+        }
+    }
+
+    @ImplicitInit
+    public struct Fragment: Hashable {
+        public var text: String
+        public var kind: Kind
+
+        public enum Kind {
+            case keyword, text, identifier, label, typeIdentifier, genericParameter
+            case internalParam, externalParam, attribute
         }
     }
 }

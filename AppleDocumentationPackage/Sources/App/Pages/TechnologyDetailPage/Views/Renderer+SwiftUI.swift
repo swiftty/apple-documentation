@@ -17,6 +17,9 @@ struct OpenDestinationAction {
 
 extension EnvironmentValues {
     @SwiftUIEnvironment
+    var references: [Technology.Identifier: TechnologyDetail.Reference] = [:]
+
+    @SwiftUIEnvironment
     var openDestination: OpenDestinationAction = .init(perform: { _ in })
 }
 
@@ -25,6 +28,7 @@ struct TextView: View {
         var font: Font = .body
         var bold: Bool = false
         var italic: Bool = false
+        var monospaced: Bool = false
         var foregroundColor: Color = .primary
 
         var link: URL?
@@ -181,7 +185,11 @@ extension TextView {
                 builder.insert(.unorderedList(list))
 
             case .unknown(let unknown):
-                break
+                var attributes = attributes
+                attributes.bold = true
+                attributes.foregroundColor = .red
+
+                builder.insert(.paragraph([.init(string: unknown.type, attributes: attributes)]))
             }
         }
 
@@ -196,7 +204,9 @@ extension TextView {
                 builder.insert([.init(string: text.text, attributes: attributes)])
 
             case .codeVoice(let codeVoice):
-                break
+                var attributes = attributes
+                attributes.monospaced = true
+                builder.insert([.init(string: codeVoice.code, attributes: attributes)])
 
             case .strong(let strong):
                 var attributes = attributes
@@ -238,7 +248,11 @@ extension TextView {
                 }
 
             case .unknown(let unknown):
-                break
+                var attributes = attributes
+                attributes.bold = true
+                attributes.foregroundColor = .red
+
+                builder.insert([.init(string: unknown.type, attributes: attributes)])
             }
         }
     }
@@ -259,6 +273,7 @@ private struct AttributedText: Hashable {
             .font(attributes.font)
             .bold(attributes.bold)
             .italic(attributes.italic)
+            .monospaced(attributes.monospaced)
             .foregroundStyle(attributes.foregroundColor)
     }
 }

@@ -27,16 +27,20 @@ private struct Result: Decodable {
                 externalID: detail.metadata.externalID),
             abstract: detail.abstract.map(\.inlineContent),
             primaryContents: detail.primaryContentSections?.map {
-                .init(content: $0.content.map(\.blockContent))
+                .init(
+                    content: $0.content?.map(\.blockContent) ?? [],
+                    declarations: $0.declarations?.map(\.declaration) ?? [],
+                    parameters: $0.parameters?.map(\.parameter) ?? []
+                )
             } ?? [],
-            topics: detail.topicSections.compactMap {
+            topics: detail.topicSections?.compactMap {
                 switch $0 {
                 case .document:
                     nil
                 case .taskGroup(let group):
                     .taskGroup(.init(title: group.title, identifiers: group.identifiers, anchor: group.anchor))
                 }
-            },
+            } ?? [],
             seeAlso: detail.seeAlsoSections?.map {
                 .init(title: $0.title, generated: $0.generated, identifiers: $0.identifiers)
             } ?? [],
@@ -62,13 +66,15 @@ private struct RawTechnologyDetail: Decodable {
     var metadata: RawMetadata
     var abstract: [RawInlineContent]
     var primaryContentSections: [PrimaryContentSection]?
-    var topicSections: [RawTopic]
+    var topicSections: [RawTopic]?
     var seeAlsoSections: [RawSeeAlso]?
     var references: [Technology.Identifier: RawReference]
     var diffAvailability: [Technology.DiffAvailability.Key: Technology.DiffAvailability.Payload]?
 
     struct PrimaryContentSection: Decodable {
-        var content: [RawBlockContent]
+        var content: [RawBlockContent]?
+        var declarations: [RawDeclaration]?
+        var parameters: [RawParameter]?
     }
 }
 
@@ -301,17 +307,18 @@ private struct RawFragment: Decodable {
 
     enum Kind: String, RawRepresentable, Decodable {
         case text, keyword, identifier, label, typeIdentifier, genericParameter
-        case externalParam, attribute
+        case internalParam, externalParam, attribute
     }
 
-    var fragment: TechnologyDetail.Reference.Fragment {
-        let kind: TechnologyDetail.Reference.Fragment.Kind = switch kind {
+    var fragment: TechnologyDetail.Fragment {
+        let kind: TechnologyDetail.Fragment.Kind = switch kind {
         case .text: .text
         case .keyword: .keyword
         case .identifier: .identifier
         case .label: .label
         case .typeIdentifier: .typeIdentifier
         case .genericParameter: .genericParameter
+        case .internalParam: .internalParam
         case .externalParam: .externalParam
         case .attribute: .attribute
         }
@@ -340,5 +347,24 @@ private struct RawImageVariant: Decodable {
                 }
             }
         )
+    }
+}
+
+private struct RawDeclaration: Decodable {
+    var languages: [String]
+    var platforms: [String]
+    var tokens: [RawFragment]
+
+    var declaration: TechnologyDetail.PrimaryContent.Declaration {
+        .init(tokens: tokens.map(\.fragment))
+    }
+}
+
+private struct RawParameter: Decodable {
+    var name: String
+    var content: [RawBlockContent]
+
+    var parameter: TechnologyDetail.PrimaryContent.Parameter {
+        .init(name: name, content: content.map(\.blockContent))
     }
 }

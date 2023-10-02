@@ -3,6 +3,19 @@ import AppleDocumentation
 import AppleDocClient
 import Router
 
+struct IndexedItem<Element: Hashable>: Identifiable, Hashable {
+    var id: some Hashable { self }
+
+    var index: Int
+    var element: Element
+}
+
+extension Array where Element: Hashable {
+    func indexed() -> [IndexedItem<Element>] {
+        enumerated().map(IndexedItem.init)
+    }
+}
+
 public struct TechnologyDetailPage: View {
     @Environment(Router.self) var router
     @Environment(\.appleDocClient) var appleDocClient
@@ -22,8 +35,9 @@ public struct TechnologyDetailPage: View {
                 VStack {
                     TextView(detail.abstract)
 
-                    ForEach(detail.primaryContents.flatMap(\.content), id: \.self) { block in
-                        TextView(block)
+                    ForEach(detail.primaryContents.indexed()) { item in
+                        primaryContentSection(with: item.element)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
                 .environment(\.references, detail.references)
@@ -52,31 +66,33 @@ public struct TechnologyDetailPage: View {
                 }
         }
     }
-}
 
-private struct BlockContentView: View {
-    var blocks: [BlockContent]
+    @ViewBuilder
+    private func primaryContentSection(with content: TechnologyDetail.PrimaryContent) -> some View {
+        if case let declarations = content.declarations, !declarations.isEmpty {
+            ForEach(declarations.indexed()) { item in
+                Text(item.element.tokens.map(\.text).joined())
+                    .foregroundStyle(.secondary)
+            }
+        }
 
-    var body: some View {
-        ForEach(blocks, id: \.self) { block in
-            switch block {
-            case .paragraph(let paragraph):
-                InlineContentView(contents: paragraph.contents)
+        if case let parameters = content.parameters, !parameters.isEmpty {
+            Text("Parameters")
+                .font(.title2.bold())
 
-            case .heading(let heading):
-                Text(heading.text)
-                    .font(.title3.bold())
+            ForEach(parameters.indexed()) { item in
+                Text(item.element.name)
+                    .font(.body.bold())
 
-            case .unorderedList(let list):
-                ForEach(list.items, id: \.self) { item in
-                    HStack(alignment: .top) {
-                        Text("・")
-                        BlockContentView(blocks: item.content)
-                    }
+                ForEach(item.element.content.indexed()) { item in
+                    TextView(item.element)
                 }
+            }
+        }
 
-            default:
-                EmptyView()
+        if case let blocks = content.content, !blocks.isEmpty {
+            ForEach(blocks.indexed()) { item in
+                TextView(item.element)
             }
         }
     }
