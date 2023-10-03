@@ -33,7 +33,7 @@ public struct TechnologyDetailPage: View {
         if let detail {
             ScrollView {
                 VStack {
-                    TextView(detail.abstract)
+                    BlockTextView(detail.abstract)
 
                     ForEach(detail.primaryContents.indexed()) { item in
                         primaryContentSection(with: item.element)
@@ -71,8 +71,7 @@ public struct TechnologyDetailPage: View {
     private func primaryContentSection(with content: TechnologyDetail.PrimaryContent) -> some View {
         if case let declarations = content.declarations, !declarations.isEmpty {
             ForEach(declarations.indexed()) { item in
-                Text(item.element.tokens.map(\.text).joined())
-                    .foregroundStyle(.secondary)
+                FragmentTextView(fragments: item.element.tokens)
             }
         }
 
@@ -85,14 +84,14 @@ public struct TechnologyDetailPage: View {
                     .font(.body.bold())
 
                 ForEach(item.element.content.indexed()) { item in
-                    TextView(item.element)
+                    BlockTextView(item.element)
                 }
             }
         }
 
         if case let blocks = content.content, !blocks.isEmpty {
             ForEach(blocks.indexed()) { item in
-                TextView(item.element)
+                BlockTextView(item.element)
             }
         }
     }

@@ -1,5 +1,3 @@
-// swiftlint:disable line_length function_body_length
-
 import XCTest
 import SwiftSyntax
 import SwiftSyntaxMacros
@@ -115,5 +113,3 @@ class SwiftUIEnvironmentTests: XCTestCase {
 
     }
 }
-
-// swiftlint:enable line_length function_body_length

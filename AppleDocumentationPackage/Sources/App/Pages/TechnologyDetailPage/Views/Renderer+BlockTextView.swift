@@ -23,28 +23,18 @@ extension EnvironmentValues {
     var openDestination: OpenDestinationAction = .init(perform: { _ in })
 }
 
-struct TextView: View {
-    struct TextAttributes: Hashable {
-        var font: Font = .body
-        var bold: Bool = false
-        var italic: Bool = false
-        var monospaced: Bool = false
-        var foregroundColor: Color = .primary
-
-        var link: URL?
-    }
-
+struct BlockTextView: View {
     @Environment(\.openURL) var openURL
 
     let block: BlockContent
-    let attributes: TextAttributes
+    let attributes: AttributedText.Attributes
 
-    init(_ block: BlockContent, attributes: TextAttributes = .init()) {
+    init(_ block: BlockContent, attributes: AttributedText.Attributes = .init()) {
         self.block = block
         self.attributes = attributes
     }
 
-    init(_ inlines: [InlineContent], attributes: TextAttributes = .init()) {
+    init(_ inlines: [InlineContent], attributes: AttributedText.Attributes = .init()) {
         self.init(.paragraph(.init(contents: inlines)), attributes: attributes)
     }
 
@@ -53,7 +43,7 @@ struct TextView: View {
     }
 }
 
-extension TextView {
+extension BlockTextView {
     private struct InnerView: View {
         private enum Content: Hashable {
             case paragraph([AttributedText])
@@ -62,12 +52,12 @@ extension TextView {
 
             struct ListItem: Hashable {
                 var block: BlockContent
-                var attributes: TextAttributes
+                var attributes: AttributedText.Attributes
             }
         }
 
         let block: BlockContent
-        let attributes: TextAttributes
+        let attributes: AttributedText.Attributes
         let openURL: OpenURLAction
 
         @Environment(\.references) var references
@@ -77,8 +67,10 @@ extension TextView {
             ForEach(contents, id: \.self) { content in
                 switch content {
                 case .paragraph(let texts):
-                    texts.reduce(Text("")) { text, appending in
-                        text + appending.render()
+                    Text { next in
+                        for text in texts {
+                            next(text)
+                        }
                     }
 
                 case .unorderedList(let items):
@@ -153,7 +145,7 @@ extension TextView {
 
         private func buildContents(
             _ block: BlockContent,
-            attributes: TextAttributes,
+            attributes: AttributedText.Attributes,
             into builder: inout ContentBuilder
         ) {
             switch block {
@@ -196,7 +188,7 @@ extension TextView {
         // swiftlint:disable:next cyclomatic_complexity
         private func buildContents(
             _ inline: InlineContent,
-            attributes: TextAttributes,
+            attributes: AttributedText.Attributes,
             into builder: inout ContentBuilder
         ) {
             switch inline {
@@ -255,26 +247,6 @@ extension TextView {
                 builder.insert([.init(string: unknown.type, attributes: attributes)])
             }
         }
-    }
-}
-
-private struct AttributedText: Hashable {
-    var string: String
-    var attributes: TextView.TextAttributes
-
-    func render() -> Text {
-        let text = if let link = attributes.link {
-            Text(.init("[\(string)](\(link.absoluteString))"))
-        } else {
-            Text(verbatim: string)
-        }
-
-        return text
-            .font(attributes.font)
-            .bold(attributes.bold)
-            .italic(attributes.italic)
-            .monospaced(attributes.monospaced)
-            .foregroundStyle(attributes.foregroundColor)
     }
 }
 
