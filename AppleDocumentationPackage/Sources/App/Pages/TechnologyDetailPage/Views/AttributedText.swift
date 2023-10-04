@@ -38,6 +38,7 @@ extension Text {
     init(next: ((AttributedText) -> Void) -> Void) {
         var text = Text("")
         next { attributedText in
+            // swiftlint:disable:next shorthand_operator
             text = text + Text(attributedText)
         }
         self = text

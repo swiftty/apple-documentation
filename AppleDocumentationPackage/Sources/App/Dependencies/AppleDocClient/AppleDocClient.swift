@@ -1,5 +1,6 @@
 import SwiftUI
 import AppleDocumentation
+import SupportMacros
 
 public struct AppleDocClient {
     package struct Props {
@@ -45,18 +46,10 @@ public struct AppleDocClient {
 }
 
 extension EnvironmentValues {
-    private struct Key: EnvironmentKey {
-        static var defaultValue: AppleDocClient {
-            AppleDocClient(
-                allTechnologies: { fatalError() },
-                diffAvailability: { fatalError() },
-                technologyDetail: { _ in fatalError() }
-            )
-        }
-    }
-
-    public var appleDocClient: AppleDocClient {
-        get { self[Key.self] }
-        set { self[Key.self] = newValue }
-    }
+    @SwiftUIEnvironment
+    public var appleDocClient: AppleDocClient = AppleDocClient(
+        allTechnologies: { fatalError() },
+        diffAvailability: { fatalError() },
+        technologyDetail: { _ in fatalError() }
+    )
 }

@@ -3,9 +3,13 @@ excluded:
 
 identifier_name:
   excluded:
+    - b
     - c
+    - g
     - i
+    - r
     - t
+    - v
     - x
     - y
     - id

@@ -148,7 +148,9 @@ let package = Package(
             feature: .dependencies,
             name: "AppleDocClient",
             dependencies: [
-                "AppleDocumentation"
+                "AppleDocumentation",
+
+                "SupportMacros"
             ]
         ),
 
