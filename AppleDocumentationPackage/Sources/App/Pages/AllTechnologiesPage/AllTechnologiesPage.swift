@@ -179,6 +179,7 @@ extension Technology.DiffAvailability.Payload {
 #Preview {
     NavigationStack {
         AllTechnologiesPage()
+            .environment(Router.empty())
             .transformEnvironment(\.appleDocClient) { client in
                 client.props.allTechnologies = {
                     [

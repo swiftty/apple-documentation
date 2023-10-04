@@ -101,6 +101,7 @@ public struct TechnologyDetailPage: View {
     TechnologyDetailPage(
         destination: .init(rawValue: "")
     )
+    .environment(Router.empty())
     .transformEnvironment(\.appleDocClient) { client in
         client.props.technologyDetail = { _ in
             TechnologyDetail(
@@ -111,7 +112,9 @@ public struct TechnologyDetailPage: View {
                     platforms: [],
                     externalID: nil
                 ),
-                abstract: [],
+                abstract: [
+                    .text(.init(text: "Hello world"))
+                ],
                 primaryContents: [],
                 topics: [],
                 seeAlso: [],

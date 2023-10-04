@@ -33,6 +33,12 @@ extension Router {
             AnyView(route(target))
         })
     }
+
+    public static func empty() -> Router {
+        Router { target in
+            AnyView(Text(String(describing: target)))
+        }
+    }
 }
 
 extension NavigationPath {
