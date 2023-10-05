@@ -1,0 +1,625 @@
+{
+  "abstract": [
+    {
+      "type": "text",
+      "text": "Applies a temporary configuration to the database within the scope of a closure that supports concurrency."
+    }
+  ],
+  "documentVersion": 0,
+  "hierarchy": {
+    "paths": [
+      [
+        "doc://com.apple.documentation/documentation/technologies",
+        "doc://com.apple.documentation/documentation/cloudkit",
+        "doc://com.apple.documentation/documentation/cloudkit/ckdatabase"
+      ]
+    ]
+  },
+  "identifier": {
+    "url": "doc://com.apple.documentation/documentation/cloudkit/ckdatabase/3794311-configuredwith",
+    "interfaceLanguage": "swift"
+  },
+  "legacy_identifier": 3794311,
+  "kind": "symbol",
+  "metadata": {
+    "title": "configuredWith(configuration:group:body:)",
+    "role": "symbol",
+    "roleHeading": "Generic Instance Method",
+    "modules": [
+      {
+        "name": "CloudKit"
+      }
+    ],
+    "platforms": [
+      {
+        "name": "iOS",
+        "introducedAt": "15.0",
+        "current": "17.0"
+      },
+      {
+        "name": "iPadOS",
+        "introducedAt": "15.0",
+        "current": "17.0"
+      },
+      {
+        "name": "macOS",
+        "introducedAt": "12.0",
+        "current": "14.0"
+      },
+      {
+        "name": "Mac Catalyst",
+        "introducedAt": "15.4",
+        "current": "17.0"
+      },
+      {
+        "name": "tvOS",
+        "introducedAt": "15.0",
+        "current": "17.0"
+      },
+      {
+        "name": "watchOS",
+        "introducedAt": "8.0",
+        "current": "10.0"
+      },
+      {
+        "name": "visionOS",
+        "introducedAt": "1.0",
+        "current": "1.0",
+        "beta": true
+      },
+      {
+        "name": "Xcode",
+        "introducedAt": "13.0",
+        "current": "15.1"
+      }
+    ],
+    "externalID": "s:So10CKDatabaseC8CloudKitE14configuredWith13configuration5group4bodyxSo24CKOperationConfigurationCSg_So0I5GroupCSgxABYaKXEtYaKlF",
+    "parent": {
+      "title": "CKDatabase"
+    },
+    "symbolKind": "instm",
+    "fragments": [
+      {
+        "kind": "text",
+        "text": "func "
+      },
+      {
+        "kind": "identifier",
+        "text": "configuredWith"
+      },
+      {
+        "kind": "text",
+        "text": "<R>("
+      },
+      {
+        "kind": "identifier",
+        "text": "configuration"
+      },
+      {
+        "kind": "text",
+        "text": ": CKOperation.Configuration?, "
+      },
+      {
+        "kind": "identifier",
+        "text": "group"
+      },
+      {
+        "kind": "text",
+        "text": ": CKOperationGroup?, "
+      },
+      {
+        "kind": "identifier",
+        "text": "body"
+      },
+      {
+        "kind": "text",
+        "text": ": (CKDatabase) -> R) -> R"
+      }
+    ]
+  },
+  "schemaVersion": {
+    "major": 0,
+    "minor": 3,
+    "patch": 0
+  },
+  "sections": [],
+  "variants": [
+    {
+      "traits": [
+        {
+          "interfaceLanguage": "swift"
+        }
+      ],
+      "paths": ["documentation/cloudkit/ckdatabase/3794311-configuredwith"]
+    }
+  ],
+  "references": {
+    "doc://com.apple.documentation/documentation/cloudkit": {
+      "title": "CloudKit",
+      "identifier": "doc://com.apple.documentation/documentation/cloudkit",
+      "url": "/documentation/cloudkit",
+      "type": "topic",
+      "kind": "symbol",
+      "role": "collection"
+    },
+    "doc://com.apple.documentation/documentation/cloudkit/ckdatabase": {
+      "title": "CKDatabase",
+      "type": "topic",
+      "identifier": "doc://com.apple.documentation/documentation/cloudkit/ckdatabase",
+      "kind": "symbol",
+      "role": "symbol",
+      "url": "/documentation/cloudkit/ckdatabase"
+    },
+    "doc://com.apple.documentation/documentation/cloudkit/ckdatabase/3794311-configuredwith#3966866": {
+      "title": "Listing 1",
+      "type": "section",
+      "identifier": "doc://com.apple.documentation/documentation/cloudkit/ckdatabase/3794311-configuredwith#3966866",
+      "kind": "article",
+      "role": "codeListing",
+      "url": "/documentation/cloudkit/ckdatabase/3794311-configuredwith#3966866"
+    },
+    "doc://com.apple.documentation/documentation/cloudkit/ckoperationgroup": {
+      "title": "CKOperationGroup",
+      "type": "topic",
+      "identifier": "doc://com.apple.documentation/documentation/cloudkit/ckoperationgroup",
+      "kind": "symbol",
+      "role": "symbol",
+      "url": "/documentation/cloudkit/ckoperationgroup"
+    },
+    "doc://com.apple.documentation/documentation/cloudkit/ckoperation": {
+      "title": "CKOperation",
+      "type": "topic",
+      "identifier": "doc://com.apple.documentation/documentation/cloudkit/ckoperation",
+      "kind": "symbol",
+      "role": "symbol",
+      "url": "/documentation/cloudkit/ckoperation"
+    },
+    "doc://com.apple.documentation/documentation/cloudkit/ckoperation/configuration": {
+      "title": "CKOperation.Configuration",
+      "type": "topic",
+      "identifier": "doc://com.apple.documentation/documentation/cloudkit/ckoperation/configuration",
+      "kind": "symbol",
+      "role": "symbol",
+      "url": "/documentation/cloudkit/ckoperation/configuration"
+    },
+    "doc://com.apple.documentation/documentation/cloudkit/ckdatabase/3794311-configuredwith": {
+      "title": "configuredWith(configuration:group:body:)",
+      "type": "topic",
+      "identifier": "doc://com.apple.documentation/documentation/cloudkit/ckdatabase/3794311-configuredwith",
+      "kind": "symbol",
+      "role": "symbol",
+      "url": "/documentation/cloudkit/ckdatabase/3794311-configuredwith",
+      "abstract": [
+        {
+          "type": "text",
+          "text": "Applies a temporary configuration to the database within the scope of a closure that supports concurrency."
+        }
+      ],
+      "fragments": [
+        {
+          "kind": "text",
+          "text": "func "
+        },
+        {
+          "kind": "identifier",
+          "text": "configuredWith"
+        },
+        {
+          "kind": "text",
+          "text": "<R>("
+        },
+        {
+          "kind": "identifier",
+          "text": "configuration"
+        },
+        {
+          "kind": "text",
+          "text": ": CKOperation.Configuration?, "
+        },
+        {
+          "kind": "identifier",
+          "text": "group"
+        },
+        {
+          "kind": "text",
+          "text": ": CKOperationGroup?, "
+        },
+        {
+          "kind": "identifier",
+          "text": "body"
+        },
+        {
+          "kind": "text",
+          "text": ": (CKDatabase) -> R) -> R"
+        }
+      ]
+    },
+    "doc://com.apple.documentation/documentation/cloudkit/ckdatabase/3794310-configuredwith": {
+      "title": "configuredWith(configuration:group:body:)",
+      "type": "topic",
+      "identifier": "doc://com.apple.documentation/documentation/cloudkit/ckdatabase/3794310-configuredwith",
+      "kind": "symbol",
+      "role": "symbol",
+      "url": "/documentation/cloudkit/ckdatabase/3794310-configuredwith",
+      "abstract": [
+        {
+          "type": "text",
+          "text": "Applies a temporary configuration to the database within the scope of a closure."
+        }
+      ],
+      "fragments": [
+        {
+          "kind": "text",
+          "text": "func "
+        },
+        {
+          "kind": "identifier",
+          "text": "configuredWith"
+        },
+        {
+          "kind": "text",
+          "text": "<R>("
+        },
+        {
+          "kind": "identifier",
+          "text": "configuration"
+        },
+        {
+          "kind": "text",
+          "text": ": CKOperation.Configuration?, "
+        },
+        {
+          "kind": "identifier",
+          "text": "group"
+        },
+        {
+          "kind": "text",
+          "text": ": CKOperationGroup?, "
+        },
+        {
+          "kind": "identifier",
+          "text": "body"
+        },
+        {
+          "kind": "text",
+          "text": ": (CKDatabase) -> R) -> R"
+        }
+      ]
+    },
+    "doc://com.apple.documentation/documentation/technologies": {
+      "type": "topic",
+      "identifier": "doc://com.apple.documentation/documentation/technologies",
+      "url": "/documentation/technologies",
+      "kind": "technologies",
+      "title": "Technologies"
+    }
+  },
+  "seeAlsoSections": [
+    {
+      "identifiers": [
+        "doc://com.apple.documentation/documentation/cloudkit/ckdatabase/3794310-configuredwith"
+      ],
+      "title": "Configuring Database Requests",
+      "generated": true
+    }
+  ],
+  "primaryContentSections": [
+    {
+      "kind": "declarations",
+      "declarations": [
+        {
+          "languages": ["swift"],
+          "tokens": [
+            {
+              "kind": "attribute",
+              "text": "@discardableResult"
+            },
+            {
+              "kind": "text",
+              "text": " "
+            },
+            {
+              "kind": "attribute",
+              "text": "@preconcurrency"
+            },
+            {
+              "kind": "text",
+              "text": " "
+            },
+            {
+              "kind": "keyword",
+              "text": "func"
+            },
+            {
+              "kind": "text",
+              "text": " "
+            },
+            {
+              "kind": "identifier",
+              "text": "configuredWith"
+            },
+            {
+              "kind": "text",
+              "text": "<"
+            },
+            {
+              "kind": "typeIdentifier",
+              "preciseIdentifier": "s:So10CKDatabaseC8CloudKitE14configuredWith13configuration5group4bodyxSo24CKOperationConfigurationCSg_So0I5GroupCSgxABYaKXEtYaKlF1RL_xmfp",
+              "text": "R"
+            },
+            {
+              "kind": "text",
+              "text": ">("
+            },
+            {
+              "kind": "externalParam",
+              "text": "configuration"
+            },
+            {
+              "kind": "text",
+              "text": ": "
+            },
+            {
+              "kind": "typeIdentifier",
+              "preciseIdentifier": "c:objc(cs)CKOperation",
+              "identifier": "doc://com.apple.documentation/documentation/cloudkit/ckoperation",
+              "text": "CKOperation"
+            },
+            {
+              "kind": "text",
+              "text": "."
+            },
+            {
+              "kind": "typeIdentifier",
+              "preciseIdentifier": "c:objc(cs)CKOperationConfiguration",
+              "identifier": "doc://com.apple.documentation/documentation/cloudkit/ckoperation/configuration",
+              "text": "Configuration"
+            },
+            {
+              "kind": "text",
+              "text": "?"
+            },
+            {
+              "kind": "text",
+              "text": " = nil"
+            },
+            {
+              "kind": "text",
+              "text": ", "
+            },
+            {
+              "kind": "externalParam",
+              "text": "group"
+            },
+            {
+              "kind": "text",
+              "text": ": "
+            },
+            {
+              "kind": "typeIdentifier",
+              "preciseIdentifier": "c:objc(cs)CKOperationGroup",
+              "identifier": "doc://com.apple.documentation/documentation/cloudkit/ckoperationgroup",
+              "text": "CKOperationGroup"
+            },
+            {
+              "kind": "text",
+              "text": "?"
+            },
+            {
+              "kind": "text",
+              "text": " = nil"
+            },
+            {
+              "kind": "text",
+              "text": ", "
+            },
+            {
+              "kind": "externalParam",
+              "text": "body"
+            },
+            {
+              "kind": "text",
+              "text": ": "
+            },
+            {
+              "kind": "attribute",
+              "text": "@Sendable"
+            },
+            {
+              "kind": "text",
+              "text": " ("
+            },
+            {
+              "kind": "text",
+              "text": "_ "
+            },
+            {
+              "kind": "internalParam",
+              "text": "configuredDatabase"
+            },
+            {
+              "kind": "text",
+              "text": ": "
+            },
+            {
+              "kind": "typeIdentifier",
+              "preciseIdentifier": "c:objc(cs)CKDatabase",
+              "identifier": "doc://com.apple.documentation/documentation/cloudkit/ckdatabase",
+              "text": "CKDatabase"
+            },
+            {
+              "kind": "text",
+              "text": ") "
+            },
+            {
+              "kind": "keyword",
+              "text": "async"
+            },
+            {
+              "kind": "text",
+              "text": " "
+            },
+            {
+              "kind": "keyword",
+              "text": "throws"
+            },
+            {
+              "kind": "text",
+              "text": " -> "
+            },
+            {
+              "kind": "typeIdentifier",
+              "preciseIdentifier": "s:So10CKDatabaseC8CloudKitE14configuredWith13configuration5group4bodyxSo24CKOperationConfigurationCSg_So0I5GroupCSgxABYaKXEtYaKlF1RL_xmfp",
+              "text": "R"
+            },
+            {
+              "kind": "text",
+              "text": ") "
+            },
+            {
+              "kind": "keyword",
+              "text": "async"
+            },
+            {
+              "kind": "text",
+              "text": " "
+            },
+            {
+              "kind": "keyword",
+              "text": "rethrows"
+            },
+            {
+              "kind": "text",
+              "text": " -> "
+            },
+            {
+              "kind": "typeIdentifier",
+              "preciseIdentifier": "s:So10CKDatabaseC8CloudKitE14configuredWith13configuration5group4bodyxSo24CKOperationConfigurationCSg_So0I5GroupCSgxABYaKXEtYaKlF1RL_xmfp",
+              "text": "R"
+            }
+          ],
+          "platforms": [
+            "iOS",
+            "iPadOS",
+            "macOS",
+            "Mac Catalyst",
+            "tvOS",
+            "watchOS",
+            "visionOS"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "parameters",
+      "languages": ["swift"],
+      "parameters": [
+        {
+          "name": "configuration",
+          "content": [
+            {
+              "type": "paragraph",
+              "inlineContent": [
+                {
+                  "type": "text",
+                  "text": "An interim configuration to apply to the current database."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "group",
+          "content": [
+            {
+              "type": "paragraph",
+              "inlineContent": [
+                {
+                  "type": "text",
+                  "text": "The group to associate with the methods you execute in the closure. Specifying a group helps the system prioritize those method calls, and helps you identify the calls in the server logs in CloudKit Console. For more information, see "
+                },
+                {
+                  "type": "reference",
+                  "isActive": true,
+                  "identifier": "doc://com.apple.documentation/documentation/cloudkit/ckoperationgroup"
+                },
+                {
+                  "type": "text",
+                  "text": "."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "body",
+          "content": [
+            {
+              "type": "paragraph",
+              "inlineContent": [
+                {
+                  "type": "text",
+                  "text": "The closure to execute with the temporarily configured database."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "content",
+      "content": [
+        {
+          "anchor": "discussion",
+          "level": 2,
+          "text": "Discussion",
+          "type": "heading"
+        },
+        {
+          "type": "paragraph",
+          "inlineContent": [
+            {
+              "type": "text",
+              "text": "Use this method to apply a specific configuration to the current database that lasts only for the duration of the trailing closure. For example, you might want to temporarily elevate the quality of service (QoS) for a group of method calls, or allow one or more expensive method calls to execute only while the device is using WiFi."
+            }
+          ]
+        },
+        {
+          "type": "codeListing",
+          "code": [
+            "func fetchRecords(with ids: [CKRecord.ID]) async throws",
+            "    -> [CKRecord.ID: Result<CKRecord, Error>] {",
+            "    ",
+            "    // Get a reference to the user's private database.",
+            "    let database = CKContainer.default().privateCloudDatabase",
+            "    ",
+            "    // Create a configuration that denies cellular access.",
+            "    let config = CKOperation.Configuration()",
+            "    config.allowsCellularAccess = false",
+            "    ",
+            "    // Configure the database and execute an expensive fetch.",
+            "    return try await database.configuredWith(configuration: config) { db in",
+            "        try await db.records(for: ids)",
+            "    }",
+            "}"
+          ],
+          "syntax": "swift",
+          "metadata": {
+            "anchor": "3966866",
+            "title": "Listing 1"
+          }
+        },
+        {
+          "type": "paragraph",
+          "inlineContent": []
+        }
+      ]
+    }
+  ],
+  "legalNotices": {
+    "copyright": "Copyright &copy; 2023 Apple Inc. All rights reserved.",
+    "termsOfUse": "https://www.apple.com/legal/internet-services/terms/site.html",
+    "privacyPolicy": "https://www.apple.com/privacy/privacy-policy"
+  }
+}

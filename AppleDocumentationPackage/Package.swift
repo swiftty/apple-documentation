@@ -8,12 +8,14 @@ enum Feature {
     case app
     case dependencies
     case pages
+    case developments
 
     var path: String {
         switch self {
         case .app: "Sources/App"
         case .dependencies: "Sources/App/Dependencies"
         case .pages: "Sources/App/Pages"
+        case .developments: "Sources/App/Developments"
         }
     }
 }
@@ -208,6 +210,15 @@ let package = Package(
                 .product(name: "NukeUI", package: "Nuke"),
                 .product(name: "NukeExtensions", package: "Nuke")
             ]
+        ),
+
+        //
+        .target(
+            feature: .developments,
+            name: "DevelopmentAssets",
+            dependencies: [
+                "AppleDocumentationAPI"
+            ]
         )
     ]
 )
@@ -219,4 +230,15 @@ package.targets.forEach {
         .plugin(name: "SwiftLintPlugin", package: "SwiftLintBinary")
     ]
     $0.plugins = plugins
+}
+
+let isDEBUG = true
+if isDEBUG {
+    package.targets.forEach {
+        guard $0.path?.hasPrefix("Sources/App") ?? false else { return }
+        guard $0.name != "DevelopmentAssets" else { return }
+        $0.dependencies += [
+            "DevelopmentAssets"
+        ]
+    }
 }

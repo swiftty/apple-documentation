@@ -58,7 +58,11 @@ public struct TechnologyDetailPage: View {
             ProgressView()
                 .progressViewStyle(.circular)
                 .task {
-                    detail = try? await appleDocClient.technologyDetail(for: destination)
+                    do {
+                        detail = try await appleDocClient.technologyDetail(for: destination)
+                    } catch {
+                        print(error)
+                    }
                 }
         }
     }
@@ -93,29 +97,20 @@ public struct TechnologyDetailPage: View {
     }
 }
 
+#if canImport(DevelopmentAssets)
+import DevelopmentAssets
+
 #Preview {
     TechnologyDetailPage(
         destination: .init(rawValue: "")
     )
     .transformEnvironment(\.appleDocClient) { client in
         client.props.technologyDetail = { _ in
-            TechnologyDetail(
-                metadata: .init(
-                    title: "title",
-                    role: "",
-                    roleHeading: "",
-                    platforms: [],
-                    externalID: nil
-                ),
-                abstract: [
-                    .text(.init(text: "Hello world"))
-                ],
-                primaryContents: [],
-                topics: [],
-                seeAlso: [],
-                references: [:],
-                diffAvailability: .init([:])
-            )
+            let data = DevelopmentResources
+                .data(name: "cloudkit--ckdatabase--3794311-configuredwith")
+            return try TechnologyDetail.from(json: data)
         }
     }
 }
+
+#endif
