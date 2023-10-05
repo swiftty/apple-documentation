@@ -17,7 +17,6 @@ extension Array where Element: Hashable {
 }
 
 public struct TechnologyDetailPage: View {
-    @Environment(Router.self) var router
     @Environment(\.appleDocClient) var appleDocClient
     @Environment(\.openURL) var openURL
 
@@ -32,7 +31,7 @@ public struct TechnologyDetailPage: View {
     public var body: some View {
         if let detail {
             ScrollView {
-                VStack {
+                LazyVStack {
                     BlockTextView(detail.abstract)
 
                     ForEach(detail.primaryContents.indexed()) { item in
@@ -55,9 +54,6 @@ public struct TechnologyDetailPage: View {
                     }
                 }
             }
-            .environment(\.openDestination, OpenDestinationAction { identifier in
-                router.navigationPath.push(.technologyDetail(for: identifier))
-            })
         } else {
             ProgressView()
                 .progressViewStyle(.circular)
@@ -101,7 +97,6 @@ public struct TechnologyDetailPage: View {
     TechnologyDetailPage(
         destination: .init(rawValue: "")
     )
-    .environment(Router.empty())
     .transformEnvironment(\.appleDocClient) { client in
         client.props.technologyDetail = { _ in
             TechnologyDetail(

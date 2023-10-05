@@ -1,6 +1,7 @@
 import SwiftUI
 import Router
 import AppleDocumentation
+import UIComponent
 
 public struct RootPage: View {
     @Environment(Router.self) var router
@@ -27,9 +28,13 @@ public struct RootPage: View {
                 router.route(for: .safari(for: url))
             }
         }
+        .extractDestination()
         .environment(\.openURL, OpenURLAction { url in
             modalContext = .safariPage(url)
             return .handled
+        })
+        .environment(\.openDestination, OpenDestinationAction { identifier in
+            router.navigationPath.append(.technologyDetail(for: identifier))
         })
     }
 }

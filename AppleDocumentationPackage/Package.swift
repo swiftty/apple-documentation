@@ -132,7 +132,12 @@ let package = Package(
 
         .target(
             feature: .app,
-            name: "UIComponent"
+            name: "UIComponent",
+            dependencies: [
+                "AppleDocumentation",
+
+                "SupportMacros"
+            ]
         ),
 
         // dependencies

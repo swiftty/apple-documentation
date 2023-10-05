@@ -2,30 +2,14 @@ import SwiftUI
 import AppleDocumentation
 import NukeUI
 import SupportMacros
-
-struct OpenDestinationAction {
-    private let handler: (Technology.Destination.Value) -> Void
-
-    init(perform handler: @escaping (Technology.Destination.Value) -> Void) {
-        self.handler = handler
-    }
-
-    func callAsFunction(_ identifier: Technology.Destination.Value) {
-        handler(identifier)
-    }
-}
+import UIComponent
 
 extension EnvironmentValues {
     @SwiftUIEnvironment
     var references: [Technology.Identifier: TechnologyDetail.Reference] = [:]
-
-    @SwiftUIEnvironment
-    var openDestination: OpenDestinationAction = .init(perform: { _ in })
 }
 
 struct BlockTextView: View {
-    @Environment(\.openURL) var openURL
-
     let block: BlockContent
     let attributes: AttributedText.Attributes
 
@@ -39,7 +23,7 @@ struct BlockTextView: View {
     }
 
     var body: some View {
-        InnerView(block: block, attributes: attributes, openURL: openURL)
+        InnerView(block: block, attributes: attributes)
     }
 }
 
@@ -58,10 +42,8 @@ extension BlockTextView {
 
         let block: BlockContent
         let attributes: AttributedText.Attributes
-        let openURL: OpenURLAction
 
         @Environment(\.references) var references
-        @Environment(\.openDestination) var openDestination
 
         var body: some View {
             ForEach(contents, id: \.self) { content in
@@ -79,7 +61,7 @@ extension BlockTextView {
                             Text("•")
                             VStack {
                                 ForEach(items, id: \.self) { item in
-                                    InnerView(block: item.block, attributes: item.attributes, openURL: openURL)
+                                    InnerView(block: item.block, attributes: item.attributes)
                                 }
                             }
                         }
@@ -95,21 +77,6 @@ extension BlockTextView {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .multilineTextAlignment(.leading)
-            .environment(\.openURL, OpenURLAction { url in
-                guard let identifier = decodeFromURL(url) else { return .discarded }
-                if identifier.hasPrefix("/") {
-                    openDestination(.init(rawValue: identifier))
-                    return .handled
-                }
-                guard let url = URL(string: identifier) else { return .discarded }
-                if url.scheme?.hasPrefix("http") ?? false {
-                    openURL(url)
-                    return .handled
-                }
-
-                openDestination(.init(rawValue: identifier))
-                return .handled
-            })
         }
 
         private var contents: [Content] {
@@ -217,10 +184,7 @@ extension BlockTextView {
             case .reference(let reference):
                 guard let ref = references[reference.identifier] else { return }
                 var attributes = attributes
-                attributes.link = encodeToURL(ref.url)
-                if attributes.link == nil {
-                    attributes.foregroundColor = .yellow
-                }
+                attributes.link(using: ref)
 
                 let title = ref.title ?? ref.fragments.map(\.text).joined()
                 builder.insert([.init(string: title, attributes: attributes)])
@@ -248,19 +212,4 @@ extension BlockTextView {
             }
         }
     }
-}
-
-private func encodeToURL(_ target: String?) -> URL? {
-    guard let target else { return nil }
-
-    var comps = URLComponents(string: "appledoc://")
-    comps?.queryItems = [
-        .init(name: "identifier", value: target)
-    ]
-    return comps?.url
-}
-
-private func decodeFromURL(_ url: URL) -> String? {
-    let comps = URLComponents(url: url, resolvingAgainstBaseURL: false)
-    return comps?.queryItems?.first(where: { $0.name == "identifier" })?.value
 }

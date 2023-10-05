@@ -42,7 +42,8 @@ extension Router {
 }
 
 extension NavigationPath {
-    public mutating func push(_ target: some Routing) {
+    @_disfavoredOverload
+    public mutating func append(_ target: some Routing) {
         append(target)
     }
 }

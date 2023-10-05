@@ -188,6 +188,7 @@ extension TechnologyDetail {
     public struct Fragment: Hashable {
         public var text: String
         public var kind: Kind
+        public var identifier: Technology.Identifier?
 
         public enum Kind {
             case keyword, text, identifier, label, typeIdentifier, genericParameter
