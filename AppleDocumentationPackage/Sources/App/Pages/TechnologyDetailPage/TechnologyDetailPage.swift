@@ -32,7 +32,34 @@ public struct TechnologyDetailPage: View {
         if let detail {
             ScrollView {
                 LazyVStack {
+                    if let roleHeading = detail.metadata.roleHeading {
+                        Text(roleHeading)
+                            .font(.title3.bold())
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+
+                    Text(detail.metadata.title)
+                        .font(.title.bold())
+                        .foregroundStyle(.primary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
                     BlockTextView(detail.abstract)
+
+                    TagLayout {
+                        ForEach(detail.metadata.platforms, id: \.name) { platform in
+                            Text("\(platform.name) \(platform.introducedAt)+")
+                                .font(.callout)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 2)
+                                .background {
+                                    Capsule()
+                                        .stroke()
+                                }
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
 
                     ForEach(detail.primaryContents.indexed()) { item in
                         primaryContentSection(with: item.element)
@@ -40,8 +67,9 @@ public struct TechnologyDetailPage: View {
                     }
                 }
                 .environment(\.references, detail.references)
+                .padding(.horizontal)
             }
-            .navigationTitle(detail.metadata.title)
+            .navigationTitle("")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {

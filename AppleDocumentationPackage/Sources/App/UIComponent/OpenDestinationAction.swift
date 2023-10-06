@@ -32,7 +32,10 @@ private struct OpenDestinationModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .environment(\.openURL, OpenURLAction { url in
-                guard let identifier = decodeFromURL(url, for: "identifier") else { return .discarded }
+                guard let identifier = decodeFromURL(url, for: "identifier") else {
+                    openURL(url)
+                    return .handled
+                }
                 if identifier.hasPrefix("/") {
                     openDestination(.init(rawValue: identifier))
                     return .handled
