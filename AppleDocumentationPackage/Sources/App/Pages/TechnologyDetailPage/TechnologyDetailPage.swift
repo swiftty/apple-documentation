@@ -46,20 +46,7 @@ public struct TechnologyDetailPage: View {
 
                     BlockTextView(detail.abstract)
 
-                    TagLayout {
-                        ForEach(detail.metadata.platforms, id: \.name) { platform in
-                            Text("\(platform.name) \(platform.introducedAt)+")
-                                .font(.callout)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 2)
-                                .background {
-                                    Capsule()
-                                        .stroke()
-                                }
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    platformsView(platforms: detail.metadata.platforms)
 
                     ForEach(detail.primaryContents.indexed()) { item in
                         primaryContentSection(with: item.element)
@@ -70,6 +57,7 @@ public struct TechnologyDetailPage: View {
                 .padding(.horizontal)
             }
             .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
@@ -93,6 +81,32 @@ public struct TechnologyDetailPage: View {
                     }
                 }
         }
+    }
+
+    @ViewBuilder
+    private func platformsView(platforms: [TechnologyDetail.Metadata.Platform]) -> some View {
+        TagLayout {
+            ForEach(platforms, id: \.name) { platform in
+                let text = if platform.beta {
+                    Text("\(platform.name) \(platform.introducedAt)+")
+                    + Text(" Beta")
+                        .foregroundStyle(.green)
+                } else {
+                    Text("\(platform.name) \(platform.introducedAt)+")
+                }
+
+                text
+                    .font(.callout)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 2)
+                    .background {
+                        Capsule()
+                            .stroke()
+                    }
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     @ViewBuilder
@@ -135,10 +149,11 @@ import DevelopmentAssets
     .transformEnvironment(\.appleDocClient) { client in
         client.props.technologyDetail = { _ in
             let data = DevelopmentResources
-                .data(name: "cloudkit--ckdatabase--3794311-configuredwith")
+                .data(name: "uikit")
             return try TechnologyDetail.from(json: data)
         }
     }
+    .preferredColorScheme(.dark)
 }
 
 #endif
