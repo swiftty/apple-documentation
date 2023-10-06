@@ -46,18 +46,30 @@ public struct TechnologyDetailPage: View {
 
                     BlockTextView(detail.abstract)
 
-                    platformsView(platforms: detail.metadata.platforms)
+                    platformsView(with: detail.metadata.platforms)
 
                     ForEach(detail.primaryContents.indexed()) { item in
                         primaryContentSection(with: item.element)
                             .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+
+                    if case let topics = detail.topics, !topics.isEmpty {
+                        Divider()
+
+                        Text("Topics")
+                            .font(.title2.bold())
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                        ForEach(topics.indexed()) { topic in
+                            topicView(with: topic.element)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
                     }
                 }
                 .environment(\.references, detail.references)
                 .padding(.horizontal)
             }
             .navigationTitle("")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
@@ -84,7 +96,7 @@ public struct TechnologyDetailPage: View {
     }
 
     @ViewBuilder
-    private func platformsView(platforms: [TechnologyDetail.Metadata.Platform]) -> some View {
+    private func platformsView(with platforms: [TechnologyDetail.Metadata.Platform]) -> some View {
         TagLayout {
             ForEach(platforms, id: \.name) { platform in
                 let text = if platform.beta {
@@ -113,17 +125,28 @@ public struct TechnologyDetailPage: View {
     private func primaryContentSection(with content: TechnologyDetail.PrimaryContent) -> some View {
         if case let declarations = content.declarations, !declarations.isEmpty {
             ForEach(declarations.indexed()) { item in
-                FragmentTextView(fragments: item.element.tokens)
+                ScrollView(.horizontal, showsIndicators: false) {
+                    FragmentTextView(fragments: item.element.tokens)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .tint(.init(r: 218, g: 186, b: 255))
+                }
+                .contentMargins(16)
+                .background {
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        .fill(.tertiary)
+                }
             }
         }
 
         if case let parameters = content.parameters, !parameters.isEmpty {
             Text("Parameters")
                 .font(.title2.bold())
+                .foregroundStyle(.primary)
 
             ForEach(parameters.indexed()) { item in
                 Text(item.element.name)
                     .font(.body.bold())
+                    .foregroundStyle(.primary)
 
                 ForEach(item.element.content.indexed()) { item in
                     BlockTextView(item.element)
@@ -134,6 +157,22 @@ public struct TechnologyDetailPage: View {
         if case let blocks = content.content, !blocks.isEmpty {
             ForEach(blocks.indexed()) { item in
                 BlockTextView(item.element)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func topicView(with topic: TechnologyDetail.Topic) -> some View {
+        switch topic {
+        case .taskGroup(let group):
+            Text(group.title)
+                .font(.title3.bold())
+                .foregroundStyle(.primary)
+
+            ForEach(group.identifiers, id: \.self) { identifier in
+                detail?.references[identifier].map { ref in
+                    ReferenceView(reference: ref)
+                }
             }
         }
     }

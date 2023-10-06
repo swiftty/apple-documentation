@@ -6,23 +6,10 @@ struct FragmentTextView: View {
     @Environment(\.references) var references
 
     let fragments: [TechnologyDetail.Fragment]
+    var attributes: AttributedText.Attributes = .init()
 
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            text()
-                .tint(.init(r: 218, g: 186, b: 255))
-        }
-        .contentMargins(16)
-        .background {
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(.tertiary)
-        }
-    }
-
-    // swiftlint:disable:next cyclomatic_complexity
-    private func text() -> Text {
         Text { next in
-            let attributes = AttributedText.Attributes()
             for fragment in fragments {
                 var attributes = attributes
                 if let identifier = fragment.identifier {
@@ -36,6 +23,7 @@ struct FragmentTextView: View {
 
                 case .text:
                     attributes.foregroundColor = .init(r: 255, g: 255, b: 255)
+                    attributes.link = nil
                     next(.init(string: fragment.text, attributes: attributes))
 
                 case .identifier:
@@ -45,7 +33,6 @@ struct FragmentTextView: View {
                 case .label:
                     attributes.foregroundColor = .init(r: 255, g: 255, b: 255)
                     next(.init(string: fragment.text, attributes: attributes))
-                    fatalError()
 
                 case .typeIdentifier:
                     attributes.foregroundColor = .init(r: 218, g: 186, b: 255)
@@ -72,7 +59,7 @@ struct FragmentTextView: View {
     }
 }
 
-private extension Color {
+extension Color {
     init(r: Int, g: Int, b: Int) {
         func f(_ v: Int) -> CGFloat {
             CGFloat(v) / 255

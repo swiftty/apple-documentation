@@ -142,11 +142,11 @@ extension TechnologyDetail {
         }
     }
 
-    public enum Topic {
+    public enum Topic: Hashable {
         case taskGroup(TaskGroup)
 
         @ImplicitInit
-        public struct TaskGroup {
+        public struct TaskGroup: Hashable {
             public var title: String
             public var identifiers: [Technology.Identifier]
             public var anchor: String
