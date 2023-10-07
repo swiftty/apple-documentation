@@ -7,56 +7,52 @@ struct FragmentTextView: View {
 
     let fragments: [TechnologyDetail.Fragment]
     var attributes: AttributedText.Attributes = .init()
+    var modifier: (TechnologyDetail.Fragment.Kind, inout AttributedText.Attributes) -> Void = { _, _ in }
 
     var body: some View {
         Text { next in
             for fragment in fragments {
                 var attributes = attributes
+                attributes.monospaced = true
                 if let identifier = fragment.identifier {
                     attributes.link(using: references[identifier])
+                }
+
+                defer {
+                    modifier(fragment.kind, &attributes)
+                    next(.init(string: fragment.text, attributes: attributes))
                 }
 
                 switch fragment.kind {
                 case .keyword:
                     attributes.foregroundColor = .init(r: 255, g: 122, b: 178)
-                    next(.init(string: fragment.text, attributes: attributes))
 
                 case .text:
                     attributes.foregroundColor = .init(r: 255, g: 255, b: 255)
-                    attributes.link = nil
-                    next(.init(string: fragment.text, attributes: attributes))
 
                 case .identifier:
                     attributes.foregroundColor = .init(r: 255, g: 255, b: 255)
-                    next(.init(string: fragment.text, attributes: attributes))
 
                 case .label:
                     attributes.foregroundColor = .init(r: 255, g: 255, b: 255)
-                    next(.init(string: fragment.text, attributes: attributes))
 
                 case .typeIdentifier:
                     attributes.foregroundColor = .init(r: 218, g: 186, b: 255)
-                    next(.init(string: fragment.text, attributes: attributes))
 
                 case .genericParameter:
                     attributes.foregroundColor = .init(r: 255, g: 255, b: 255)
-                    next(.init(string: fragment.text, attributes: attributes))
 
                 case .internalParam:
                     attributes.foregroundColor = .init(r: 191, g: 191, b: 191)
-                    next(.init(string: fragment.text, attributes: attributes))
 
                 case .externalParam:
                     attributes.foregroundColor = .init(r: 255, g: 255, b: 255)
-                    next(.init(string: fragment.text, attributes: attributes))
 
                 case .attribute:
                     attributes.foregroundColor = .init(r: 255, g: 122, b: 178)
-                    next(.init(string: fragment.text, attributes: attributes))
 
                 case .number:
                     attributes.foregroundColor = .init(r: 217, g: 201, b: 124)
-                    next(.init(string: fragment.text, attributes: attributes))
                 }
             }
         }

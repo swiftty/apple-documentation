@@ -12,7 +12,7 @@ public struct AttributedText: Hashable {
         public var bold: Bool
         public var italic: Bool
         public var monospaced: Bool
-        public var foregroundColor: Color
+        public var foregroundColor: Color?
 
         public var link: URL?
 
@@ -21,7 +21,7 @@ public struct AttributedText: Hashable {
             bold: Bool = false,
             italic: Bool = false,
             monospaced: Bool = false,
-            foregroundColor: Color = .primary,
+            foregroundColor: Color? = nil,
             link: URL? = nil
         ) {
             self.font = font
@@ -51,7 +51,7 @@ public struct AttributedText: Hashable {
             .bold(attributes.bold)
             .italic(attributes.italic)
             .monospaced(attributes.monospaced)
-            .foregroundStyle(attributes.foregroundColor)
+            .foregroundStyle(attributes.foregroundColor ?? .primary)
     }
 }
 

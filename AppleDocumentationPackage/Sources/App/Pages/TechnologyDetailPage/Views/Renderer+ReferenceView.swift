@@ -52,7 +52,12 @@ struct ReferenceView: View {
 
         return VStack {
             HStack(alignment: .firstTextBaseline) {
-                FragmentTextView(fragments: reference.fragments, attributes: attributes)
+                FragmentTextView(fragments: reference.fragments, attributes: attributes) { kind, attributes in
+                    if !Set([.identifier]).contains(kind) {
+                        attributes.link = nil
+                        attributes.foregroundColor = .secondary
+                    }
+                }
 
                 if reference.beta {
                     Text { next in
@@ -87,6 +92,7 @@ private extension TechnologyDetail.Reference {
         switch role {
         case "article": Image(systemName: "doc.text")
         case "collectionGroup": Image(systemName: "list.bullet")
+        case "sampleCode": Image(systemName: "curlybraces")
         default: nil
         }
     }

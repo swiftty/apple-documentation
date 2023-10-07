@@ -35,8 +35,8 @@ private struct Result: Decodable {
             } ?? [],
             topics: detail.topicSections?.compactMap {
                 switch $0 {
-                case .document:
-                    nil
+                case .document(let doc):
+                    .document(.init(title: doc.title, identifiers: doc.identifiers))
                 case .taskGroup(let group):
                     .taskGroup(.init(title: group.title, identifiers: group.identifiers, anchor: group.anchor))
                 }

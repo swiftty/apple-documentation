@@ -69,7 +69,6 @@ public struct TechnologyDetailPage: View {
                 .environment(\.references, detail.references)
                 .padding(.horizontal)
             }
-            .navigationTitle("")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
@@ -170,6 +169,17 @@ public struct TechnologyDetailPage: View {
                 .foregroundStyle(.primary)
 
             ForEach(group.identifiers, id: \.self) { identifier in
+                detail?.references[identifier].map { ref in
+                    ReferenceView(reference: ref)
+                }
+            }
+
+        case .document(let doc):
+            Text(doc.title)
+                .font(.title3.bold())
+                .foregroundStyle(.primary)
+
+            ForEach(doc.identifiers, id: \.self) { identifier in
                 detail?.references[identifier].map { ref in
                     ReferenceView(reference: ref)
                 }

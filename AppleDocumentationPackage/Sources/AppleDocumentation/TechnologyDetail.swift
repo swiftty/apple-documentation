@@ -144,12 +144,19 @@ extension TechnologyDetail {
 
     public enum Topic: Hashable {
         case taskGroup(TaskGroup)
+        case document(Document)
 
         @ImplicitInit
         public struct TaskGroup: Hashable {
             public var title: String
             public var identifiers: [Technology.Identifier]
             public var anchor: String
+        }
+
+        @ImplicitInit
+        public struct Document: Hashable {
+            public var title: String
+            public var identifiers: [Technology.Identifier]
         }
     }
 
