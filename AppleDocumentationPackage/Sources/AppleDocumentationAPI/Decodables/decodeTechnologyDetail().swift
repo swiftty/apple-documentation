@@ -25,7 +25,7 @@ private struct Result: Decodable {
                     )
                 } ?? [],
                 externalID: detail.metadata.externalID),
-            abstract: detail.abstract.map(\.inlineContent),
+            abstract: detail.abstract?.map(\.inlineContent) ?? [],
             primaryContents: detail.primaryContentSections?.map {
                 .init(
                     content: $0.content?.map(\.blockContent) ?? [],
@@ -64,7 +64,7 @@ private struct Result: Decodable {
 
 private struct RawTechnologyDetail: Decodable {
     var metadata: RawMetadata
-    var abstract: [RawInlineContent]
+    var abstract: [RawInlineContent]?
     var primaryContentSections: [PrimaryContentSection]?
     var topicSections: [RawTopic]?
     var seeAlsoSections: [RawSeeAlso]?

@@ -50,7 +50,14 @@ struct ReferenceView: View {
         var attributes = AttributedText.Attributes()
         attributes.link(using: reference)
 
-        return FragmentTextView(fragments: reference.fragments, attributes: attributes)
+        return VStack {
+            FragmentTextView(fragments: reference.fragments, attributes: attributes)
+
+            if !reference.abstract.isEmpty {
+                BlockTextView(reference.abstract)
+                    .padding(.leading, 28)
+            }
+        }
     }
 }
 
@@ -65,19 +72,39 @@ private extension TechnologyDetail.Reference {
 }
 
 #Preview {
-    ReferenceView(reference: .init(
-        identifier: .init(rawValue: ""),
-        title: "UIKit updates",
-        url: "/documentation/updates/uikit",
-        kind: "article",
-        role: "article",
-        abstract: [
-            .text(.init(text: """
-            Secure personal data, and respect user preferences for how data is used.
-            """))
-        ],
-        fragments: [],
-        navigatorTitle: [],
-        variants: [])
-    )
+    VStack {
+        ReferenceView(reference: .init(
+            identifier: .init(rawValue: ""),
+            title: "UIKit updates",
+            url: "/documentation/updates/uikit",
+            kind: "article",
+            role: "article",
+            abstract: [
+                .text(.init(text: """
+                Secure personal data, and respect user preferences for how data is used.
+                """))
+            ],
+            fragments: [],
+            navigatorTitle: [],
+            variants: [])
+        )
+        ReferenceView(reference: .init(
+            identifier: .init(rawValue: ""),
+            title: nil,
+            url: "/documentation/updates/uikit",
+            kind: "symbol",
+            role: "collectionGroup",
+            abstract: [
+                .text(.init(text: """
+                Secure personal data, and respect user preferences for how data is used.
+                """))
+            ],
+            fragments: [
+                .init(text: "Hello world", kind: .text, identifier: nil)
+            ],
+            navigatorTitle: [],
+            variants: [])
+        )
+    }
+    .preferredColorScheme(.dark)
 }

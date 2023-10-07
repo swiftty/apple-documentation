@@ -56,6 +56,7 @@ struct FragmentTextView: View {
                 }
             }
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
