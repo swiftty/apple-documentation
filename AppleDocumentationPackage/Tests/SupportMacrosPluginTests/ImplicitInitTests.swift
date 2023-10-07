@@ -109,6 +109,28 @@ class ImplicitInitTests: XCTestCase {
             """,
             macros: testMacors
         )
+
+        assertMacroExpansion(
+            """
+            @ImplicitInit struct Foo {
+                var value: Int = 10
+                var opt: String?
+            }
+            """,
+            expandedSource:
+            """
+            struct Foo {
+                var value: Int = 10
+                var opt: String?
+
+                public init(value: Int = 10, opt: String? = nil) {
+                    self.value = value
+                    self.opt = opt
+                }
+            }
+            """,
+            macros: testMacors
+        )
     }
 }
 

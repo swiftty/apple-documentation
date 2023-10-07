@@ -29,16 +29,25 @@ public struct ImplicitInitMacro: MemberMacro {
         members: MemberBlockItemListSyntax,
         accessLevel: String?
     ) throws -> InitializerDeclSyntax {
-        let variables: [(name: PatternSyntax, type: TypeSyntax)] = members.compactMap { member in
-            guard let variable = member.decl.as(VariableDeclSyntax.self),
-                  let name = variable.bindings.first?.pattern,
-                  let type = variable.bindings.first?.typeAnnotation?.type else { return nil }
-            return (name.trimmed, type.trimmed)
+        // swiftlint:disable:next large_tuple
+        typealias Variable = (name: PatternSyntax, type: TypeSyntax, initializer: ExprSyntax?)
+
+        let variables: [Variable] = members.compactMap { member in
+            guard let variable = member.decl.as(VariableDeclSyntax.self)?.bindings.first,
+                  let type = variable.typeAnnotation?.type else { return nil }
+            return (variable.pattern.trimmed, type.trimmed, variable.initializer?.value)
         }
 
         let arguments = FunctionParameterListSyntax {
             for variable in variables {
-                FunctionParameterSyntax("\(variable.name): \(variable.type)")
+                let optionalInitializer: () -> ExprSyntax? = {
+                    variable.type.description.hasSuffix("?") ? "nil" : nil
+                }
+                if let initializer = variable.initializer ?? optionalInitializer() {
+                    FunctionParameterSyntax("\(variable.name): \(variable.type) = \(initializer)")
+                } else {
+                    FunctionParameterSyntax("\(variable.name): \(variable.type)")
+                }
             }
         }
 

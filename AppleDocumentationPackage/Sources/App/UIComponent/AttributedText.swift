@@ -7,30 +7,15 @@ public struct AttributedText: Hashable {
     public var string: String
     public var attributes: Attributes
 
+    @ImplicitInit
     public struct Attributes: Hashable {
-        public var font: Font
-        public var bold: Bool
-        public var italic: Bool
-        public var monospaced: Bool
+        public var font: Font = .body
+        public var bold: Bool = false
+        public var italic: Bool = false
+        public var monospaced: Bool = false
         public var foregroundColor: Color?
 
         public var link: URL?
-
-        public init(
-            font: Font = .body,
-            bold: Bool = false,
-            italic: Bool = false,
-            monospaced: Bool = false,
-            foregroundColor: Color? = nil,
-            link: URL? = nil
-        ) {
-            self.font = font
-            self.bold = bold
-            self.italic = italic
-            self.monospaced = monospaced
-            self.foregroundColor = foregroundColor
-            self.link = link
-        }
 
         @discardableResult
         public mutating func link(using ref: TechnologyDetail.Reference?) -> Bool {
