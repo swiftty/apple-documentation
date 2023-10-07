@@ -4,6 +4,7 @@ import UIComponent
 
 struct ReferenceView: View {
     let reference: TechnologyDetail.Reference
+    var descriptionOnly = false
 
     var body: some View {
         content()
@@ -52,11 +53,19 @@ struct ReferenceView: View {
 
         return VStack {
             HStack(alignment: .firstTextBaseline) {
-                FragmentTextView(fragments: reference.fragments, attributes: attributes) { kind, attributes in
-                    if !Set([.identifier]).contains(kind) {
-                        attributes.link = nil
-                        attributes.foregroundColor = .secondary
+                if case let fragments = reference.fragments, !fragments.isEmpty, !descriptionOnly {
+                    FragmentTextView(fragments: fragments, attributes: attributes) { kind, attributes in
+                        if !Set([.identifier]).contains(kind) {
+                            attributes.link = nil
+                            attributes.foregroundColor = .secondary
+                        }
                     }
+
+                } else if let title = reference.title {
+                    FragmentTextView(
+                        fragments: [.init(text: title, kind: .identifier, identifier: nil)],
+                        attributes: attributes
+                    )
                 }
 
                 if reference.beta {
@@ -79,7 +88,7 @@ struct ReferenceView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
-            if !reference.abstract.isEmpty {
+            if !reference.abstract.isEmpty, !descriptionOnly {
                 BlockTextView(reference.abstract)
                     .padding(.leading, 28)
             }

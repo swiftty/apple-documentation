@@ -33,14 +33,8 @@ private struct Result: Decodable {
                     parameters: $0.parameters?.map(\.parameter) ?? []
                 )
             } ?? [],
-            topics: detail.topicSections?.compactMap {
-                switch $0 {
-                case .document(let doc):
-                    .document(.init(title: doc.title, identifiers: doc.identifiers))
-                case .taskGroup(let group):
-                    .taskGroup(.init(title: group.title, identifiers: group.identifiers, anchor: group.anchor))
-                }
-            } ?? [],
+            topics: detail.topicSections?.map(\.topic) ?? [],
+            relationships: detail.relationshipsSections?.map(\.topic) ?? [],
             seeAlso: detail.seeAlsoSections?.map {
                 .init(title: $0.title, generated: $0.generated, identifiers: $0.identifiers)
             } ?? [],
@@ -68,6 +62,7 @@ private struct RawTechnologyDetail: Decodable {
     var abstract: [RawInlineContent]?
     var primaryContentSections: [PrimaryContentSection]?
     var topicSections: [RawTopic]?
+    var relationshipsSections: [RawTopic]?
     var seeAlsoSections: [RawSeeAlso]?
     var references: [Technology.Identifier: RawReference]
     var diffAvailability: [Technology.DiffAvailability.Key: Technology.DiffAvailability.Payload]?
@@ -251,9 +246,11 @@ private enum RawInlineContent: Decodable {
 private enum RawTopic: Decodable {
     case document(Document)
     case taskGroup(TaskGroup)
+    case relationships(Relationship)
 
     enum Kind: String, RawRepresentable, Decodable {
         case taskGroup
+        case relationships
     }
 
     struct Document: Decodable {
@@ -267,6 +264,12 @@ private enum RawTopic: Decodable {
         var anchor: String
     }
 
+    struct Relationship: Decodable {
+        var title: String
+        var identifiers: [Technology.Identifier]
+        var type: String
+    }
+
     private enum CodingKeys: CodingKey {
         case kind
     }
@@ -277,8 +280,22 @@ private enum RawTopic: Decodable {
         case .taskGroup:
             try .taskGroup(TaskGroup(from: decoder))
 
+        case .relationships:
+            try .relationships(Relationship(from: decoder))
+
         case nil:
             try .document(Document(from: decoder))
+        }
+    }
+
+    var topic: TechnologyDetail.Topic {
+        switch self {
+        case .document(let doc):
+            .document(.init(title: doc.title, identifiers: doc.identifiers))
+        case .taskGroup(let group):
+            .taskGroup(.init(title: group.title, identifiers: group.identifiers, anchor: group.anchor))
+        case .relationships(let rel):
+            .relationships(.init(title: rel.title, identifiers: rel.identifiers, type: rel.type))
         }
     }
 }

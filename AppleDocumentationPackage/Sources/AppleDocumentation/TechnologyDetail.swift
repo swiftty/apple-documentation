@@ -7,6 +7,7 @@ public struct TechnologyDetail {
     public var abstract: [InlineContent]
     public var primaryContents: [PrimaryContent]
     public var topics: [Topic]
+    public var relationships: [Topic]
     public var seeAlso: [SeeAlso]
     public var references: [Technology.Identifier: Reference]
     public var diffAvailability: Technology.DiffAvailability
@@ -143,8 +144,15 @@ extension TechnologyDetail {
     }
 
     public enum Topic: Hashable {
-        case taskGroup(TaskGroup)
         case document(Document)
+        case taskGroup(TaskGroup)
+        case relationships(Relationship)
+
+        @ImplicitInit
+        public struct Document: Hashable {
+            public var title: String
+            public var identifiers: [Technology.Identifier]
+        }
 
         @ImplicitInit
         public struct TaskGroup: Hashable {
@@ -154,9 +162,10 @@ extension TechnologyDetail {
         }
 
         @ImplicitInit
-        public struct Document: Hashable {
+        public struct Relationship: Hashable {
             public var title: String
             public var identifiers: [Technology.Identifier]
+            public var type: String
         }
     }
 

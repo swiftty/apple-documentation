@@ -65,6 +65,19 @@ public struct TechnologyDetailPage: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
+
+                    if case let rels = detail.relationships, !rels.isEmpty {
+                        Divider()
+
+                        Text("Relationships")
+                            .font(.title2.bold())
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                        ForEach(rels.indexed()) { topic in
+                            topicView(with: topic.element)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                    }
                 }
                 .environment(\.references, detail.references)
                 .padding(.horizontal)
@@ -171,6 +184,17 @@ public struct TechnologyDetailPage: View {
             ForEach(group.identifiers, id: \.self) { identifier in
                 detail?.references[identifier].map { ref in
                     ReferenceView(reference: ref)
+                }
+            }
+
+        case .relationships(let rel):
+            Text(rel.title)
+                .font(.title3.bold())
+                .foregroundStyle(.primary)
+
+            ForEach(rel.identifiers, id: \.self) { identifier in
+                detail?.references[identifier].map { ref in
+                    ReferenceView(reference: ref, descriptionOnly: true)
                 }
             }
 
