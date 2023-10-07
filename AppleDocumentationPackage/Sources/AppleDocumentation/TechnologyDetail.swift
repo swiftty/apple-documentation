@@ -171,6 +171,7 @@ extension TechnologyDetail {
         public var fragments: [Fragment]
         public var navigatorTitle: [Fragment]
         public var variants: [ImageVariant]
+        public var beta: Bool
 
         @ImplicitInit
         public struct ImageVariant: Hashable {

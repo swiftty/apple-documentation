@@ -54,7 +54,8 @@ private struct Result: Decodable {
                     abstract: $0.abstract?.map(\.inlineContent) ?? [],
                     fragments: $0.fragments?.map(\.fragment) ?? [],
                     navigatorTitle: $0.navigatorTitle?.map(\.fragment) ?? [],
-                    variants: $0.variants?.map(\.variant) ?? []
+                    variants: $0.variants?.map(\.variant) ?? [],
+                    beta: $0.beta ?? false
                 )
             },
             diffAvailability: .init(detail.diffAvailability ?? [:])
@@ -299,6 +300,7 @@ private struct RawReference: Decodable {
     var fragments: [RawFragment]?
     var navigatorTitle: [RawFragment]?
     var variants: [RawImageVariant]?
+    var beta: Bool?
 }
 
 private struct RawFragment: Decodable {

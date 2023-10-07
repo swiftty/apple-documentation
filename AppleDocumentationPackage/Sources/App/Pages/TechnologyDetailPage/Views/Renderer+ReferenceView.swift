@@ -51,7 +51,28 @@ struct ReferenceView: View {
         attributes.link(using: reference)
 
         return VStack {
-            FragmentTextView(fragments: reference.fragments, attributes: attributes)
+            HStack(alignment: .firstTextBaseline) {
+                FragmentTextView(fragments: reference.fragments, attributes: attributes)
+
+                if reference.beta {
+                    Text { next in
+                        var attributes = attributes
+                        attributes.foregroundColor = .green
+                        attributes.font = .caption
+                        attributes.link = nil
+                        next(.init(string: "Beta", attributes: attributes))
+                    }
+                    .padding(.vertical, 4)
+                    .padding(.horizontal, 8)
+                    .background {
+                        Capsule()
+                            .stroke()
+                    }
+                    .foregroundStyle(.green)
+                    .offset(y: -2)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
 
             if !reference.abstract.isEmpty {
                 BlockTextView(reference.abstract)
@@ -86,7 +107,8 @@ private extension TechnologyDetail.Reference {
             ],
             fragments: [],
             navigatorTitle: [],
-            variants: [])
+            variants: [],
+            beta: false)
         )
         ReferenceView(reference: .init(
             identifier: .init(rawValue: ""),
@@ -103,7 +125,8 @@ private extension TechnologyDetail.Reference {
                 .init(text: "Hello world", kind: .text, identifier: nil)
             ],
             navigatorTitle: [],
-            variants: [])
+            variants: [],
+            beta: true)
         )
     }
     .preferredColorScheme(.dark)
