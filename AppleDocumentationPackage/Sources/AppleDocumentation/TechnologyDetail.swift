@@ -192,7 +192,7 @@ extension TechnologyDetail {
 
         public enum Kind {
             case keyword, text, identifier, label, typeIdentifier, genericParameter
-            case internalParam, externalParam, attribute
+            case internalParam, externalParam, attribute, number
         }
     }
 }

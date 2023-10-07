@@ -53,6 +53,10 @@ struct FragmentTextView: View {
                 case .attribute:
                     attributes.foregroundColor = .init(r: 255, g: 122, b: 178)
                     next(.init(string: fragment.text, attributes: attributes))
+
+                case .number:
+                    attributes.foregroundColor = .init(r: 217, g: 201, b: 124)
+                    next(.init(string: fragment.text, attributes: attributes))
                 }
             }
         }

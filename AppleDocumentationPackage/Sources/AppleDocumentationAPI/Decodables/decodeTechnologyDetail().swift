@@ -308,7 +308,7 @@ private struct RawFragment: Decodable {
 
     enum Kind: String, RawRepresentable, Decodable {
         case text, keyword, identifier, label, typeIdentifier, genericParameter
-        case internalParam, externalParam, attribute
+        case internalParam, externalParam, attribute, number
     }
 
     var fragment: TechnologyDetail.Fragment {
@@ -322,6 +322,7 @@ private struct RawFragment: Decodable {
         case .internalParam: .internalParam
         case .externalParam: .externalParam
         case .attribute: .attribute
+        case .number: .number
         }
         return .init(text: text, kind: kind, identifier: identifier)
     }
