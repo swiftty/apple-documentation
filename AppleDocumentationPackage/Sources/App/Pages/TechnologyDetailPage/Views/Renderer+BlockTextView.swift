@@ -33,11 +33,25 @@ private struct InnerView: View {
         case paragraph([AttributedText])
         case unorderedList([[ListItem]])
         case aside(name: String?, style: String, contents: [Content])
-        case image(URL)
+        case image([ImageVariant])
 
         struct ListItem: Hashable {
             var block: BlockContent
             var attributes: AttributedText.Attributes
+        }
+
+        struct ImageVariant: Hashable {
+            var url: URL
+            var traits: Set<Trait>
+
+            enum Trait: Hashable {
+                case dark, light
+            }
+
+            func isMatching(scheme: ColorScheme) -> Bool {
+                return scheme == .dark && traits.contains(.dark)
+                    || scheme == .light && traits.contains(.light)
+            }
         }
     }
 
@@ -169,9 +183,17 @@ private struct InnerView: View {
             builder.insert([.init(string: title, attributes: attributes)])
 
         case .image(let image):
-            guard let ref = references[image.identifier],
-                  let url = ref.variants.last?.url else { return }
-            builder.insert(.image(url))
+            guard let ref = references[image.identifier] else { return }
+
+            builder.insert(.image(ref.variants.map {
+                .init(url: $0.url, traits: Set($0.traits.compactMap { trait in
+                    switch trait {
+                    case .dark: .dark
+                    case .light: .light
+                    default: nil
+                    }
+                }))
+            }))
 
         case .inlineHead(let inlineHead):
             var attributes = attributes
@@ -221,11 +243,10 @@ private struct ContentsRenderer: View {
             case .aside(let name, let style, let contents):
                 asideView(name: name, style: style, contents: contents)
 
-            case .image(let url):
-                LazyImage(url: url) { state in
-                    state.image?
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
+            case .image(let variants):
+                HStack {
+                    ImageView(variants: variants)
+                        .frame(maxWidth: .infinity, alignment: .center)
                 }
             }
         }
@@ -269,5 +290,37 @@ private struct ContentsRenderer: View {
                 .fill(style.fill)
                 .stroke(style.border)
         }
+    }
+}
+
+private struct ImageView: View {
+    @Environment(\.displayScale) var displayScale
+    @Environment(\.colorScheme) var colorScheme
+
+    let variants: [InnerView.Content.ImageVariant]
+
+    var body: some View {
+        if let url = findURL() {
+            LazyImage(url: url) { state in
+                state.image?
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(maxWidth: state.imageContainer.map { $0.image.size.width / displayScale })
+            }
+        } else {
+            Color.clear
+                .overlay {
+                    Image(systemName: "exclamationmark.triangle")
+                }
+                .aspectRatio(CGSize(width: 3, height: 2), contentMode: .fit)
+                .border(.yellow)
+        }
+    }
+
+    private func findURL() -> URL? {
+        for variant in variants where variant.isMatching(scheme: colorScheme) {
+            return variant.url
+        }
+        return variants.first?.url
     }
 }
