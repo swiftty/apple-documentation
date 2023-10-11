@@ -128,6 +128,7 @@ let package = Package(
                 "RootPage",
                 "SafariPage",
                 "AllTechnologiesPage",
+                "TechnologyDetailIndexPage",
                 "TechnologyDetailPage"
             ]
         ),
@@ -190,6 +191,16 @@ let package = Package(
         .target(
             feature: .pages,
             name: "AllTechnologiesPage",
+            dependencies: [
+                "Router",
+                "AppleDocClient",
+                "UIComponent"
+            ]
+        ),
+
+        .target(
+            feature: .pages,
+            name: "TechnologyDetailIndexPage",
             dependencies: [
                 "Router",
                 "AppleDocClient",

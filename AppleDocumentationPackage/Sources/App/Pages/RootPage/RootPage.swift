@@ -15,6 +15,9 @@ public struct RootPage: View {
 
         NavigationStack(path: $router.navigationPath) {
             router.route(for: .allTechnologiesPage)
+                .navigationDestination(for: Routings.TechnologyDetailIndexPage.self) { page in
+                    router.route(for: page)
+                }
                 .navigationDestination(for: Routings.TechnologyDetailPage.self) { page in
                     router.route(for: page)
                 }

@@ -13,6 +13,20 @@ extension Routing where Self == Routings.AllTechnologiesPage {
     }
 }
 
+// MARK: -
+extension Routings {
+    public struct TechnologyDetailIndexPage: Routing {
+        public var destination: Technology.Destination.Value
+    }
+}
+
+extension Routing where Self == Routings.TechnologyDetailIndexPage {
+    public static func technologyDetailIndex(for destination: Technology.Destination.Value) -> Self {
+        Self.init(destination: destination)
+    }
+}
+
+// MARK: -
 extension Routings {
     public struct TechnologyDetailPage: Routing {
         public var destination: Technology.Destination.Value
@@ -25,6 +39,7 @@ extension Routing where Self == Routings.TechnologyDetailPage {
     }
 }
 
+// MARK: -
 extension Routings {
     public struct SafariPage: Routing {
         public var url: URL

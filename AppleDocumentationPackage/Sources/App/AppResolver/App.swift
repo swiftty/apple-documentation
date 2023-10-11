@@ -6,6 +6,7 @@ import AppleDocClientLive
 import RootPage
 import SafariPage
 import AllTechnologiesPage
+import TechnologyDetailIndexPage
 import TechnologyDetailPage
 
 public struct App: SwiftUI.App {
@@ -34,6 +35,9 @@ private struct RoutingProviderImpl: RoutingProvider {
         switch target {
         case is Routings.AllTechnologiesPage:
             AllTechnologiesPage()
+
+        case let page as Routings.TechnologyDetailIndexPage:
+            TechnologyDetailIndexPage(destination: page.destination)
 
         case let page as Routings.TechnologyDetailPage:
             TechnologyDetailPage(destination: page.destination)
