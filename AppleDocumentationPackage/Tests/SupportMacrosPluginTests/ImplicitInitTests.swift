@@ -9,7 +9,7 @@ import SwiftSyntaxMacrosTestSupport
 import SupportMacrosPlugin
 
 class ImplicitInitTests: XCTestCase {
-    let testMacors: [String: Macro.Type] = [
+    let testMacros: [String: Macro.Type] = [
         "ImplicitInit": ImplicitInitMacro.self
     ]
 
@@ -30,7 +30,7 @@ class ImplicitInitTests: XCTestCase {
                 }
             }
             """,
-            macros: testMacors
+            macros: testMacros
         )
 
         assertMacroExpansion(
@@ -52,7 +52,7 @@ class ImplicitInitTests: XCTestCase {
                 }
             }
             """,
-            macros: testMacors
+            macros: testMacros
         )
 
         assertMacroExpansion(
@@ -76,7 +76,7 @@ class ImplicitInitTests: XCTestCase {
                 }
             }
             """#,
-            macros: testMacors
+            macros: testMacros
         )
 
         assertMacroExpansion(
@@ -107,7 +107,7 @@ class ImplicitInitTests: XCTestCase {
                 }
             }
             """,
-            macros: testMacors
+            macros: testMacros
         )
 
         assertMacroExpansion(
@@ -129,7 +129,7 @@ class ImplicitInitTests: XCTestCase {
                 }
             }
             """,
-            macros: testMacors
+            macros: testMacros
         )
     }
 }

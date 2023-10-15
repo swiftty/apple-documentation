@@ -23,13 +23,13 @@ extension SwiftUIEnvironmentMacro: PeerMacro {
         }
         let name = variable.pattern.trimmed
         return [
-            DeclSyntax(
-                try StructDeclSyntax("private struct Key_\(name): SwiftUI.EnvironmentKey") {
-                    try VariableDeclSyntax("static var defaultValue: \(type)") {
-                        StmtSyntax("return \(value)")
-                    }
+            """
+            private struct Key_\(name): SwiftUI.EnvironmentKey {
+                static var defaultValue: \(type) {
+                    return \(value)
                 }
-            )
+            }
+            """
         ]
     }
 }

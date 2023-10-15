@@ -7,10 +7,11 @@ import SwiftSyntaxMacrosTestSupport
 import SupportMacrosPlugin
 
 class SwiftUIEnvironmentTests: XCTestCase {
-    let testMacors: [String: Macro.Type] = [
+    let testMacros: [String: Macro.Type] = [
         "SwiftUIEnvironment": SwiftUIEnvironmentMacro.self
     ]
 
+    // swiftlint:disable:next function_body_length
     func testBasic() throws {
         assertMacroExpansion(
             """
@@ -37,7 +38,7 @@ class SwiftUIEnvironmentTests: XCTestCase {
                 }
             }
             """,
-            macros: testMacors
+            macros: testMacros
         )
         assertMacroExpansion(
             """
@@ -64,7 +65,7 @@ class SwiftUIEnvironmentTests: XCTestCase {
                 }
             }
             """,
-            macros: testMacors
+            macros: testMacros
         )
         assertMacroExpansion(
             """
@@ -108,7 +109,7 @@ class SwiftUIEnvironmentTests: XCTestCase {
                 }
             }
             """,
-            macros: testMacors
+            macros: testMacros
         )
 
     }
