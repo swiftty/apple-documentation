@@ -8,6 +8,7 @@ public struct AppleDocClient {
         package var diffAvailability: () async throws -> Technology.DiffAvailability
 
         package var technologyDetail: (String) async throws -> TechnologyDetail
+        package var technologyDetailIndex: (String) async throws -> [TechnologyDetailIndex]
     }
 
     package var props: Props
@@ -15,12 +16,14 @@ public struct AppleDocClient {
     public init(
         allTechnologies: @escaping () async throws -> [Technology],
         diffAvailability: @escaping () async throws -> Technology.DiffAvailability,
-        technologyDetail: @escaping (String) async throws -> TechnologyDetail
+        technologyDetail: @escaping (String) async throws -> TechnologyDetail,
+        technologyDetailIndex: @escaping (String) async throws -> [TechnologyDetailIndex]
     ) {
         props = Props(
             allTechnologies: allTechnologies,
             diffAvailability: diffAvailability,
-            technologyDetail: technologyDetail
+            technologyDetail: technologyDetail,
+            technologyDetailIndex: technologyDetailIndex
         )
     }
 
@@ -43,6 +46,10 @@ public struct AppleDocClient {
     public func technologyDetail(for path: Technology.Destination.Value) async throws -> TechnologyDetail {
         try await props.technologyDetail(path.rawValue)
     }
+
+    public func technologyDetailIndex(for path: Technology.Destination.Value) async throws -> [TechnologyDetailIndex] {
+        try await props.technologyDetailIndex(path.rawValue)
+    }
 }
 
 extension EnvironmentValues {
@@ -50,6 +57,7 @@ extension EnvironmentValues {
     public var appleDocClient: AppleDocClient = AppleDocClient(
         allTechnologies: { fatalError() },
         diffAvailability: { fatalError() },
-        technologyDetail: { _ in fatalError() }
+        technologyDetail: { _ in fatalError() },
+        technologyDetailIndex: { _ in fatalError() }
     )
 }
