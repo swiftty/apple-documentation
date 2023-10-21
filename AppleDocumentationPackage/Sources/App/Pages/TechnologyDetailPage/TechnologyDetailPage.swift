@@ -2,19 +2,7 @@ import SwiftUI
 import AppleDocumentation
 import AppleDocClient
 import Router
-
-struct IndexedItem<Element: Hashable>: Identifiable, Hashable {
-    var id: some Hashable { self }
-
-    var index: Int
-    var element: Element
-}
-
-extension Array where Element: Hashable {
-    func indexed() -> [IndexedItem<Element>] {
-        enumerated().map(IndexedItem.init)
-    }
-}
+import UIComponent
 
 public struct TechnologyDetailPage: View {
     @Environment(\.appleDocClient) var appleDocClient
