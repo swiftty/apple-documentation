@@ -70,7 +70,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/kean/Nuke.git", from: "12.2.0"),
+        .package(url: "https://github.com/kean/Nuke.git", from: "12.3.0"),
         .package(url: "https://github.com/apple/swift-algorithms.git", from: "1.2.0"),
 
         .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.2"),
