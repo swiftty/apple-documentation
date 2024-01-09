@@ -73,7 +73,7 @@ let package = Package(
         .package(url: "https://github.com/kean/Nuke.git", from: "12.3.0"),
         .package(url: "https://github.com/apple/swift-algorithms.git", from: "1.2.0"),
 
-        .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.2"),
+        .package(url: "https://github.com/apple/swift-syntax.git", from: "509.1.0"),
 
         .package(url: "https://github.com/swiftty/XcodeGenBinary.git", from: "2.38.0"),
         .package(url: "https://github.com/swiftty/SwiftLintBinary.git", from: "0.54.0")
