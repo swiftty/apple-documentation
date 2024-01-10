@@ -20,7 +20,10 @@ private struct InnerView: UIViewControllerRepresentable {
 
     func makeUIViewController(context: Context) -> SFSafariViewController {
         let config = SFSafariViewController.Configuration()
+        #if os(visionOS)
+        #else
         config.barCollapsingEnabled = true
+        #endif
         let vc = SFSafariViewController(url: url, configuration: config)
         return vc
     }

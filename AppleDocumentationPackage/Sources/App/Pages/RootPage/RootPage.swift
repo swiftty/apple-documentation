@@ -29,10 +29,12 @@ public struct RootPage: View {
             }
         }
         .extractDestination()
+        #if !os(visionOS)
         .environment(\.openURL, OpenURLAction { url in
             modalContext = .safariPage(url)
             return .handled
         })
+        #endif
         .environment(\.openDestination, OpenDestinationAction { identifier in
             router.navigationPath.append(.technologyDetail(for: identifier))
         })
