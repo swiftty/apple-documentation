@@ -23,5 +23,9 @@ targetTemplates:
       - Platform
     settings:
       base:
-        TARGETED_DEVICE_FAMILY: 1,2,6
+        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator macosx xros xrsimulator"
+        TARGETED_DEVICE_FAMILY: "1,2,7"
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+        SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD: NO
         DEVELOPMENT_TEAM: B2TD54U4MA
