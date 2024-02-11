@@ -15,7 +15,6 @@ struct TagLayout: Layout {
         var result = CGRect.zero
 
         for index in subviews.indices {
-            let subview = subviews[index]
             let size = cache.sizes[index]
 
             let maxWidth = origin.x + size.width
