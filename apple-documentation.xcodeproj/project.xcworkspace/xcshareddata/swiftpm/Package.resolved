@@ -1,0 +1,59 @@
+{
+  "pins" : [
+    {
+      "identity" : "nuke",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kean/Nuke.git",
+      "state" : {
+        "revision" : "8ecbfc886da39bccb01c34abef5f2ff4073ad633",
+        "version" : "12.4.0"
+      }
+    },
+    {
+      "identity" : "swift-algorithms",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-algorithms.git",
+      "state" : {
+        "revision" : "f6919dfc309e7f1b56224378b11e28bab5bccc42",
+        "version" : "1.2.0"
+      }
+    },
+    {
+      "identity" : "swift-numerics",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-numerics",
+      "state" : {
+        "revision" : "0a5bc04095a675662cf24757cc0640aa2204253b",
+        "version" : "1.0.2"
+      }
+    },
+    {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-syntax.git",
+      "state" : {
+        "revision" : "64889f0c732f210a935a0ad7cda38f77f876262d",
+        "version" : "509.1.1"
+      }
+    },
+    {
+      "identity" : "swiftlintbinary",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftty/SwiftLintBinary.git",
+      "state" : {
+        "revision" : "347d0b073b3d736c05f545e978b6fb61a5cc7313",
+        "version" : "0.54.0"
+      }
+    },
+    {
+      "identity" : "xcodegenbinary",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftty/XcodeGenBinary.git",
+      "state" : {
+        "revision" : "84ecf81ae08629bc9b10649df689b0eb68536951",
+        "version" : "2.38.0"
+      }
+    }
+  ],
+  "version" : 2
+}
