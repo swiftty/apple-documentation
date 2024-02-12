@@ -27,7 +27,7 @@ public struct TechnologyDetailPage: View {
     }
 
     public var body: some View {
-        WithObservation {
+        InObservation {
             TechnologyDetailModel(
                 destination: destination,
                 dependency: .init(
@@ -46,77 +46,88 @@ public struct TechnologyDetailPage: View {
         let model: TechnologyDetailModel
 
         var body: some View {
-            if let detail = model.detail {
-                ScrollView {
-                    LazyVStack {
-                        if let roleHeading = detail.metadata.roleHeading {
-                            Text(roleHeading)
-                                .font(.title3.bold())
-                                .foregroundStyle(.secondary)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-
-                        Text(detail.metadata.title)
-                            .font(.title.bold())
-                            .foregroundStyle(.primary)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-
-                        BlockTextView(detail.abstract)
-
-                        platformsView(with: detail.metadata.platforms)
-
-                        ForEach(detail.primaryContents.indexed()) { item in
-                            primaryContentSection(with: item.element)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-
-                        if case let topics = detail.topics, !topics.isEmpty {
-                            Divider()
-
-                            Text("Topics")
-                                .font(.title2.bold())
-                                .frame(maxWidth: .infinity, alignment: .leading)
-
-                            ForEach(topics.indexed()) { topic in
-                                topicView(with: topic.element)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                            }
-                        }
-
-                        if case let rels = detail.relationships, !rels.isEmpty {
-                            Divider()
-
-                            Text("Relationships")
-                                .font(.title2.bold())
-                                .frame(maxWidth: .infinity, alignment: .leading)
-
-                            ForEach(rels.indexed()) { topic in
-                                topicView(with: topic.element)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                            }
-                        }
-                    }
-                    .environment(\.references, detail.references)
-                    .padding(.horizontal)
-                }
-                .toolbar {
-                    ToolbarItem(placement: .primaryAction) {
-                        Button {
-                            guard let url = URL(string: "https://developer.apple.com\(destination.rawValue)") else {
-                                return
-                            }
-                            openURL(url)
-                        } label: {
-                            Label("safari", systemImage: "safari")
-                        }
-                    }
-                }
-            } else {
+            InUIStack {
+                model.detail
+            } loading: { isLoading in
                 ProgressView()
                     .progressViewStyle(.circular)
                     .task {
-                        await model.fetch()
+                        if !isLoading {
+                            await model.fetch()
+                        }
                     }
+            } loaded: { detail in
+                detail.map(content(for:))
+            } failed: { error in
+                Text(String(describing: error))
+            }
+        }
+
+        // swiftlint:disable:next function_body_length
+        private func content(for detail: TechnologyDetail) -> some View {
+            ScrollView {
+                LazyVStack {
+                    if let roleHeading = detail.metadata.roleHeading {
+                        Text(roleHeading)
+                            .font(.title3.bold())
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+
+                    Text(detail.metadata.title)
+                        .font(.title.bold())
+                        .foregroundStyle(.primary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    BlockTextView(detail.abstract)
+
+                    platformsView(with: detail.metadata.platforms)
+
+                    ForEach(detail.primaryContents.indexed()) { item in
+                        primaryContentSection(with: item.element)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+
+                    if case let topics = detail.topics, !topics.isEmpty {
+                        Divider()
+
+                        Text("Topics")
+                            .font(.title2.bold())
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                        ForEach(topics.indexed()) { topic in
+                            topicView(with: topic.element)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                    }
+
+                    if case let rels = detail.relationships, !rels.isEmpty {
+                        Divider()
+
+                        Text("Relationships")
+                            .font(.title2.bold())
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                        ForEach(rels.indexed()) { topic in
+                            topicView(with: topic.element)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                    }
+                }
+                .environment(\.references, detail.references)
+                .padding(.horizontal)
+            }
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        guard let url = URL(string: "https://developer.apple.com\(destination.rawValue)") else {
+                            return
+                        }
+                        openURL(url)
+                    } label: {
+                        Label("safari", systemImage: "safari")
+                    }
+                }
             }
         }
 
@@ -195,7 +206,7 @@ public struct TechnologyDetailPage: View {
                     .foregroundStyle(.primary)
 
                 ForEach(group.identifiers, id: \.self) { identifier in
-                    model.detail?.references[identifier].map { ref in
+                    model.detail.wrappedValue?.references[identifier].map { ref in
                         ReferenceView(reference: ref)
                     }
                 }
@@ -206,7 +217,7 @@ public struct TechnologyDetailPage: View {
                     .foregroundStyle(.primary)
 
                 ForEach(rel.identifiers, id: \.self) { identifier in
-                    model.detail?.references[identifier].map { ref in
+                    model.detail.wrappedValue?.references[identifier].map { ref in
                         ReferenceView(reference: ref, descriptionOnly: true)
                     }
                 }
@@ -217,7 +228,7 @@ public struct TechnologyDetailPage: View {
                     .foregroundStyle(.primary)
 
                 ForEach(doc.identifiers, id: \.self) { identifier in
-                    model.detail?.references[identifier].map { ref in
+                    model.detail.wrappedValue?.references[identifier].map { ref in
                         ReferenceView(reference: ref)
                     }
                 }

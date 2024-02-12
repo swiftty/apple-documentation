@@ -1,6 +1,6 @@
 import SwiftUI
 
-public struct WithObservation<Model: Observable, Content: View, Loading: View>: View {
+public struct InObservation<Model: Observable, Content: View, Loading: View>: View {
     @ViewBuilder private var content: (Model) -> Content
     @ViewBuilder private var loading: () -> Loading
 
@@ -29,7 +29,7 @@ public struct WithObservation<Model: Observable, Content: View, Loading: View>: 
     }
 }
 
-extension WithObservation where Loading == Color {
+extension InObservation where Loading == Color {
     public init(
         _ initializer: @escaping () -> Model,
         @ViewBuilder content: @escaping (Model) -> Content

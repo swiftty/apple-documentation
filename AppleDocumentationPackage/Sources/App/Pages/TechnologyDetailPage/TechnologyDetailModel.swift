@@ -2,6 +2,7 @@ import Foundation
 import Observation
 import AppleDocumentation
 import AppleDocClient
+import UIComponent
 
 @Observable
 class TechnologyDetailModel {
@@ -12,7 +13,7 @@ class TechnologyDetailModel {
     let destination: Technology.Destination.Value
     let dependency: Dependency
 
-    private(set) var detail: TechnologyDetail?
+    private(set) var detail = WithUIStack<TechnologyDetail?>(initialValue: nil)
 
     init(
         destination: Technology.Destination.Value,
@@ -24,9 +25,9 @@ class TechnologyDetailModel {
 
     func fetch() async {
         do {
-            detail = try await dependency.appleDocClient.technologyDetail(for: destination)
+            detail.next(.loaded(try await dependency.appleDocClient.technologyDetail(for: destination)))
         } catch {
-            print(error)
+            detail.next(.failed(error))
         }
     }
 }
