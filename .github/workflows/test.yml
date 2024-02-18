@@ -18,4 +18,4 @@ jobs:
       - name: Make project
         run: make project
       - name: Run tests
-        run: xcodebuild test -project apple-documentation.xcodeproj -scheme App -skipPackagePluginValidation
+        run: cd AppleDocumentationPackage && swift test
