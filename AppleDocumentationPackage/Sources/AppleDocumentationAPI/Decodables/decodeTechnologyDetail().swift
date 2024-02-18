@@ -36,7 +36,7 @@ private struct Result: Decodable {
             topics: detail.topicSections?.map(\.topic) ?? [],
             relationships: detail.relationshipsSections?.map(\.topic) ?? [],
             seeAlso: detail.seeAlsoSections?.map {
-                .init(title: $0.title, generated: $0.generated, identifiers: $0.identifiers)
+                .init(title: $0.title, generated: $0.generated ?? false, identifiers: $0.identifiers)
             } ?? [],
             references: detail.references.mapValues {
                 .init(
@@ -127,11 +127,11 @@ private enum RawBlockContent: Decodable {
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         let type = try c.decode(String.self, forKey: .type)
-        self = try switch type {
-        case "paragraph": .paragraph(.init(from: decoder))
-        case "heading": .heading(.init(from: decoder))
-        case "aside": .aside(.init(from: decoder))
-        case "unorderedList": .unorderedList(.init(from: decoder))
+        self = switch type {
+        case "paragraph": try .paragraph(.init(from: decoder))
+        case "heading": try .heading(.init(from: decoder))
+        case "aside": try .aside(.init(from: decoder))
+        case "unorderedList": try .unorderedList(.init(from: decoder))
         default: .unknown(type)
         }
     }
@@ -202,14 +202,14 @@ private enum RawInlineContent: Decodable {
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         let type = try c.decode(String.self, forKey: .type)
-        self = try switch type {
-        case "text": .text(.init(from: decoder))
-        case "codeVoice": .codeVoice(.init(from: decoder))
-        case "image": .image(.init(from: decoder))
-        case "reference": .reference(.init(from: decoder))
-        case "strong": .strong(.init(from: decoder))
-        case "emphasis": .emphasis(.init(from: decoder))
-        case "inlineHead": .inlineHead(.init(from: decoder))
+        self = switch type {
+        case "text": try .text(.init(from: decoder))
+        case "codeVoice": try .codeVoice(.init(from: decoder))
+        case "image": try .image(.init(from: decoder))
+        case "reference": try .reference(.init(from: decoder))
+        case "strong": try .strong(.init(from: decoder))
+        case "emphasis": try .emphasis(.init(from: decoder))
+        case "inlineHead": try .inlineHead(.init(from: decoder))
         default: .unknown(type)
         }
     }
@@ -302,7 +302,7 @@ private enum RawTopic: Decodable {
 
 private struct RawSeeAlso: Decodable {
     var title: String
-    var generated: Bool
+    var generated: Bool?
     var identifiers: [Technology.Identifier]
 }
 
