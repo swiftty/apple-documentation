@@ -65,6 +65,10 @@ extension Color {
             CGFloat(v) / 255
         }
 
+        #if canImport(UIKit)
         self = .init(uiColor: .init(red: f(r), green: f(g), blue: f(b), alpha: 1))
+        #elseif canImport(AppKit)
+        self = .init(nsColor: .init(red: f(r), green: f(g), blue: f(b), alpha: 1))
+        #endif
     }
 }

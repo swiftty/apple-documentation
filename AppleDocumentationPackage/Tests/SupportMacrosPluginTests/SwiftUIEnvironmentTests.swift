@@ -1,3 +1,5 @@
+// swiftlint:disable function_body_length
+
 import XCTest
 import SwiftSyntax
 import SwiftSyntaxMacros
@@ -113,3 +115,5 @@ class SwiftUIEnvironmentTests: XCTestCase {
 
     }
 }
+
+// swiftlint:enable function_body_length
