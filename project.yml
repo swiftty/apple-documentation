@@ -23,12 +23,19 @@ targets:
         Debug:
           PRODUCT_BUNDLE_IDENTIFIER: com.swiftty.apple-documentation.App-debug
           INFOPLIST_PREPROCESS: YES
+    scheme:
+      testPlans:
+        - path: App.xctestplan
+          defaultPlan: true
     sources:
       - App
       - path: project.yml
         group: Configurations
         buildPhase: none
       - path: .swiftlint.yml
+        group: Configurations
+        buildPhase: none
+      - path: App.xctestplan
         group: Configurations
         buildPhase: none
     dependencies:
