@@ -1,6 +1,8 @@
 import SwiftUI
 import SafariServices
 
+#if canImport(UIKit)
+
 public struct SafariPage: View {
     var url: URL
 
@@ -30,3 +32,5 @@ private struct InnerView: UIViewControllerRepresentable {
 
     func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) {}
 }
+
+#endif

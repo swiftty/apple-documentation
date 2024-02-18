@@ -22,12 +22,14 @@ public struct RootPage: View {
                     router.route(for: page)
                 }
         }
+        #if canImport(UIKit)
         .fullScreenCover(item: $modalContext) { context in
             switch context {
             case .safariPage(let url):
                 router.route(for: .safari(for: url))
             }
         }
+        #endif
         .extractDestination()
         #if !os(visionOS)
         .environment(\.openURL, OpenURLAction { url in

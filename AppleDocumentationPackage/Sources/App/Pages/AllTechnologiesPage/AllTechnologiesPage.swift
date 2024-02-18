@@ -42,11 +42,13 @@ public struct AllTechnologiesPage: View {
                 emptyContent()
             }
         }
+        #if canImport(UIKit)
         .searchable(
             text: $filterText.animation(),
             placement: .navigationBarDrawer(displayMode: .always),
             prompt: Text("Filter on this page")
         )
+        #endif
         .toolbar {
             let isEmpty = diffAvailability?.isEmpty ?? true
             if !isEmpty {
