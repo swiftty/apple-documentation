@@ -218,6 +218,9 @@ let package = Package(
             name: "DevelopmentAssets",
             dependencies: [
                 "AppleDocumentationAPI"
+            ],
+            resources: [
+                .process("Resources")
             ]
         )
     ]
