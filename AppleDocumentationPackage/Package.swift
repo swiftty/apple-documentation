@@ -72,6 +72,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/kean/Nuke.git", from: "12.4.0"),
         .package(url: "https://github.com/apple/swift-algorithms.git", from: "1.2.0"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "10.22.1"),
 
         .package(url: "https://github.com/apple/swift-syntax.git", from: "509.1.1"),
 
@@ -128,7 +129,9 @@ let package = Package(
                 "RootPage",
                 "SafariPage",
                 "AllTechnologiesPage",
-                "TechnologyDetailPage"
+                "TechnologyDetailPage",
+
+                .product(name: "FirebaseCrashlytics", package: "firebase-ios-sdk"),
             ]
         ),
 
