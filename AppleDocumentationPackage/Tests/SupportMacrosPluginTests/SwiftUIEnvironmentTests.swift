@@ -23,7 +23,7 @@ class SwiftUIEnvironmentTests: XCTestCase {
             expandedSource:
             """
             extension EnvironmentValues {
-                var references: [Technology.Identifier: TechnologyDetail.Reference] = [:] {
+                var references: [Technology.Identifier: TechnologyDetail.Reference] {
                     get {
                         self [Key_references.self]
                     }
@@ -50,7 +50,7 @@ class SwiftUIEnvironmentTests: XCTestCase {
             expandedSource:
             """
             extension EnvironmentValues {
-                var uiFont: UIFont? = nil {
+                var uiFont: UIFont? {
                     get {
                         self [Key_uiFont.self]
                     }
@@ -79,7 +79,7 @@ class SwiftUIEnvironmentTests: XCTestCase {
             expandedSource:
             """
             extension EnvironmentValues {
-                var references: [Technology.Identifier: TechnologyDetail.Reference] = [:] {
+                var references: [Technology.Identifier: TechnologyDetail.Reference] {
                     get {
                         self [Key_references.self]
                     }
@@ -94,7 +94,7 @@ class SwiftUIEnvironmentTests: XCTestCase {
                     }
                 }
 
-                var uiFont: UIFont? = nil {
+                var uiFont: UIFont? {
                     get {
                         self [Key_uiFont.self]
                     }
