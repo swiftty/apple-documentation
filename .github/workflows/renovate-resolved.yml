@@ -15,6 +15,6 @@ jobs:
       - name: Update Package.resolved
         run: |
           cd AppleDocumentationPackage
-          cp -f ../apple-documentation-package/project.xcworkspace/xcshareddata/swiftpm/Package.resolved Package.resolved
+          cp -f ../apple-documentation.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved Package.resolved
           swift package resolve
-          cp -f Package.resolved ../apple-documentation-package/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+          cp -f Package.resolved ../apple-documentation.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
