@@ -11,10 +11,14 @@ jobs:
   mac-os:
     runs-on: macos-14
     steps:
-      - name: select Xcode
+      - name: Select Xcode
         run: |
           sudo xcode-select --switch "/Applications/Xcode_15.2.app"
       - uses: actions/checkout@v4
+      - name: Prepare project
+        run: |
+          mkdir -p configs/debug
+          cp .github/workflows/GoogleService-Info.plist configs/debug/GoogleService-Info.plist
       - name: Make project
         run: make project
       - name: Run tests

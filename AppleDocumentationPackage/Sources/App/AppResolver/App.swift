@@ -7,6 +7,8 @@ import RootPage
 import SafariPage
 import AllTechnologiesPage
 import TechnologyDetailPage
+import FirebaseCore
+import FirebaseCrashlytics
 
 public struct App: SwiftUI.App {
     #if canImport(UIKit)
@@ -32,10 +34,22 @@ public struct App: SwiftUI.App {
 #if canImport(UIKit)
 private final class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var appleDocClient = AppleDocClient.live(session: .shared)
+
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+    ) -> Bool {
+        FirebaseApp.configure()
+        return true
+    }
 }
 #elseif canImport(AppKit)
 private final class AppDelegate: NSResponder, NSApplicationDelegate {
     lazy var appleDocClient = AppleDocClient.live(session: .shared)
+
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        FirebaseApp.configure()
+    }
 }
 #endif
 
