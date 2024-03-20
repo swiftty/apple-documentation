@@ -1,0 +1,14 @@
+name: Setup Build Environment
+description: Setup Xcode
+runs:
+  using: "composite"
+  steps:
+    - name: Select Xcode
+      shell: bash
+      run: |
+        sudo xcode-select --switch "/Applications/Xcode_15.2.app"
+    - name: Prepare project
+      shell: bash
+      run: |
+        mkdir -p configs/debug
+        cp .github/workflows/GoogleService-Info.plist configs/debug/GoogleService-Info.plist
