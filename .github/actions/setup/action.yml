@@ -3,6 +3,10 @@ description: Setup Xcode
 runs:
   using: "composite"
   steps:
+    - uses: actions/cache@v4
+      with:
+        path: DerivedData
+        key: ${{ runner.os }}-deriveddata
     - name: Git settings
       shell: bash
       run: |

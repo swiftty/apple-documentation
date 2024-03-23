@@ -16,4 +16,4 @@ jobs:
       - name: Make project
         run: make project
       - name: Run tests
-        run: cd AppleDocumentationPackage && swift test
+        run: make unittest

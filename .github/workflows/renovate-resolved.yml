@@ -16,10 +16,7 @@ jobs:
       - uses: ./.github/actions/setup
       - name: Update Package.resolved
         run: |
-          cd AppleDocumentationPackage
-          cp -f ../apple-documentation.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved Package.resolved
-          swift package resolve
-          cp -f Package.resolved ../apple-documentation.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+          make resolve
       - name: Commit Package.resolved
         run: |
           git add -u
