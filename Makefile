@@ -1,4 +1,4 @@
-SWIFT_PACKAGE := swift package --package-path AppleDocumentationPackage
+SWIFT_PACKAGE := swift package --package-path AppleDocumentationPackage --build-path DerivedData/apple-documentation/SourcePackages
 
 .PHONY: project
 project:
