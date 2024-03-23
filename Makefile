@@ -1,8 +1,9 @@
-SWIFT = swift$(1) --package-path AppleDocumentationPackage --build-path DerivedData/apple-documentation/SourcePackages
-
+PACKAGE_DIR := AppleDocumentationPackage
 XCODE_PROJECT := apple-documentation.xcodeproj
-XCUSERDATA_DIR := $(XCODE_PROJECT)/project.xcworkspace/xcuserdata/$$(whoami).xcuserdatad
+XCUSERDATA_DIR := $(XCODE_PROJECT)/project.xcworkspace/xcuserdata/$(shell whoami).xcuserdatad
 XCSHAREDDATA_DIR := $(XCODE_PROJECT)/project.xcworkspace/xcshareddata
+
+SWIFT = swift$(1) --package-path $(PACKAGE_DIR) --build-path DerivedData/apple-documentation/SourcePackages
 
 .PHONY: project
 project:
@@ -21,6 +22,6 @@ unittest:
 
 .PHONY: resolve
 resolve:
-	cp -f $(XCSHAREDDATA_DIR)/swiftpm/Package.resolved AppleDocumentationPackage/Package.resolved
+	cp -f $(XCSHAREDDATA_DIR)/swiftpm/Package.resolved $(PACKAGE_DIR)/Package.resolved
 	$(call SWIFT, package) resolve
-	cp -f AppleDocumentationPackage/Package.resolved $(XCSHAREDDATA_DIR)/swiftpm/Package.resolved
+	cp -f $(PACKAGE_DIR)/Package.resolved $(XCSHAREDDATA_DIR)/swiftpm/Package.resolved
