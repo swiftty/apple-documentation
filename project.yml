@@ -55,6 +55,7 @@ targets:
         outputFiles:
           - ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist
       - name: Upload dSYMs to Crashlytics
+        basedOnDependencyAnalysis: false
         script: |
           if [ "${CONFIGURATION}" == "Release" ]; then
             "${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
