@@ -38,8 +38,7 @@ targets:
       - path: App.xctestplan
         group: Configurations
         buildPhase: none
-      - path: configs/debug/GoogleService-Info.plist
-        group: Configurations
+      - path: Configurations
         buildPhase: none
     dependencies:
       - package: AppleDocumentationPackage
@@ -48,10 +47,10 @@ targets:
       - name: Rename GoogleService-Info.plist
         script: |
           if [ "${CONFIGURATION}" == "Debug" ]; then
-            cp "${PROJECT_DIR}/configs/debug/GoogleService-Info.plist" "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist"
+            cp "${PROJECT_DIR}/Configurations/debug/GoogleService-Info.plist" "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist"
           fi
         inputFiles:
-          - ${PROJECT_DIR}/configs/debug/GoogleService-Info.plist
+          - ${PROJECT_DIR}/Configurations/debug/GoogleService-Info.plist
         outputFiles:
           - ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist
       - name: Upload dSYMs to Crashlytics
