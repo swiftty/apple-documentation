@@ -61,6 +61,9 @@ public struct TechnologyDetailPage: View {
             } failed: { error in
                 Text(String(describing: error))
             }
+            .background {
+                DummyUI()
+            }
         }
 
         // swiftlint:disable:next function_body_length
@@ -255,3 +258,18 @@ import DevelopmentAssets
 }
 
 #endif
+
+import UIKit
+
+struct DummyUI: UIViewRepresentable {
+    func makeUIView(context: Context) -> some UIView {
+        // force crash here!
+        let nib = UINib(nibName: "foo", bundle: .main)
+        // swiftlint:disable:next force_cast
+        return nib.instantiate(withOwner: nil).first as! UIView
+    }
+
+    func updateUIView(_ uiView: UIViewType, context: Context) {
+
+    }
+}
