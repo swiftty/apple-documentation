@@ -7,6 +7,8 @@ include:
 options:
   bundleIdPrefix: com.swiftty.apple-documentation
   developmentLanguage: ja
+  deploymentTarget:
+    iOS: "17.0"
 
 packages:
   AppleDocumentationPackage:
@@ -40,20 +42,11 @@ targets:
         group: Configurations
         buildPhase: none
       - path: Configurations
-        buildPhase: none
+        buildPhase: resources
     dependencies:
       - package: AppleDocumentationPackage
         product: AppleDocumentationApp
     postBuildScripts:
-      - name: Rename GoogleService-Info.plist
-        script: |
-          if [ "${CONFIGURATION}" == "Debug" ]; then
-            cp "${PROJECT_DIR}/Configurations/debug/GoogleService-Info.plist" "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist"
-          fi
-        inputFiles:
-          - ${PROJECT_DIR}/Configurations/debug/GoogleService-Info.plist
-        outputFiles:
-          - ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist
       - name: Upload dSYMs to Crashlytics
         basedOnDependencyAnalysis: false
         script: |
