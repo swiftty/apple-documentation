@@ -23,6 +23,7 @@ targets:
         Debug:
           PRODUCT_BUNDLE_IDENTIFIER: com.swiftty.apple-documentation.App-debug
           INFOPLIST_PREPROCESS: YES
+          DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
     scheme:
       testPlans:
         - path: App.xctestplan
@@ -56,7 +57,7 @@ targets:
       - name: Upload dSYMs to Crashlytics
         basedOnDependencyAnalysis: false
         script: |
-          if [ "${CONFIGURATION}" == "Release" ]; then
+          if [ "${CONFIGURATION}" == "Debug" ]; then
             "${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
           fi
         inputFiles:
