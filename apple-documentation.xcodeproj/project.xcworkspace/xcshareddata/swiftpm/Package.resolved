@@ -167,8 +167,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftty/XcodeGenBinary.git",
       "state" : {
-        "revision" : "257e30596bae178d0e13451d81aacb35a487bee3",
-        "version" : "2.40.0"
+        "revision" : "c691099e80c67bba228c106e452d6e8ecf6329c5",
+        "version" : "2.40.1"
       }
     }
   ],
