@@ -77,7 +77,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-syntax.git", from: "510.0.1"),
 
         .package(url: "https://github.com/swiftty/XcodeGenBinary.git", from: "2.40.1"),
-        .package(url: "https://github.com/swiftty/SwiftLintBinary.git", from: "0.54.0")
+        .package(url: "https://github.com/swiftty/SwiftLintBinary.git", from: "0.55.1")
     ],
     targets: [
         .target(
@@ -233,7 +233,7 @@ package.targets.forEach {
     var plugins = $0.plugins ?? []
 
     plugins += [
-        .plugin(name: "SwiftLintPlugin", package: "SwiftLintBinary")
+        .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintBinary")
     ]
     $0.plugins = plugins
 }
