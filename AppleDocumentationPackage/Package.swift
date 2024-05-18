@@ -233,7 +233,7 @@ package.targets.forEach {
     var plugins = $0.plugins ?? []
 
     plugins += [
-        .plugin(name: "SwiftLintPlugin", package: "SwiftLintBinary")
+        .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintBinary")
     ]
     $0.plugins = plugins
 }
