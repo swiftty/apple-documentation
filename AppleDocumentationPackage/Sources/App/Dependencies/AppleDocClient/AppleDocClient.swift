@@ -2,20 +2,20 @@ import SwiftUI
 import AppleDocumentation
 import SupportMacros
 
-public struct AppleDocClient {
-    package struct Props {
-        package var allTechnologies: () async throws -> [Technology]
-        package var diffAvailability: () async throws -> Technology.DiffAvailability
+public struct AppleDocClient: Sendable {
+    package struct Props: Sendable {
+        package var allTechnologies: @Sendable () async throws -> [Technology]
+        package var diffAvailability: @Sendable () async throws -> Technology.DiffAvailability
 
-        package var technologyDetail: (String) async throws -> TechnologyDetail
+        package var technologyDetail: @Sendable (String) async throws -> TechnologyDetail
     }
 
     package var props: Props
 
     public init(
-        allTechnologies: @escaping () async throws -> [Technology],
-        diffAvailability: @escaping () async throws -> Technology.DiffAvailability,
-        technologyDetail: @escaping (String) async throws -> TechnologyDetail
+        allTechnologies: @escaping @Sendable () async throws -> [Technology],
+        diffAvailability: @escaping @Sendable () async throws -> Technology.DiffAvailability,
+        technologyDetail: @escaping @Sendable (String) async throws -> TechnologyDetail
     ) {
         props = Props(
             allTechnologies: allTechnologies,
@@ -25,7 +25,7 @@ public struct AppleDocClient {
     }
 
     public enum Error: Swift.Error {
-        case notFound(any Hashable, payload: [String: Any]? = nil)
+        case notFound(any Hashable & Sendable, payload: [String: Sendable]? = nil)
     }
 
     public var allTechnologies: [Technology] {

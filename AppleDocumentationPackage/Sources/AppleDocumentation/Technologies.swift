@@ -1,7 +1,7 @@
 import Foundation
 import SupportMacros
 
-public struct Technology {
+public struct Technology: Sendable {
     public var title: String
     public var languages: [Language]
     public var tags: [String]
@@ -17,24 +17,24 @@ public struct Technology {
 
 extension Technology {
     @ImplicitInit
-    public struct Identifier: Hashable, RawRepresentable {
+    public struct Identifier: Hashable, RawRepresentable, Sendable {
         public var rawValue: String
     }
 
     @ImplicitInit
-    public struct Destination: Hashable {
+    public struct Destination: Hashable, Sendable {
         public var identifier: Identifier
         public var title: String
         public var value: Value
         public var abstract: String
 
         @ImplicitInit
-        public struct Value: Hashable, RawRepresentable {
+        public struct Value: Hashable, RawRepresentable, Sendable {
             public var rawValue: String
         }
     }
 
-    public enum Language {
+    public enum Language: Sendable {
         case objectiveC
         case swift
         case other
@@ -42,7 +42,7 @@ extension Technology {
 }
 
 extension Technology {
-    public struct DiffAvailability {
+    public struct DiffAvailability: Sendable {
         public subscript(key: Key) -> Payload? {
             items[key]
         }
@@ -54,11 +54,11 @@ extension Technology {
         }
 
         @ImplicitInit
-        public struct Key: Hashable, RawRepresentable {
+        public struct Key: Hashable, RawRepresentable, Sendable {
             public var rawValue: String
         }
 
-        public struct Payload: Equatable, Comparable {
+        public struct Payload: Equatable, Comparable, Sendable {
             public static func < (lhs: Self, rhs: Self) -> Bool {
                 lhs.versions < rhs.versions
             }
@@ -73,7 +73,7 @@ extension Technology {
                 self.versions = versions
             }
 
-            public struct Versions: Equatable, Comparable {
+            public struct Versions: Equatable, Comparable, Sendable {
                 public static func < (lhs: Self, rhs: Self) -> Bool {
                     lhs.from < rhs.from
                 }

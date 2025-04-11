@@ -17,7 +17,7 @@ public class Router {
 
     let router: @MainActor (any Routing) -> AnyView
 
-    init(router: @escaping (any Routing) -> AnyView) {
+    init(router: @escaping @MainActor (any Routing) -> AnyView) {
         self.router = router
     }
 

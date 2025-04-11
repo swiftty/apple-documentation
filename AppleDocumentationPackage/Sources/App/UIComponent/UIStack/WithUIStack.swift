@@ -148,7 +148,7 @@ private extension WithUIStack.State {
 
 // MARK: -
 private enum Seeder {
-    class Storage {
+    final class Storage: @unchecked Sendable {
         var value: UInt = 0
     }
     private static let storage = Storage()

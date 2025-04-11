@@ -74,14 +74,7 @@ extension TechnologyCell {
 }
 
 extension EnvironmentValues {
-    private struct Key: EnvironmentKey {
-        static var defaultValue: Bool = false
-    }
-
-    var isPressed: Bool {
-        get { self[Key.self] }
-        set { self[Key.self] = newValue }
-    }
+    @Entry var isPressed: Bool = false
 }
 
 // swiftlint:disable line_length
