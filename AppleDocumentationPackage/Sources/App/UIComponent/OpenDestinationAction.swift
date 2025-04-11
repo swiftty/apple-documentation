@@ -15,7 +15,7 @@ public struct OpenDestinationAction {
 }
 
 extension EnvironmentValues {
-    @SwiftUIEnvironment
+    @Entry
     public var openDestination: OpenDestinationAction = .init(perform: { _ in })
 }
 

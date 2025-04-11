@@ -46,7 +46,7 @@ public struct AppleDocClient {
 }
 
 extension EnvironmentValues {
-    @SwiftUIEnvironment
+    @Entry
     public var appleDocClient: AppleDocClient = AppleDocClient(
         allTechnologies: { fatalError() },
         diffAvailability: { fatalError() },
