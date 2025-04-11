@@ -13,7 +13,7 @@ final class TechnologyDetailTests: XCTestCase {
     }
 
     func test_TechnologyDetail_CoreText_CTFont() async throws {
-        let url = try XCTUnwrap(URL(string: "https://developer.apple.com/tutorials/data/documentation/coretext/ctfont-q6r.json"))
+        let url = try XCTUnwrap(URL(string: "https://developer.apple.com/tutorials/data/documentation/coretext/ctfont.json"))
         let (data, _) = try await URLSession.shared.data(from: url)
 
         XCTAssertNoThrow(try decodeTechnologyDetail(from: data))
