@@ -19,7 +19,7 @@ private struct Result: Decodable {
                 platforms: detail.metadata.platforms?.map {
                     TechnologyDetail.Metadata.Platform(
                         name: $0.name,
-                        introducedAt: $0.introducedAt,
+                        introducedAt: $0.introducedAt ?? "",
                         current: $0.current,
                         beta: $0.beta ?? false
                     )
@@ -83,7 +83,7 @@ private struct RawMetadata: Decodable {
 
     struct RawPlatform: Decodable {
         var name: String
-        var introducedAt: String
+        var introducedAt: String?
         var current: String?
         var beta: Bool?
     }
