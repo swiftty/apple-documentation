@@ -131,7 +131,7 @@ let package = Package(
                 "AllTechnologiesPage",
                 "TechnologyDetailPage",
 
-                .product(name: "FirebaseCrashlytics", package: "firebase-ios-sdk"),
+                .product(name: "FirebaseCrashlytics", package: "firebase-ios-sdk")
             ]
         ),
 
