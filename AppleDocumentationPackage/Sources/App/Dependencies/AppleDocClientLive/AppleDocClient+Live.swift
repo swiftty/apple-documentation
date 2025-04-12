@@ -1,5 +1,5 @@
-import SwiftUI
-import AppleDocClient
+public import SwiftUI
+public import AppleDocClient
 import AppleDocumentation
 import AppleDocumentationAPI
 

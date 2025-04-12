@@ -1,4 +1,4 @@
-import SwiftUI
+public import SwiftUI
 
 public struct InObservation<Model: Observable, Content: View, Loading: View>: View {
     @ViewBuilder private var content: (Model) -> Content

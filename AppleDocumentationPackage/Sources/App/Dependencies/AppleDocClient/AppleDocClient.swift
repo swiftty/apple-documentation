@@ -1,5 +1,5 @@
-import SwiftUI
-import AppleDocumentation
+public import SwiftUI
+public import AppleDocumentation
 import SupportMacros
 
 public struct AppleDocClient: Sendable {
@@ -25,7 +25,7 @@ public struct AppleDocClient: Sendable {
     }
 
     public enum Error: Swift.Error {
-        case notFound(any Hashable & Sendable, payload: [String: Sendable]? = nil)
+        case notFound(any Hashable & Sendable, payload: [String: any Sendable]? = nil)
     }
 
     public var allTechnologies: [Technology] {

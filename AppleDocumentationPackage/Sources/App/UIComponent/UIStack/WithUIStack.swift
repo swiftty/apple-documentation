@@ -10,9 +10,9 @@ public struct WithUIStack<T> {
         case idle
         case loading
         case loaded(T)
-        case failed(Error, key: Key)
+        case failed(any Error, key: Key)
 
-        public static func failed(_ error: Error) -> Self {
+        public static func failed(_ error: any Error) -> Self {
             .failed(error, key: .init(Seeder.seed()))
         }
     }
@@ -42,7 +42,7 @@ public struct WithUIStack<T> {
         guard case .loading = newState else { return false }
         return true
     }
-    public var error: Error? {
+    public var error: (any Error)? {
         guard case .failed(let error, _) = newState else { return nil }
         return error
     }

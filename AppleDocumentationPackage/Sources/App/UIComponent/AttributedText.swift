@@ -1,5 +1,5 @@
-import SwiftUI
-import AppleDocumentation
+public import SwiftUI
+public import AppleDocumentation
 import SupportMacros
 
 @ImplicitInit

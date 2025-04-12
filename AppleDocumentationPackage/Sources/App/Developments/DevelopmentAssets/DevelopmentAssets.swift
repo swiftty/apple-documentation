@@ -1,4 +1,4 @@
-import Foundation
+package import Foundation
 #if canImport(UIKit)
 import UIKit
 #elseif canImport(AppKit)
@@ -11,7 +11,7 @@ package enum DevelopmentResources {
     }
 }
 
-import AppleDocumentation
+package import AppleDocumentation
 import AppleDocumentationAPI
 
 extension TechnologyDetail {

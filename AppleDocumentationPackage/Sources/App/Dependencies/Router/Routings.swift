@@ -1,5 +1,5 @@
-import Foundation
-import AppleDocumentation
+public import Foundation
+public import AppleDocumentation
 
 public enum Routings {}
 

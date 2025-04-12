@@ -229,13 +229,22 @@ let package = Package(
     ]
 )
 
-package.targets.forEach {
-    var plugins = $0.plugins ?? []
+extension Optional {
+    static func += <T>(lhs: inout Self, rhs: [T]) where Wrapped == [T] {
+        lhs = (lhs ?? []) + rhs
+    }
+}
 
-    plugins += [
+package.targets.forEach { target in
+    if target.type != .macro {
+        target.swiftSettings += [
+            .enableUpcomingFeature("ExistentialAny"),
+            .enableUpcomingFeature("InternalImportsByDefault")
+        ]
+    }
+    target.plugins += [
         .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintBinary")
     ]
-    $0.plugins = plugins
 }
 
 let isDEBUG = true

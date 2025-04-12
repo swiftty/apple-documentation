@@ -1,4 +1,4 @@
-import SwiftUI
+public import SwiftUI
 
 public protocol Routing: Hashable {}
 
