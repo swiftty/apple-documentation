@@ -9,7 +9,7 @@ import SwiftSyntaxMacrosTestSupport
 import SupportMacrosPlugin
 
 class ImplicitInitTests: XCTestCase {
-    let testMacors: [String: Macro.Type] = [
+    let testMacors: [String: any Macro.Type] = [
         "ImplicitInit": ImplicitInitMacro.self
     ]
 
