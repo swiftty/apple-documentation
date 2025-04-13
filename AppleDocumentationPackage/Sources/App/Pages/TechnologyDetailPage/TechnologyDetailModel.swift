@@ -4,6 +4,7 @@ import AppleDocumentation
 import AppleDocClient
 import UIComponent
 
+@MainActor
 @Observable
 class TechnologyDetailModel {
     struct Dependency {

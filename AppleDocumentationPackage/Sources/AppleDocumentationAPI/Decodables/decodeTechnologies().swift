@@ -1,5 +1,5 @@
-import Foundation
-import AppleDocumentation
+public import Foundation
+public import AppleDocumentation
 import Algorithms
 
 public func decodeTechnologies(from data: Data) throws -> (
@@ -17,7 +17,7 @@ private struct Result: Decodable {
     var diffAvailability: Technology.DiffAvailability
 
     // swiftlint:disable:next function_body_length
-    init(from decoder: Decoder) throws {
+    init(from decoder: any Decoder) throws {
         struct RawTechnology: Decodable {
             var title: String
             var languages: [Technology.Language]
@@ -42,7 +42,7 @@ private struct Result: Decodable {
                 }
             }
 
-            init(from decoder: Decoder) throws {
+            init(from decoder: any Decoder) throws {
                 enum CodingKeys: CodingKey {
                     case kind
                 }
@@ -62,7 +62,7 @@ private struct Result: Decodable {
             var identifier: Technology.Identifier
             var content: Content
 
-            init(from decoder: Decoder) throws {
+            init(from decoder: any Decoder) throws {
                 enum CodingKeys: CodingKey {
                     case identifier
                 }
@@ -75,7 +75,7 @@ private struct Result: Decodable {
                 case topic(RawTopic)
                 case other(type: String)
 
-                init(from decoder: Decoder) throws {
+                init(from decoder: any Decoder) throws {
                     enum CodingKeys: CodingKey {
                         case type
                     }

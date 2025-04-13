@@ -1,5 +1,5 @@
-import SwiftUI
-import AppleDocumentation
+public import SwiftUI
+public import AppleDocumentation
 import SupportMacros
 
 public struct OpenDestinationAction {
@@ -15,7 +15,7 @@ public struct OpenDestinationAction {
 }
 
 extension EnvironmentValues {
-    @SwiftUIEnvironment
+    @Entry
     public var openDestination: OpenDestinationAction = .init(perform: { _ in })
 }
 

@@ -1,4 +1,4 @@
-import SwiftUI
+public import SwiftUI
 import Router
 import AppleDocumentation
 import UIComponent

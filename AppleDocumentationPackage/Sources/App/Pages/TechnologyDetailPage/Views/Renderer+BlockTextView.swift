@@ -5,7 +5,7 @@ import SupportMacros
 import UIComponent
 
 extension EnvironmentValues {
-    @SwiftUIEnvironment
+    @Entry
     var references: [Technology.Identifier: TechnologyDetail.Reference] = [:]
 }
 

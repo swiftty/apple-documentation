@@ -2,13 +2,13 @@ name: renovate-resolved
 
 on:
   push:
-    branches: [ "renovate/**" ]
+    branches: ["renovate/**"]
     paths:
       - "AppleDocumentationPackage/Package.swift"
 
 jobs:
   mac-os:
-    runs-on: macos-14
+    runs-on: macos-15
     permissions:
       contents: write
     steps:

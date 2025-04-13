@@ -1,5 +1,5 @@
 import Foundation
-import SwiftUI
+public import SwiftUI
 import Router
 import AppleDocClient
 import AppleDocClientLive

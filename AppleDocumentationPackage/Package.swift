@@ -1,4 +1,4 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -131,7 +131,7 @@ let package = Package(
                 "AllTechnologiesPage",
                 "TechnologyDetailPage",
 
-                .product(name: "FirebaseCrashlytics", package: "firebase-ios-sdk"),
+                .product(name: "FirebaseCrashlytics", package: "firebase-ios-sdk")
             ]
         ),
 
@@ -229,13 +229,22 @@ let package = Package(
     ]
 )
 
-package.targets.forEach {
-    var plugins = $0.plugins ?? []
+extension Optional {
+    static func += <T>(lhs: inout Self, rhs: [T]) where Wrapped == [T] {
+        lhs = (lhs ?? []) + rhs
+    }
+}
 
-    plugins += [
+package.targets.forEach { target in
+    if target.type != .macro {
+        target.swiftSettings += [
+            .enableUpcomingFeature("ExistentialAny"),
+            .enableUpcomingFeature("InternalImportsByDefault")
+        ]
+    }
+    target.plugins += [
         .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintBinary")
     ]
-    $0.plugins = plugins
 }
 
 let isDEBUG = true

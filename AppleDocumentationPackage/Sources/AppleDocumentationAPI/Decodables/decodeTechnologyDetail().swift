@@ -1,5 +1,5 @@
-import Foundation
-import AppleDocumentation
+public import Foundation
+public import AppleDocumentation
 
 public func decodeTechnologyDetail(from data: Data) throws -> TechnologyDetail {
     let result = try JSONDecoder().decode(Result.self, from: data)
@@ -9,7 +9,7 @@ public func decodeTechnologyDetail(from data: Data) throws -> TechnologyDetail {
 private struct Result: Decodable {
     var technologyDetail: TechnologyDetail
 
-    init(from decoder: Decoder) throws {
+    init(from decoder: any Decoder) throws {
         let detail = try RawTechnologyDetail(from: decoder)
         technologyDetail = TechnologyDetail(
             metadata: .init(
@@ -124,7 +124,7 @@ private enum RawBlockContent: Decodable {
         case type
     }
 
-    init(from decoder: Decoder) throws {
+    init(from decoder: any Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         let type = try c.decode(String.self, forKey: .type)
         self = switch type {
@@ -199,7 +199,7 @@ private enum RawInlineContent: Decodable {
         case type
     }
 
-    init(from decoder: Decoder) throws {
+    init(from decoder: any Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         let type = try c.decode(String.self, forKey: .type)
         self = switch type {
@@ -274,7 +274,7 @@ private enum RawTopic: Decodable {
         case kind
     }
 
-    init(from decoder: Decoder) throws {
+    init(from decoder: any Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         self = switch try c.decodeIfPresent(Kind.self, forKey: .kind) {
         case .taskGroup:
