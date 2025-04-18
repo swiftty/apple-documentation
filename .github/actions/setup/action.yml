@@ -6,7 +6,10 @@ runs:
     - uses: actions/cache@v4
       with:
         path: DerivedData
-        key: ${{ runner.os }}-deriveddata
+        key: ${{ runner.os }}-deriveddata-${{ hashFiles('**/Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-deriveddata-${{ hashFiles('**/Package.resolved') }}
+          ${{ runner.os }}-deriveddata
     - name: Git settings
       shell: bash
       run: |

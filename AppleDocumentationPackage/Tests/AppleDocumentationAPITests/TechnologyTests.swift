@@ -1,10 +1,10 @@
-// swiftlint:disable line_length
-import XCTest
+import Testing
 import Foundation
 import AppleDocumentation
 @testable import AppleDocumentationAPI
 
-final class TechnologyTests: XCTestCase {
+struct TechnologyTests {
+    @Test
     func test_DiffAvailability() throws {
         let json = """
         {
@@ -38,32 +38,32 @@ final class TechnologyTests: XCTestCase {
         typealias DiffAvailability = Technology.DiffAvailability
         let data = try JSONDecoder().decode([DiffAvailability.Key: DiffAvailability.Payload].self, from: json)
         let diff = DiffAvailability(data)
-        XCTAssertEqual(diff.count, 3)
-        XCTAssertEqual(diff.sorted().map(\.key), [.beta, .minor, .major])
+        #expect(diff.count == 3)
+        #expect(diff.sorted().map(\.key) == [.beta, .minor, .major])
 
-        XCTAssertNotNil(diff[.beta])
-        XCTAssertNotNil(diff[.minor])
-        XCTAssertNotNil(diff[.major])
+        #expect(diff[.beta] != nil)
+        #expect(diff[.minor] != nil)
+        #expect(diff[.major] != nil)
     }
 
+    @Test
     func test_Technologies() async throws {
-        let url = try XCTUnwrap(URL(string: "https://developer.apple.com/tutorials/data/documentation/technologies.json"))
+        let url = try #require(URL(string: "https://developer.apple.com/tutorials/data/documentation/technologies.json"))
         let (data, _) = try await URLSession.shared.data(from: url)
 
         let (technologies, diff) = try decodeTechnologies(from: data)
 
-        XCTAssertGreaterThanOrEqual(technologies.count, 0)
-        XCTAssertGreaterThanOrEqual(diff.count, 0)
+        #expect(technologies.count >= 0)
+        #expect(diff.count >= 0)
     }
 
+    @Test
     func test_Technologies_changes() async throws {
-        let url = try XCTUnwrap(URL(string: "https://developer.apple.com/tutorials/data/diffs/documentation/technologies.json?changes=latest_minor"))
+        let url = try #require(URL(string: "https://developer.apple.com/tutorials/data/diffs/documentation/technologies.json?changes=latest_minor"))
         let (data, _) = try await URLSession.shared.data(from: url)
 
         let changes = try decodeTechnologyChanges(from: data)
 
-        XCTAssertGreaterThanOrEqual(changes.count, 0)
+        #expect(changes.count >= 0)
     }
 }
-
-// swiftlint:enable line_length
