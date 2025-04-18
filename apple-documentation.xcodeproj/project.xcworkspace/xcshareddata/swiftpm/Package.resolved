@@ -1,5 +1,5 @@
 {
-  "originHash" : "8b214433d4aeacf05ebd10c80e2c791b1943f152a61f4a888a710dd59e5a826e",
+  "originHash" : "f14625d574296c39f742a1af1107515579df7ce9451c0f1003e4f1aa890dd589",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -168,8 +168,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftty/XcodeGenBinary.git",
       "state" : {
-        "revision" : "90c29bdff61601b1421bf42918a0c9feb7c11064",
-        "version" : "2.42.0"
+        "revision" : "bd1152720451194c932aaf279114cd7398fdae1a",
+        "version" : "2.43.0"
       }
     }
   ],
