@@ -1,5 +1,5 @@
 {
-  "originHash" : "e2fdc51505300daafc21e5aea12aa7a1d4f5e1e01bcdea5f1f9d01ff91bdd9c6",
+  "originHash" : "9acb2027f7be28248e91878c61f9a1654f76d5eab4e30fcc1b57a98d76ceecbb",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -130,7 +130,7 @@
     {
       "identity" : "swift-numerics",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-numerics",
+      "location" : "https://github.com/apple/swift-numerics.git",
       "state" : {
         "revision" : "0a5bc04095a675662cf24757cc0640aa2204253b",
         "version" : "1.0.2"
@@ -168,8 +168,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftty/XcodeGenBinary.git",
       "state" : {
-        "revision" : "90c29bdff61601b1421bf42918a0c9feb7c11064",
-        "version" : "2.42.0"
+        "revision" : "bd1152720451194c932aaf279114cd7398fdae1a",
+        "version" : "2.43.0"
       }
     }
   ],
