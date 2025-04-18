@@ -2,6 +2,6 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "automerge": true,
   "automergeSchedule": ["every 1 hour after 00:00 and before 23:59 every day"],
-  "minimumReleaseAge": "30 hours",
+  "minimumReleaseAge": "30 minutes",
   "extends": ["config:recommended"]
 }
