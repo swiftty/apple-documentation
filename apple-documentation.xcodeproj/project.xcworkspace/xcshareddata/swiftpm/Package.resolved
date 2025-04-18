@@ -1,5 +1,5 @@
 {
-  "originHash" : "e2fdc51505300daafc21e5aea12aa7a1d4f5e1e01bcdea5f1f9d01ff91bdd9c6",
+  "originHash" : "8b214433d4aeacf05ebd10c80e2c791b1943f152a61f4a888a710dd59e5a826e",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -130,7 +130,7 @@
     {
       "identity" : "swift-numerics",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-numerics",
+      "location" : "https://github.com/apple/swift-numerics.git",
       "state" : {
         "revision" : "0a5bc04095a675662cf24757cc0640aa2204253b",
         "version" : "1.0.2"
@@ -159,8 +159,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftty/SwiftLintBinary.git",
       "state" : {
-        "revision" : "e902b6492a75eb816461befc12d9cd33a3740a4b",
-        "version" : "0.59.0"
+        "revision" : "8b142740a38bff41072cebd89cfa0d9058d6ed19",
+        "version" : "0.59.1"
       }
     },
     {
