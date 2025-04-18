@@ -1,6 +1,5 @@
 excluded:
-  - .build
-  - "**/*/.build"
+  - AppleDocumentationPackage/.build
   - DerivedData
 
 disabled_rules:
