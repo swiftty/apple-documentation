@@ -1,0 +1,26 @@
+excluded:
+  - .build
+  - "**/*/.build"
+  - DerivedData
+
+disabled_rules:
+  - non_optional_string_data_conversion
+
+identifier_name:
+  excluded:
+    - b
+    - c
+    - g
+    - i
+    - r
+    - t
+    - v
+    - x
+    - y
+    - id
+    - to
+    - vc
+
+nesting:
+  type_level:
+    warning: 3
