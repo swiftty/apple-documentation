@@ -1,6 +1,9 @@
 excluded:
-  - ".build"
+  - .build
   - "**/*/.build"
+
+disabled_rules:
+  - non_optional_string_data_conversion
 
 identifier_name:
   excluded:

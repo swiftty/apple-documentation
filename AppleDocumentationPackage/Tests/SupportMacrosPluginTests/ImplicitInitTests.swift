@@ -1,18 +1,48 @@
-// swiftlint:disable function_body_length
-
-import XCTest
+import Testing
 import SwiftSyntax
 import SwiftSyntaxMacros
 import SwiftSyntaxMacroExpansion
-import SwiftSyntaxMacrosTestSupport
+import SwiftSyntaxMacrosGenericTestSupport
 
 import SupportMacrosPlugin
 
-class ImplicitInitTests: XCTestCase {
+func assertMacroExpansion(
+    _ originalSource: String,
+    expandedSource: String,
+    diagnostics: [DiagnosticSpec] = [],
+    macros: [String: any Macro.Type],
+    conformsTo conformances: [TypeSyntax] = [],
+    testModuleName: String = "TestModule",
+    testFileName: String = "test.swift",
+    indentationWidth: Trivia = .spaces(4),
+    fileID: StaticString = #fileID, filePath: StaticString = #filePath,
+    file: StaticString = #file, line: UInt = #line, column: UInt = #column
+) {
+    assertMacroExpansion(
+        originalSource, expandedSource: expandedSource,
+        diagnostics: diagnostics,
+        macroSpecs: macros.mapValues { value in
+            MacroSpec(type: value, conformances: conformances)
+        },
+        testModuleName: testModuleName, testFileName: testFileName,
+        indentationWidth: indentationWidth
+    ) { spec in
+        Issue.record(
+            .init(rawValue: spec.message),
+            sourceLocation: .init(
+                fileID: String(describing: fileID), filePath: String(describing: filePath),
+                line: Int(line), column: Int(column)
+            )
+        )
+    }
+}
+
+struct ImplicitInitTests {
     let testMacors: [String: any Macro.Type] = [
         "ImplicitInit": ImplicitInitMacro.self
     ]
 
+    @Test
     func testBasic() throws {
         assertMacroExpansion(
             """
@@ -133,5 +163,3 @@ class ImplicitInitTests: XCTestCase {
         )
     }
 }
-
-// swiftlint:enable function_body_length

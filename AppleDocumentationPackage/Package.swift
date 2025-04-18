@@ -115,7 +115,7 @@ let package = Package(
             name: "SupportMacrosPluginTests",
             dependencies: [
                 "SupportMacrosPlugin",
-                .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax")
+                .product(name: "SwiftSyntaxMacrosGenericTestSupport", package: "swift-syntax")
             ]
         ),
 
