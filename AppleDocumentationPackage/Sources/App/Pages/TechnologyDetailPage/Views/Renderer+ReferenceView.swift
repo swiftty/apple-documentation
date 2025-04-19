@@ -28,19 +28,18 @@ struct ReferenceView: View {
 
     @ViewBuilder
     private func asArticle() -> some View {
-        HStack(alignment: .firstTextBaseline, spacing: 12) {
+        HStack(alignment: .firstTextBaseline) {
             reference.articleImage?
                 .font(.body)
                 .foregroundStyle(.secondary)
 
-            VStack {
+            VStack(alignment: .leading) {
                 Text { next in
                     var attrs = AttributedText.Attributes()
                     attrs.font = .body
                     attrs.link(using: reference)
                     next(.init(string: reference.title ?? "", attributes: attrs))
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
 
                 BlockTextView(reference.abstract)
             }
@@ -51,7 +50,7 @@ struct ReferenceView: View {
         var attributes = AttributedText.Attributes()
         attributes.link(using: reference)
 
-        return VStack {
+        return VStack(alignment: .leading) {
             HStack(alignment: .firstTextBaseline) {
                 if case let fragments = reference.fragments, !fragments.isEmpty, !descriptionOnly {
                     FragmentTextView(fragments: fragments, attributes: attributes) { kind, attributes in
@@ -86,7 +85,6 @@ struct ReferenceView: View {
                     .offset(y: -2)
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
 
             if !reference.abstract.isEmpty, !descriptionOnly {
                 BlockTextView(reference.abstract)
