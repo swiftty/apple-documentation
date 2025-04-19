@@ -185,15 +185,19 @@ public struct TechnologyDetailPage: View {
                         .font(.body.bold())
                         .foregroundStyle(.primary)
 
-                    ForEach(item.element.content.indexed()) { item in
-                        BlockTextView(item.element)
+                    VStack(alignment: .leading, spacing: 12) {
+                        ForEach(item.element.content.indexed()) { item in
+                            BlockTextView(item.element)
+                        }
                     }
                 }
             }
 
             if case let blocks = content.content, !blocks.isEmpty {
-                ForEach(blocks.indexed()) { item in
-                    BlockTextView(item.element)
+                VStack(alignment: .leading, spacing: 12) {
+                    ForEach(blocks.indexed()) { item in
+                        BlockTextView(item.element)
+                    }
                 }
             }
         }
@@ -288,6 +292,20 @@ import DevelopmentAssets
         client.props.technologyDetail = { _ in
             let data = DevelopmentResources
                 .data(name: "developing-a-widgetkit-strategy")
+            return try TechnologyDetail.from(json: data)
+        }
+    }
+    .preferredColorScheme(.dark)
+}
+
+#Preview {
+    TechnologyDetailPage(
+        destination: .init(rawValue: "")
+    )
+    .transformEnvironment(\.appleDocClient) { client in
+        client.props.technologyDetail = { _ in
+            let data = DevelopmentResources
+                .data(name: "view")
             return try TechnologyDetail.from(json: data)
         }
     }

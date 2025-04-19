@@ -264,7 +264,7 @@ private struct ContentsRenderer: View {
                 .headingLevel(paragraph.options.headingLevel)
 
             case .unorderedList(let items):
-                VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .leading) {
                     ForEach(items, id: \.self) { items in
                         HStack(alignment: .firstTextBaseline) {
                             Text("•")
@@ -276,18 +276,15 @@ private struct ContentsRenderer: View {
                         }
                     }
                 }
-                .padding(.vertical)
 
             case .aside(let name, let style, let contents):
                 asideView(name: name, style: style, contents: contents)
-                    .padding(.vertical)
 
             case .image(let variants):
                 HStack {
                     ImageView(variants: variants)
                         .frame(maxWidth: .infinity, alignment: .center)
                 }
-                .padding(.vertical)
             }
         }
     }
