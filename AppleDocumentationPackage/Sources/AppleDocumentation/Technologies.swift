@@ -1,18 +1,12 @@
 import Foundation
 import SupportMacros
 
+@ImplicitInit
 public struct Technology: Sendable {
     public var title: String
     public var languages: [Language]
     public var tags: [String]
     public var destination: Destination
-
-    public init(title: String, languages: [Language], tags: [String], destination: Destination) {
-        self.title = title
-        self.languages = languages
-        self.tags = tags
-        self.destination = destination
-    }
 }
 
 extension Technology {

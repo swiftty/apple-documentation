@@ -10,7 +10,7 @@ public struct InObservation<Model: Observable, Content: View, Loading: View>: Vi
     public init(
         _ initializer: @escaping () -> Model,
         @ViewBuilder content: @escaping (Model) -> Content,
-        @ViewBuilder loading: @escaping () -> Loading
+        @ViewBuilder loading: @escaping () -> Loading = { Color.clear }
     ) {
         self.initializer = initializer
         self.content = content
@@ -26,14 +26,5 @@ public struct InObservation<Model: Observable, Content: View, Loading: View>: Vi
                     model = initializer()
                 }
         }
-    }
-}
-
-extension InObservation where Loading == Color {
-    public init(
-        _ initializer: @escaping () -> Model,
-        @ViewBuilder content: @escaping (Model) -> Content
-    ) {
-        self.init(initializer, content: content, loading: { Color.clear })
     }
 }

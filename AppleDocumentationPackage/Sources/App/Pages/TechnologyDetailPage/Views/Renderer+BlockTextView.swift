@@ -23,17 +23,48 @@ struct BlockTextView: View {
     }
 
     var body: some View {
-        InnerView(block: block, attributes: attributes)
+        VStack(alignment: .leading) {
+            InnerView(block: block, attributes: attributes)
+        }
+    }
+}
+
+extension View {
+    @ViewBuilder
+    func headingLevel(_ level: Int?) -> some View {
+        switch level {
+        case 1:
+            self
+                .padding(.top)
+                .padding(.bottom)
+
+        case 2, 3:
+            self
+                .padding(.top)
+                .padding(.bottom, 4)
+
+        default:
+            self
+        }
     }
 }
 
 // MARK: -
 private struct InnerView: View {
     enum Content: Hashable {
-        case paragraph([AttributedText])
+        case paragraph(ParagraphItem)
         case unorderedList([[ListItem]])
         case aside(name: String?, style: String, contents: [Content])
         case image([ImageVariant])
+
+        struct ParagraphItem: Hashable {
+            var texts: [AttributedText]
+            var options = Options()
+
+            struct Options: Hashable {
+                var headingLevel: Int?
+            }
+        }
 
         struct ListItem: Hashable {
             var block: BlockContent
@@ -62,8 +93,6 @@ private struct InnerView: View {
 
     var body: some View {
         ContentsRenderer(contents: contents)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .multilineTextAlignment(.leading)
     }
 
     private var contents: [Content] {
@@ -91,7 +120,7 @@ private struct InnerView: View {
 
         mutating func commit() {
             if !cursor.isEmpty {
-                contents.append(.paragraph(cursor))
+                contents.append(.paragraph(.init(texts: cursor)))
                 cursor = []
             }
         }
@@ -118,7 +147,12 @@ private struct InnerView: View {
             case 3: .title3
             default: attributes.font
             }
-            builder.insert(.paragraph([.init(string: heading.text, attributes: attributes)]))
+            builder.insert(.paragraph(
+                .init(
+                    texts: [.init(string: heading.text, attributes: attributes)],
+                    options: .init(headingLevel: (1...3).contains(heading.level) ? heading.level : nil)
+                )
+            ))
 
         case .aside(let aside):
             var childBuilder = ContentBuilder()
@@ -141,7 +175,7 @@ private struct InnerView: View {
             attributes.bold = true
             attributes.foregroundColor = .red
 
-            builder.insert(.paragraph([.init(string: unknown.type, attributes: attributes)]))
+            builder.insert(.paragraph(.init(texts: [.init(string: unknown.type, attributes: attributes)])))
         }
     }
 
@@ -221,33 +255,39 @@ private struct ContentsRenderer: View {
     var body: some View {
         ForEach(contents, id: \.self) { content in
             switch content {
-            case .paragraph(let texts):
+            case .paragraph(let paragraph):
                 Text { next in
-                    for text in texts {
+                    for text in paragraph.texts {
                         next(text)
                     }
                 }
+                .headingLevel(paragraph.options.headingLevel)
 
             case .unorderedList(let items):
-                ForEach(items, id: \.self) { items in
-                    HStack(alignment: .firstTextBaseline) {
-                        Text("•")
-                        VStack {
-                            ForEach(items, id: \.self) { item in
-                                InnerView(block: item.block, attributes: item.attributes)
+                VStack(alignment: .leading, spacing: 12) {
+                    ForEach(items, id: \.self) { items in
+                        HStack(alignment: .firstTextBaseline) {
+                            Text("•")
+                            VStack(alignment: .leading) {
+                                ForEach(items, id: \.self) { item in
+                                    InnerView(block: item.block, attributes: item.attributes)
+                                }
                             }
                         }
                     }
                 }
+                .padding(.vertical)
 
             case .aside(let name, let style, let contents):
                 asideView(name: name, style: style, contents: contents)
+                    .padding(.vertical)
 
             case .image(let variants):
                 HStack {
                     ImageView(variants: variants)
                         .frame(maxWidth: .infinity, alignment: .center)
                 }
+                .padding(.vertical)
             }
         }
     }
@@ -273,7 +313,7 @@ private struct ContentsRenderer: View {
 
         let style = parameters()
 
-        return VStack {
+        return VStack(alignment: .leading) {
             if let name = style.name {
                 Text(name)
                     .foregroundStyle(.primary)
@@ -281,7 +321,6 @@ private struct ContentsRenderer: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             ContentsRenderer(contents: contents)
-                .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding()
         .tint(.primary)

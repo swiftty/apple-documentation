@@ -66,51 +66,52 @@ public struct TechnologyDetailPage: View {
         // swiftlint:disable:next function_body_length
         private func content(for detail: TechnologyDetail) -> some View {
             ScrollView {
-                LazyVStack {
+                LazyVStack(alignment: .leading) {
                     if let roleHeading = detail.metadata.roleHeading {
                         Text(roleHeading)
                             .font(.title3.bold())
                             .foregroundStyle(.secondary)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.bottom)
                     }
 
                     Text(detail.metadata.title)
                         .font(.title.bold())
                         .foregroundStyle(.primary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.bottom)
+                        .padding(.bottom)
 
                     BlockTextView(detail.abstract)
+                        .padding(.bottom)
 
                     platformsView(with: detail.metadata.platforms)
 
                     ForEach(detail.primaryContents.indexed()) { item in
                         primaryContentSection(with: item.element)
-                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
 
                     if case let topics = detail.topics, !topics.isEmpty {
                         Divider()
+                            .padding(.vertical)
 
                         Text("Topics")
                             .font(.title2.bold())
-                            .frame(maxWidth: .infinity, alignment: .leading)
 
-                        ForEach(topics.indexed()) { topic in
-                            topicView(with: topic.element)
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                        VStack(alignment: .leading, spacing: 24) {
+                            ForEach(topics.indexed()) { topic in
+                                topicView(with: topic.element)
+                            }
                         }
                     }
 
                     if case let rels = detail.relationships, !rels.isEmpty {
                         Divider()
+                            .padding(.vertical)
 
                         Text("Relationships")
                             .font(.title2.bold())
-                            .frame(maxWidth: .infinity, alignment: .leading)
 
                         ForEach(rels.indexed()) { topic in
                             topicView(with: topic.element)
-                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
                 }
@@ -199,37 +200,48 @@ public struct TechnologyDetailPage: View {
 
         @ViewBuilder
         private func topicView(with topic: TechnologyDetail.Topic) -> some View {
-            switch topic {
-            case .taskGroup(let group):
-                Text(group.title)
-                    .font(.title3.bold())
-                    .foregroundStyle(.primary)
+            VStack(alignment: .leading) {
+                switch topic {
+                case .taskGroup(let group):
+                    Text(group.title)
+                        .font(.title3.bold())
+                        .foregroundStyle(.primary)
+                        .headingLevel(3)
 
-                ForEach(group.identifiers, id: \.self) { identifier in
-                    model.detail.wrappedValue?.references[identifier].map { ref in
-                        ReferenceView(reference: ref)
+                    VStack(alignment: .leading, spacing: 24) {
+                        ForEach(group.identifiers, id: \.self) { identifier in
+                            model.detail.wrappedValue?.references[identifier].map { ref in
+                                ReferenceView(reference: ref)
+                            }
+                        }
                     }
-                }
 
-            case .relationships(let rel):
-                Text(rel.title)
-                    .font(.title3.bold())
-                    .foregroundStyle(.primary)
+                case .relationships(let rel):
+                    Text(rel.title)
+                        .font(.title3.bold())
+                        .foregroundStyle(.primary)
+                        .headingLevel(3)
 
-                ForEach(rel.identifiers, id: \.self) { identifier in
-                    model.detail.wrappedValue?.references[identifier].map { ref in
-                        ReferenceView(reference: ref, descriptionOnly: true)
+                    VStack(alignment: .leading, spacing: 24) {
+                        ForEach(rel.identifiers, id: \.self) { identifier in
+                            model.detail.wrappedValue?.references[identifier].map { ref in
+                                ReferenceView(reference: ref, descriptionOnly: true)
+                            }
+                        }
                     }
-                }
 
-            case .document(let doc):
-                Text(doc.title)
-                    .font(.title3.bold())
-                    .foregroundStyle(.primary)
+                case .document(let doc):
+                    Text(doc.title)
+                        .font(.title3.bold())
+                        .foregroundStyle(.primary)
+                        .headingLevel(3)
 
-                ForEach(doc.identifiers, id: \.self) { identifier in
-                    model.detail.wrappedValue?.references[identifier].map { ref in
-                        ReferenceView(reference: ref)
+                    VStack(alignment: .leading, spacing: 24) {
+                        ForEach(doc.identifiers, id: \.self) { identifier in
+                            model.detail.wrappedValue?.references[identifier].map { ref in
+                                ReferenceView(reference: ref)
+                            }
+                        }
                     }
                 }
             }
@@ -248,6 +260,34 @@ import DevelopmentAssets
         client.props.technologyDetail = { _ in
             let data = DevelopmentResources
                 .data(name: "uikit")
+            return try TechnologyDetail.from(json: data)
+        }
+    }
+    .preferredColorScheme(.dark)
+}
+
+#Preview {
+    TechnologyDetailPage(
+        destination: .init(rawValue: "")
+    )
+    .transformEnvironment(\.appleDocClient) { client in
+        client.props.technologyDetail = { _ in
+            let data = DevelopmentResources
+                .data(name: "view-fundamentals")
+            return try TechnologyDetail.from(json: data)
+        }
+    }
+    .preferredColorScheme(.dark)
+}
+
+#Preview {
+    TechnologyDetailPage(
+        destination: .init(rawValue: "")
+    )
+    .transformEnvironment(\.appleDocClient) { client in
+        client.props.technologyDetail = { _ in
+            let data = DevelopmentResources
+                .data(name: "developing-a-widgetkit-strategy")
             return try TechnologyDetail.from(json: data)
         }
     }
