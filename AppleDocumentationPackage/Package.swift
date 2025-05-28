@@ -72,12 +72,12 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/kean/Nuke.git", from: "12.8.0"),
         .package(url: "https://github.com/apple/swift-algorithms.git", from: "1.2.1"),
-        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "11.13.0"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "11.13.0"),
 
         .package(url: "https://github.com/apple/swift-syntax.git", from: "601.0.1"),
 
         .package(url: "https://github.com/swiftty/XcodeGenBinary.git", from: "2.43.0"),
-        .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.59.1")
+        .package(url: "https://github.com/swiftty/SwiftLintBinary.git", exact: "0.59.1-patch")
     ],
     targets: [
         .target(
@@ -243,7 +243,7 @@ package.targets.forEach { target in
         ]
     }
     target.plugins += [
-        .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
+        .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintBinary")
     ]
 }
 
