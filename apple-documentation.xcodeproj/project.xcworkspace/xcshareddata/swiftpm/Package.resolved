@@ -1,5 +1,5 @@
 {
-  "originHash" : "7f039cf31f1a7514217093caa8268682e1f06538d17cd681b32280aca9fff36f",
+  "originHash" : "61d178196b33b0dd7d4ff536068b1b3dcff9b8d1007b0ac15334b7da95624727",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -22,7 +22,7 @@
     {
       "identity" : "firebase-ios-sdk",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/firebase/firebase-ios-sdk.git",
+      "location" : "https://github.com/firebase/firebase-ios-sdk",
       "state" : {
         "revision" : "3663b1aa6c7a1bed67ee80fd09dc6d0f9c3bb660",
         "version" : "11.13.0"
@@ -159,8 +159,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftty/SwiftLintBinary.git",
       "state" : {
-        "revision" : "a7ab97d2188716f8d81c33f8959e3c17c9657734",
-        "version" : "0.59.1-patch"
+        "revision" : "8b142740a38bff41072cebd89cfa0d9058d6ed19",
+        "version" : "0.59.1"
       }
     },
     {
