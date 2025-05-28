@@ -1,5 +1,5 @@
 {
-  "originHash" : "4ed47d8db33efef8e2df2991e8d1b51780e1cf7d460ce0589b0f7c13936ce353",
+  "originHash" : "fab473479f0e3a997889e6af0d1d8dfb7a656519c6d4b169d1c83f63a497de7e",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -22,7 +22,7 @@
     {
       "identity" : "firebase-ios-sdk",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/firebase/firebase-ios-sdk",
+      "location" : "https://github.com/firebase/firebase-ios-sdk.git",
       "state" : {
         "revision" : "3663b1aa6c7a1bed67ee80fd09dc6d0f9c3bb660",
         "version" : "11.13.0"
@@ -69,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/gtm-session-fetcher.git",
       "state" : {
-        "revision" : "4d70340d55d7d07cc2fdf8e8125c4c126c1d5f35",
-        "version" : "4.4.0"
+        "revision" : "c756a29784521063b6a1202907e2cc47f41b667c",
+        "version" : "4.5.0"
       }
     },
     {
@@ -87,8 +87,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/leveldb.git",
       "state" : {
-        "revision" : "43aaef65e0c665daadf848761d560e446d350d3d",
-        "version" : "1.22.4"
+        "revision" : "a0bc79961d7be727d258d33d5a6b2f1023270ba1",
+        "version" : "1.22.5"
       }
     },
     {
@@ -130,10 +130,10 @@
     {
       "identity" : "swift-numerics",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-numerics",
+      "location" : "https://github.com/apple/swift-numerics.git",
       "state" : {
-        "revision" : "0a5bc04095a675662cf24757cc0640aa2204253b",
-        "version" : "1.0.2"
+        "revision" : "e0ec0f5f3af6f3e4d5e7a19d2af26b481acb6ba8",
+        "version" : "1.0.3"
       }
     },
     {
@@ -141,23 +141,23 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-protobuf.git",
       "state" : {
-        "revision" : "65e8f29b2d63c4e38e736b25c27b83e012159be8",
-        "version" : "1.25.2"
+        "revision" : "d72aed98f8253ec1aa9ea1141e28150f408cf17f",
+        "version" : "1.29.0"
       }
     },
     {
       "identity" : "swift-syntax",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-syntax.git",
+      "location" : "https://github.com/swift-precompiled/swift-syntax.git",
       "state" : {
-        "revision" : "f99ae8aa18f0cf0d53481901f88a0991dc3bd4a2",
+        "revision" : "fc197a24fb2e77609fbe3d94624e36f84d758099",
         "version" : "601.0.1"
       }
     },
     {
       "identity" : "swiftlintplugins",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SimplyDanny/SwiftLintPlugins",
+      "location" : "https://github.com/SimplyDanny/SwiftLintPlugins.git",
       "state" : {
         "revision" : "8545ddf4de043e6f2051c5cf204f39ef778ebf6b",
         "version" : "0.59.1"
