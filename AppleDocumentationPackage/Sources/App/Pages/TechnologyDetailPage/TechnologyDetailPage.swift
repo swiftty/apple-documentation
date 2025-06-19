@@ -13,7 +13,7 @@ struct IndexedItem<Element: Hashable>: Identifiable, Hashable {
 
 extension Array where Element: Hashable {
     func indexed() -> [IndexedItem<Element>] {
-        enumerated().map(IndexedItem.init)
+        enumerated().map { IndexedItem(index: $0.offset, element: $0.element) }
     }
 }
 
@@ -51,6 +51,7 @@ public struct TechnologyDetailPage: View {
             } loading: { isLoading in
                 ProgressView()
                     .progressViewStyle(.circular)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .task {
                         if !isLoading {
                             await model.fetch()
