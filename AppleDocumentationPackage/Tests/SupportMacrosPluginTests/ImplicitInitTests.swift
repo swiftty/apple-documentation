@@ -4,6 +4,7 @@ import SwiftSyntaxMacros
 import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacrosGenericTestSupport
 
+#if canImport(SupportMacrosPlugin)
 import SupportMacrosPlugin
 
 func assertMacroExpansion(
@@ -163,3 +164,5 @@ struct ImplicitInitTests {
         )
     }
 }
+
+#endif
