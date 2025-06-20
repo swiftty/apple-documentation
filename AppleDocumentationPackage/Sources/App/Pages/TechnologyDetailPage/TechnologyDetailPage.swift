@@ -45,6 +45,8 @@ public struct TechnologyDetailPage: View {
         let destination: Technology.Destination.Value
         let model: TechnologyDetailModel
 
+        @State private var showsJSON = false
+
         var body: some View {
             InUIStack {
                 model.detail
@@ -61,6 +63,10 @@ public struct TechnologyDetailPage: View {
                 detail.map(content(for:))
             } failed: { error in
                 Text(String(describing: error))
+            }
+            .sheet(isPresented: $showsJSON) {
+                let url = URL(string: "https://developer.apple.com/tutorials/data/\(destination.rawValue).json")!
+                JSONView(url: url)
             }
         }
 
@@ -120,6 +126,13 @@ public struct TechnologyDetailPage: View {
                 .padding(.horizontal)
             }
             .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        showsJSON = true
+                    } label: {
+                        Label("dev", systemImage: "curlybraces.square")
+                    }
+                }
                 ToolbarItem(placement: .primaryAction) {
                     Button {
                         guard let url = URL(string: "https://developer.apple.com\(destination.rawValue)") else {
