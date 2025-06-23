@@ -33,7 +33,7 @@ private struct OpenDestinationModifier: ViewModifier {
         content
             .environment(\.openURL, OpenURLAction { url in
                 guard let identifier = decodeFromURL(url, for: "identifier") else {
-                    if #available(iOS 26.0, *) {
+                    if #available(iOS 26.0, macOS 26.0, *) {
                         openURL(url, prefersInApp: true)
                     } else {
                         openURL(url)
@@ -46,7 +46,7 @@ private struct OpenDestinationModifier: ViewModifier {
                 }
                 guard let url = URL(string: identifier) else { return .discarded }
                 if url.scheme?.hasPrefix("http") ?? false {
-                    if #available(iOS 26.0, *) {
+                    if #available(iOS 26.0, macOS 26.0, *) {
                         openURL(url, prefersInApp: true)
                     } else {
                         openURL(url)
