@@ -24,15 +24,3 @@ extension Routing where Self == Routings.TechnologyDetailPage {
         Self.init(destination: destination)
     }
 }
-
-extension Routings {
-    public struct SafariPage: Routing {
-        public var url: URL
-    }
-}
-
-extension Routing where Self == Routings.SafariPage {
-    public static func safari(for url: URL) -> Self {
-        Self.init(url: url)
-    }
-}
