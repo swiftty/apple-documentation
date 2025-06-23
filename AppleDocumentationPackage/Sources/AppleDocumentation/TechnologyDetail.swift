@@ -70,6 +70,7 @@ public enum BlockContent: Hashable, Sendable {
     case heading(Heading)
     case aside(Aside)
     case unorderedList(UnorderedList)
+    case codeListing(CodeListing)
     case unknown(Unknown)
 
     @ImplicitInit
@@ -99,6 +100,12 @@ public enum BlockContent: Hashable, Sendable {
         public struct Item: Hashable, Sendable {
             public var content: [BlockContent]
         }
+    }
+
+    @ImplicitInit
+    public struct CodeListing: Hashable, Sendable {
+        public var syntax: String?
+        public var code: [String]
     }
 
     @ImplicitInit

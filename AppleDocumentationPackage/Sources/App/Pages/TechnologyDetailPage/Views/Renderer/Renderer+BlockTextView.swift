@@ -56,6 +56,7 @@ private struct InnerView: View {
         case unorderedList([[ListItem]])
         case aside(name: String?, style: String, contents: [Content])
         case image([ImageVariant])
+        case codeListing(syntax: String?, code: [String])
 
         struct ParagraphItem: Hashable {
             var texts: [AttributedText]
@@ -169,6 +170,9 @@ private struct InnerView: View {
                 }
             }
             builder.insert(.unorderedList(list))
+
+        case .codeListing(let codeListing):
+            builder.insert(.codeListing(syntax: codeListing.syntax, code: codeListing.code))
 
         case .unknown(let unknown):
             var attributes = attributes
@@ -284,6 +288,18 @@ private struct ContentsRenderer: View {
                 HStack {
                     ImageView(variants: variants)
                         .frame(maxWidth: .infinity, alignment: .center)
+                }
+
+            case .codeListing(_, let code):
+                ScrollView(.horizontal, showsIndicators: false) {
+                    Text(code.joined(separator: "\n"))
+                        .fixedSize(horizontal: false, vertical: true)
+                        .tint(.init(r: 218, g: 186, b: 255))
+                }
+                .contentMargins(16)
+                .background {
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        .fill(.tertiary)
                 }
             }
         }

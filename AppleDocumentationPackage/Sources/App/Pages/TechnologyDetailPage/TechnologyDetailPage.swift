@@ -64,13 +64,31 @@ public struct TechnologyDetailPage: View {
             } failed: { error in
                 Text(String(describing: error))
             }
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        showsJSON = true
+                    } label: {
+                        Label("dev", systemImage: "curlybraces.square")
+                    }
+                }
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        guard let url = URL(string: "https://developer.apple.com\(destination.rawValue)") else {
+                            return
+                        }
+                        openURL(url)
+                    } label: {
+                        Label("safari", systemImage: "safari")
+                    }
+                }
+            }
             .sheet(isPresented: $showsJSON) {
                 let url = URL(string: "https://developer.apple.com/tutorials/data/\(destination.rawValue).json")!
                 JSONView(url: url)
             }
         }
 
-        // swiftlint:disable:next function_body_length
         private func content(for detail: TechnologyDetail) -> some View {
             ScrollView {
                 LazyVStack(alignment: .leading) {
@@ -124,25 +142,6 @@ public struct TechnologyDetailPage: View {
                 }
                 .environment(\.references, detail.references)
                 .padding(.horizontal)
-            }
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        showsJSON = true
-                    } label: {
-                        Label("dev", systemImage: "curlybraces.square")
-                    }
-                }
-                ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        guard let url = URL(string: "https://developer.apple.com\(destination.rawValue)") else {
-                            return
-                        }
-                        openURL(url)
-                    } label: {
-                        Label("safari", systemImage: "safari")
-                    }
-                }
             }
         }
 
