@@ -57,6 +57,7 @@ private struct InnerView: View {
         case aside(name: String?, style: String, contents: [Content])
         case image([ImageVariant])
         case codeListing(syntax: String?, code: [String])
+        case links(style: String, items: [TechnologyDetail.Reference])
 
         struct ParagraphItem: Hashable {
             var texts: [AttributedText]
@@ -173,6 +174,10 @@ private struct InnerView: View {
 
         case .codeListing(let codeListing):
             builder.insert(.codeListing(syntax: codeListing.syntax, code: codeListing.code))
+
+        case .links(let links):
+            let items = links.items.compactMap { references[$0] }
+            builder.insert(.links(style: links.style, items: items))
 
         case .unknown(let unknown):
             var attributes = attributes
@@ -300,6 +305,13 @@ private struct ContentsRenderer: View {
                 .background {
                     RoundedRectangle(cornerRadius: 16, style: .continuous)
                         .fill(.tertiary)
+                }
+
+            case .links(_, let items):
+                VStack(alignment: .leading, spacing: 16) {
+                    ForEach(items.indexed()) { item in
+                        ReferenceView(reference: item.element)
+                    }
                 }
             }
         }

@@ -95,6 +95,7 @@ private enum RawBlockContent: Decodable {
     case aside(Aside)
     case unorderedList(UnorderedList)
     case codeListing(CodeListing)
+    case links(Links)
     case unknown(String)
 
     struct Paragraph: Decodable {
@@ -126,6 +127,11 @@ private enum RawBlockContent: Decodable {
         var code: [String]
     }
 
+    struct Links: Decodable {
+        var style: String
+        var items: [Technology.Identifier]
+    }
+
     private enum CodingKeys: CodingKey {
         case type
     }
@@ -139,6 +145,7 @@ private enum RawBlockContent: Decodable {
         case "aside": try .aside(.init(from: decoder))
         case "unorderedList": try .unorderedList(.init(from: decoder))
         case "codeListing": try .codeListing(.init(from: decoder))
+        case "links": try .links(.init(from: decoder))
         default: .unknown(type)
         }
     }
@@ -159,6 +166,9 @@ private enum RawBlockContent: Decodable {
 
         case .codeListing(let codeListing):
             .codeListing(.init(syntax: codeListing.syntax, code: codeListing.code))
+
+        case .links(let links):
+            .links(.init(style: links.style, items: links.items))
 
         case .unknown(let type):
             .unknown(.init(type: type))
