@@ -18,25 +18,11 @@ public struct RootPage: View {
                 .navigationDestination(for: Routings.TechnologyDetailPage.self) { page in
                     router.route(for: page)
                 }
-                .navigationDestination(for: Routings.SafariPage.self) { page in
-                    router.route(for: page)
-                }
         }
         #if canImport(UIKit)
-        .fullScreenCover(item: $modalContext) { context in
-            switch context {
-            case .safariPage(let url):
-                router.route(for: .safari(for: url))
-            }
-        }
+        .fullScreenCover(item: $modalContext) { _ in }
         #endif
         .extractDestination()
-        #if !os(visionOS)
-        .environment(\.openURL, OpenURLAction { url in
-            modalContext = .safariPage(url)
-            return .handled
-        })
-        #endif
         .environment(\.openDestination, OpenDestinationAction { identifier in
             router.navigationPath.append(.technologyDetail(for: identifier))
         })
@@ -44,7 +30,5 @@ public struct RootPage: View {
 }
 
 private enum ModalContext: Hashable, Identifiable {
-    case safariPage(URL)
-
     var id: some Hashable { self }
 }

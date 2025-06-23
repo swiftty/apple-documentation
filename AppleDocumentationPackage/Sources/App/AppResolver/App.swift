@@ -4,7 +4,6 @@ import Router
 import AppleDocClient
 import AppleDocClientLive
 import RootPage
-import SafariPage
 import AllTechnologiesPage
 import TechnologyDetailPage
 import FirebaseCore
@@ -61,11 +60,6 @@ private struct RoutingProviderImpl: RoutingProvider {
 
         case let page as Routings.TechnologyDetailPage:
             TechnologyDetailPage(destination: page.destination)
-
-        #if canImport(UIKit)
-        case let page as Routings.SafariPage:
-            SafariPage(url: page.url)
-        #endif
 
         default:
             Text("unhandled route: \(String(describing: target))")

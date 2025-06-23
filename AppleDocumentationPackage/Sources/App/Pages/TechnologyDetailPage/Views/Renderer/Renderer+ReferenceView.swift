@@ -17,7 +17,7 @@ struct ReferenceView: View {
         case "article":
             asArticle()
 
-        case "symbol":
+        case "symbol", "overview", "section":
             asSymbol()
 
         default:

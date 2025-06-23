@@ -33,6 +33,7 @@ public struct AllTechnologiesPage: View {
             if isLoading {
                 ProgressView()
                     .progressViewStyle(.circular)
+                    .frame(maxWidth: .infinity)
             } else {
                 listContent()
             }
@@ -45,7 +46,6 @@ public struct AllTechnologiesPage: View {
         #if canImport(UIKit)
         .searchable(
             text: $filterText.animation(),
-            placement: .navigationBarDrawer(displayMode: .always),
             prompt: Text("Filter on this page")
         )
         #endif
