@@ -53,6 +53,7 @@ extension View {
 private struct InnerView: View {
     enum Content: Hashable {
         case paragraph(ParagraphItem)
+        case orderedList([[ListItem]])
         case unorderedList([[ListItem]])
         case aside(name: String?, style: String, contents: [Content])
         case image([ImageVariant])
@@ -164,6 +165,14 @@ private struct InnerView: View {
             childBuilder.commit()
             builder.insert(.aside(name: aside.name, style: aside.style, contents: childBuilder.contents))
 
+        case .orderedList(let unorderedList):
+            let list = unorderedList.items.map { item in
+                item.content.map {
+                    Content.ListItem(block: $0, attributes: attributes)
+                }
+            }
+            builder.insert(.orderedList(list))
+
         case .unorderedList(let unorderedList):
             let list = unorderedList.items.map { item in
                 item.content.map {
@@ -272,14 +281,28 @@ private struct ContentsRenderer: View {
                 }
                 .headingLevel(paragraph.options.headingLevel)
 
+            case .orderedList(let items):
+                VStack(alignment: .leading) {
+                    ForEach(items.indexed()) { items in
+                        HStack(alignment: .firstTextBaseline) {
+                            Text("\(items.index + 1).")
+                            VStack(alignment: .leading) {
+                                ForEach(items.element.indexed()) { item in
+                                    InnerView(block: item.element.block, attributes: item.element.attributes)
+                                }
+                            }
+                        }
+                    }
+                }
+
             case .unorderedList(let items):
                 VStack(alignment: .leading) {
-                    ForEach(items, id: \.self) { items in
+                    ForEach(items.indexed()) { items in
                         HStack(alignment: .firstTextBaseline) {
                             Text("•")
                             VStack(alignment: .leading) {
-                                ForEach(items, id: \.self) { item in
-                                    InnerView(block: item.block, attributes: item.attributes)
+                                ForEach(items.element.indexed()) { item in
+                                    InnerView(block: item.element.block, attributes: item.element.attributes)
                                 }
                             }
                         }

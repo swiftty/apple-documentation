@@ -69,6 +69,7 @@ public enum BlockContent: Hashable, Sendable {
     case paragraph(Paragraph)
     case heading(Heading)
     case aside(Aside)
+    case orderedList(OrderedList)
     case unorderedList(UnorderedList)
     case codeListing(CodeListing)
     case links(Links)
@@ -91,6 +92,16 @@ public enum BlockContent: Hashable, Sendable {
         public var style: String
         public var name: String?
         public var contents: [BlockContent]
+    }
+
+    @ImplicitInit
+    public struct OrderedList: Hashable, Sendable {
+        public var items: [Item]
+
+        @ImplicitInit
+        public struct Item: Hashable, Sendable {
+            public var content: [BlockContent]
+        }
     }
 
     @ImplicitInit
