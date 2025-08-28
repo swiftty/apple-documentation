@@ -19,7 +19,7 @@ runs:
     - name: Select Xcode
       shell: bash
       run: |
-        sudo xcode-select --switch "/Applications/Xcode_26_beta.app"
+        sudo xcode-select --switch "/Applications/Xcode_26.0.app"
     - name: Prepare project
       shell: bash
       run: |
