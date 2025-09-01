@@ -77,7 +77,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-syntax.git", from: "601.0.1"),
 
         .package(url: "https://github.com/swiftty/XcodeGenBinary.git", from: "2.44.1"),
-        .package(url: "https://github.com/swiftty/SwiftLintBinary.git", exact: "0.59.1-patch")
+        .package(url: "https://github.com/swiftty/SwiftLintBinary.git", exact: "0.60.0")
     ],
     targets: [
         .target(
