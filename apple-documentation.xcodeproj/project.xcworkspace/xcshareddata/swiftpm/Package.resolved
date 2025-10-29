@@ -1,5 +1,5 @@
 {
-  "originHash" : "e1df46e7088f0ae573af19714af7dae048f1a681fb1a14b32a4fe42b57760657",
+  "originHash" : "c4e6689e9f45a4143aa171b34aa03f7c0a9e71ccc48382c09fc5c956bc82ee52",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -168,8 +168,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftty/SwiftLintBinary.git",
       "state" : {
-        "revision" : "db32235c62c5edc166d627e238ebeb547564ff0e",
-        "version" : "0.62.1"
+        "revision" : "06515639423fb02e0c382bf706b7d64a2bdd3942",
+        "version" : "0.62.2"
       }
     },
     {
