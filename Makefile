@@ -22,6 +22,4 @@ unittest:
 
 .PHONY: resolve
 resolve:
-	cp -f $(XCSHAREDDATA_DIR)/swiftpm/Package.resolved $(PACKAGE_DIR)/Package.resolved
 	$(call SWIFT, package) resolve
-	cp -f $(PACKAGE_DIR)/Package.resolved $(XCSHAREDDATA_DIR)/swiftpm/Package.resolved
