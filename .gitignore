@@ -46,9 +46,6 @@ playground.xcworkspace
 *.xcodeproj/project.xcworkspace/*
 !*.xcodeproj/project.xcworkspace/xcshareddata
 *.xcodeproj/project.xcworkspace/xcshareddata/*
-!*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm
-*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/*
-!*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
 !*.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
 
 #
@@ -99,5 +96,4 @@ fastlane/test_output
 iOSInjectionProject/
 
 # Repository specific
-AppleDocumentationPackage/Package.resolved
 Configurations
