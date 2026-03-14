@@ -159,8 +159,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftty/SwiftLintBinary.git",
       "state" : {
-        "revision" : "06515639423fb02e0c382bf706b7d64a2bdd3942",
-        "version" : "0.62.2"
+        "revision" : "00ea053ced1418050bea522599de20cab4da4667",
+        "version" : "0.63.2"
       }
     },
     {
