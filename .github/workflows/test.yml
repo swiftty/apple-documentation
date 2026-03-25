@@ -17,3 +17,7 @@ jobs:
         run: make project
       - name: Run tests
         run: make unittest
+  example:
+    runs-on: macos-latest
+    steps:
+      - run: sw_vers
