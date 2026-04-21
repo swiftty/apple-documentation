@@ -74,7 +74,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-algorithms.git", from: "1.2.1"),
         .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "12.12.1"),
 
-        .package(url: "https://github.com/apple/swift-syntax.git", from: "603.0.0"),
+        .package(url: "https://github.com/apple/swift-syntax.git", from: "603.0.1"),
 
         .package(url: "https://github.com/swiftty/XcodeGenBinary.git", from: "2.45.4"),
         .package(url: "https://github.com/swiftty/SwiftLintBinary.git", exact: "0.63.2")
