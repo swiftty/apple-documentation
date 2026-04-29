@@ -177,7 +177,6 @@ extension Technology.DiffAvailability.Payload {
     }
 }
 
-// swiftlint:disable line_length
 #Preview {
     NavigationStack {
         AllTechnologiesPage()
@@ -206,4 +205,3 @@ extension Technology.DiffAvailability.Payload {
             }
     }
 }
-// swiftlint:enable line_length

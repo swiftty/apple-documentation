@@ -1,4 +1,0 @@
-parent_config: ../.swiftlint.yml
-
-excluded:
-  - .build

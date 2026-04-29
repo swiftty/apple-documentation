@@ -389,7 +389,7 @@ private struct RawImageVariant: Decodable {
     var traits: [Trait]
 
     enum Trait: String, RawRepresentable, Decodable {
-        case x1 = "1x", x2 = "2x"  // swiftlint:disable:this identifier_name
+        case x1 = "1x", x2 = "2x"
         case light, dark
     }
 

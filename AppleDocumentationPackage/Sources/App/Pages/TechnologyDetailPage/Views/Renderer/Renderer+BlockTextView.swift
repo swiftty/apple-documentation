@@ -129,7 +129,6 @@ private struct InnerView: View {
         }
     }
 
-    // swiftlint:disable:next cyclomatic_complexity
     private func buildContents(
         _ block: BlockContent,
         attributes: AttributedText.Attributes,
@@ -199,7 +198,6 @@ private struct InnerView: View {
         }
     }
 
-    // swiftlint:disable:next cyclomatic_complexity
     private func buildContents(
         _ inline: InlineContent,
         attributes: AttributedText.Attributes,
@@ -348,7 +346,6 @@ private struct ContentsRenderer: View {
     }
 
     private func asideView(name: String?, style: String, contents: [InnerView.Content]) -> some View {
-        // swiftlint:disable:next large_tuple
         func parameters() -> (name: String?, fill: AnyShapeStyle, border: AnyShapeStyle) {
             switch style {
             case "important":

@@ -33,9 +33,6 @@ targets:
       - path: project.yml
         group: Configurations
         buildPhase: none
-      - path: AppleDocumentationPackage/.swiftlint.yml
-        group: Configurations
-        buildPhase: none
       - path: App.xctestplan
         group: Configurations
         buildPhase: none

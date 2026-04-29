@@ -77,7 +77,6 @@ extension EnvironmentValues {
     @Entry var isPressed: Bool = false
 }
 
-// swiftlint:disable line_length
 #Preview(traits: .sizeThatFitsLayout) {
     TechnologyCell(
         title: "Accelerate",
@@ -88,4 +87,3 @@ extension EnvironmentValues {
     )
     .padding()
 }
-// swiftlint:enable line_length
