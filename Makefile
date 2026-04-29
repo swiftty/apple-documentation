@@ -14,7 +14,7 @@ project:
 
 .PHONY: format
 format:
-	@$(call SWIFT, package) plugin --allow-writing-to-package-directory --allow-writing-to-directory ../ swiftlint lint --fix --working-directory ../
+	@$(call SWIFT, package) plugin --allow-writing-to-package-directory --allow-writing-to-directory ../ format-source-code
 
 .PHONY: unittest
 unittest:
