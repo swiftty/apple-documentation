@@ -2,7 +2,7 @@ import Foundation
 import SupportMacros
 
 @ImplicitInit
-public struct Technology: Sendable {
+nonisolated public struct Technology: Sendable {
     public var title: String
     public var languages: [Language]
     public var tags: [String]
@@ -11,19 +11,19 @@ public struct Technology: Sendable {
 
 extension Technology {
     @ImplicitInit
-    public struct Identifier: Hashable, RawRepresentable, Sendable {
+    nonisolated public struct Identifier: Hashable, RawRepresentable, Sendable {
         public var rawValue: String
     }
 
     @ImplicitInit
-    public struct Destination: Hashable, Sendable {
+    nonisolated public struct Destination: Hashable, Sendable {
         public var identifier: Identifier
         public var title: String
         public var value: Value
         public var abstract: String
 
         @ImplicitInit
-        public struct Value: Hashable, RawRepresentable, Sendable {
+        nonisolated public struct Value: Hashable, RawRepresentable, Sendable {
             public var rawValue: String
         }
     }
@@ -36,7 +36,7 @@ extension Technology {
 }
 
 extension Technology {
-    public struct DiffAvailability: Sendable {
+    nonisolated public struct DiffAvailability: Sendable {
         public subscript(key: Key) -> Payload? {
             items[key]
         }
@@ -48,11 +48,11 @@ extension Technology {
         }
 
         @ImplicitInit
-        public struct Key: Hashable, RawRepresentable, Sendable {
+        nonisolated public struct Key: Hashable, RawRepresentable, Sendable {
             public var rawValue: String
         }
 
-        public struct Payload: Equatable, Comparable, Sendable {
+        nonisolated public struct Payload: Equatable, Comparable, Sendable {
             public static func < (lhs: Self, rhs: Self) -> Bool {
                 lhs.versions < rhs.versions
             }
@@ -67,7 +67,7 @@ extension Technology {
                 self.versions = versions
             }
 
-            public struct Versions: Equatable, Comparable, Sendable {
+            nonisolated public struct Versions: Equatable, Comparable, Sendable {
                 public static func < (lhs: Self, rhs: Self) -> Bool {
                     lhs.from < rhs.from
                 }
@@ -120,7 +120,7 @@ extension Technology.DiffAvailability.Key {
 }
 
 extension Technology {
-    public struct Changes {
+    nonisolated public struct Changes {
         public subscript(key: Technology.Identifier) -> Change? {
             items[key]
         }

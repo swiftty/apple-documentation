@@ -4,7 +4,7 @@ public import AppleDocumentation
 public enum Routings {}
 
 extension Routings {
-    public struct AllTechnologiesPage: Routing {}
+    nonisolated public struct AllTechnologiesPage: Routing {}
 }
 
 extension Routing where Self == Routings.AllTechnologiesPage {
@@ -14,7 +14,7 @@ extension Routing where Self == Routings.AllTechnologiesPage {
 }
 
 extension Routings {
-    public struct TechnologyDetailPage: Routing {
+    nonisolated public struct TechnologyDetailPage: Routing {
         public var destination: Technology.Destination.Value
     }
 }

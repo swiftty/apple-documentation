@@ -97,3 +97,8 @@ iOSInjectionProject/
 
 # Repository specific
 Configurations
+.derived-data-log*
+.claude/
+# temporary
+AGENTS.md
+CLAUDE.md
