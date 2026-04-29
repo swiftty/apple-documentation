@@ -107,39 +107,45 @@ private extension TechnologyDetail.Reference {
 
 #Preview {
     VStack {
-        ReferenceView(reference: .init(
-            identifier: .init(rawValue: ""),
-            title: "UIKit updates",
-            url: "/documentation/updates/uikit",
-            kind: "article",
-            role: "article",
-            abstract: [
-                .text(.init(text: """
-                Secure personal data, and respect user preferences for how data is used.
-                """))
-            ],
-            fragments: [],
-            navigatorTitle: [],
-            variants: [],
-            beta: false)
+        ReferenceView(
+            reference: .init(
+                identifier: .init(rawValue: ""),
+                title: "UIKit updates",
+                url: "/documentation/updates/uikit",
+                kind: "article",
+                role: "article",
+                abstract: [
+                    .text(
+                        .init(
+                            text: """
+                                Secure personal data, and respect user preferences for how data is used.
+                                """))
+                ],
+                fragments: [],
+                navigatorTitle: [],
+                variants: [],
+                beta: false)
         )
-        ReferenceView(reference: .init(
-            identifier: .init(rawValue: ""),
-            title: nil,
-            url: "/documentation/updates/uikit",
-            kind: "symbol",
-            role: "collectionGroup",
-            abstract: [
-                .text(.init(text: """
-                Secure personal data, and respect user preferences for how data is used.
-                """))
-            ],
-            fragments: [
-                .init(text: "Hello world", kind: .text, identifier: nil)
-            ],
-            navigatorTitle: [],
-            variants: [],
-            beta: true)
+        ReferenceView(
+            reference: .init(
+                identifier: .init(rawValue: ""),
+                title: nil,
+                url: "/documentation/updates/uikit",
+                kind: "symbol",
+                role: "collectionGroup",
+                abstract: [
+                    .text(
+                        .init(
+                            text: """
+                                Secure personal data, and respect user preferences for how data is used.
+                                """))
+                ],
+                fragments: [
+                    .init(text: "Hello world", kind: .text, identifier: nil)
+                ],
+                navigatorTitle: [],
+                variants: [],
+                beta: true)
         )
     }
     .preferredColorScheme(.dark)

@@ -8,11 +8,12 @@ extension Technology.Language: Decodable {
             case occ, swift, data
         }
 
-        self = switch try RawLanguage(from: decoder) {
-        case .occ: .objectiveC
-        case .swift: .swift
-        case .data: .other
-        }
+        self =
+            switch try RawLanguage(from: decoder) {
+            case .occ: .objectiveC
+            case .swift: .swift
+            case .data: .other
+            }
     }
 }
 

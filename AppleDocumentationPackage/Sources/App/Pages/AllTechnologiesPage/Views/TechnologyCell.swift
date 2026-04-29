@@ -65,12 +65,12 @@ struct TechnologyCell: View {
 
 extension TechnologyCell {
     struct ButtonStyle: SwiftUI.ButtonStyle {
-       func makeBody(configuration: Configuration) -> some View {
-           configuration.label
-               .environment(\.isPressed, configuration.isPressed)
-               .scaleEffect(configuration.isPressed ? 1.02 : 1)
-       }
-   }
+        func makeBody(configuration: Configuration) -> some View {
+            configuration.label
+                .environment(\.isPressed, configuration.isPressed)
+                .scaleEffect(configuration.isPressed ? 1.02 : 1)
+        }
+    }
 }
 
 extension EnvironmentValues {
@@ -82,8 +82,8 @@ extension EnvironmentValues {
     TechnologyCell(
         title: "Accelerate",
         abstract: """
-        Make large-scale mathematical computations and image calculations, optimized for high performance and low energy consumption.
-        """,
+            Make large-scale mathematical computations and image calculations, optimized for high performance and low energy consumption.
+            """,
         tags: ["UI"]
     )
     .padding()

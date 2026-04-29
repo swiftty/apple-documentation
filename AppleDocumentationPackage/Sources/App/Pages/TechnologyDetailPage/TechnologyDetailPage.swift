@@ -149,13 +149,14 @@ public struct TechnologyDetailPage: View {
         private func platformsView(with platforms: [TechnologyDetail.Metadata.Platform]) -> some View {
             TagLayout {
                 ForEach(platforms, id: \.name) { platform in
-                    let text = if platform.beta {
-                        Text("\(platform.name) \(platform.introducedAt)+")
-                        + (Text(" Beta")
-                            .foregroundStyle(.green))
-                    } else {
-                        Text("\(platform.name) \(platform.introducedAt)+")
-                    }
+                    let text =
+                        if platform.beta {
+                            Text("\(platform.name) \(platform.introducedAt)+")
+                                + (Text(" Beta")
+                                    .foregroundStyle(.green))
+                        } else {
+                            Text("\(platform.name) \(platform.introducedAt)+")
+                        }
 
                     text
                         .font(.callout)
@@ -267,62 +268,66 @@ public struct TechnologyDetailPage: View {
 }
 
 #if canImport(DevelopmentAssets)
-import DevelopmentAssets
+    import DevelopmentAssets
 
-#Preview {
-    TechnologyDetailPage(
-        destination: .init(rawValue: "")
-    )
-    .transformEnvironment(\.appleDocClient) { client in
-        client.props.technologyDetail = { _ in
-            let data = DevelopmentResources
-                .data(name: "uikit")
-            return try TechnologyDetail.from(json: data)
+    #Preview {
+        TechnologyDetailPage(
+            destination: .init(rawValue: "")
+        )
+        .transformEnvironment(\.appleDocClient) { client in
+            client.props.technologyDetail = { _ in
+                let data =
+                    DevelopmentResources
+                    .data(name: "uikit")
+                return try TechnologyDetail.from(json: data)
+            }
         }
+        .preferredColorScheme(.dark)
     }
-    .preferredColorScheme(.dark)
-}
 
-#Preview {
-    TechnologyDetailPage(
-        destination: .init(rawValue: "")
-    )
-    .transformEnvironment(\.appleDocClient) { client in
-        client.props.technologyDetail = { _ in
-            let data = DevelopmentResources
-                .data(name: "view-fundamentals")
-            return try TechnologyDetail.from(json: data)
+    #Preview {
+        TechnologyDetailPage(
+            destination: .init(rawValue: "")
+        )
+        .transformEnvironment(\.appleDocClient) { client in
+            client.props.technologyDetail = { _ in
+                let data =
+                    DevelopmentResources
+                    .data(name: "view-fundamentals")
+                return try TechnologyDetail.from(json: data)
+            }
         }
+        .preferredColorScheme(.dark)
     }
-    .preferredColorScheme(.dark)
-}
 
-#Preview {
-    TechnologyDetailPage(
-        destination: .init(rawValue: "")
-    )
-    .transformEnvironment(\.appleDocClient) { client in
-        client.props.technologyDetail = { _ in
-            let data = DevelopmentResources
-                .data(name: "developing-a-widgetkit-strategy")
-            return try TechnologyDetail.from(json: data)
+    #Preview {
+        TechnologyDetailPage(
+            destination: .init(rawValue: "")
+        )
+        .transformEnvironment(\.appleDocClient) { client in
+            client.props.technologyDetail = { _ in
+                let data =
+                    DevelopmentResources
+                    .data(name: "developing-a-widgetkit-strategy")
+                return try TechnologyDetail.from(json: data)
+            }
         }
+        .preferredColorScheme(.dark)
     }
-    .preferredColorScheme(.dark)
-}
 
-#Preview {
-    TechnologyDetailPage(
-        destination: .init(rawValue: "")
-    )
-    .transformEnvironment(\.appleDocClient) { client in
-        client.props.technologyDetail = { _ in
-            let data = DevelopmentResources
-                .data(name: "view")
-            return try TechnologyDetail.from(json: data)
+    #Preview {
+        TechnologyDetailPage(
+            destination: .init(rawValue: "")
+        )
+        .transformEnvironment(\.appleDocClient) { client in
+            client.props.technologyDetail = { _ in
+                let data =
+                    DevelopmentResources
+                    .data(name: "view")
+                return try TechnologyDetail.from(json: data)
+            }
         }
+        .preferredColorScheme(.dark)
     }
-    .preferredColorScheme(.dark)
-}
 
 #endif

@@ -31,31 +31,33 @@ private struct OpenDestinationModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .environment(\.openURL, OpenURLAction { url in
-                guard let identifier = decodeFromURL(url, for: "identifier") else {
-                    if #available(iOS 26.0, macOS 26.0, *) {
-                        openURL(url, prefersInApp: true)
-                    } else {
-                        openURL(url)
+            .environment(
+                \.openURL,
+                OpenURLAction { url in
+                    guard let identifier = decodeFromURL(url, for: "identifier") else {
+                        if #available(iOS 26.0, macOS 26.0, *) {
+                            openURL(url, prefersInApp: true)
+                        } else {
+                            openURL(url)
+                        }
+                        return .handled
                     }
-                    return .handled
-                }
-                if identifier.hasPrefix("/") {
+                    if identifier.hasPrefix("/") {
+                        openDestination(.init(rawValue: identifier))
+                        return .handled
+                    }
+                    guard let url = URL(string: identifier) else { return .discarded }
+                    if url.scheme?.hasPrefix("http") ?? false {
+                        if #available(iOS 26.0, macOS 26.0, *) {
+                            openURL(url, prefersInApp: true)
+                        } else {
+                            openURL(url)
+                        }
+                        return .handled
+                    }
+
                     openDestination(.init(rawValue: identifier))
                     return .handled
-                }
-                guard let url = URL(string: identifier) else { return .discarded }
-                if url.scheme?.hasPrefix("http") ?? false {
-                    if #available(iOS 26.0, macOS 26.0, *) {
-                        openURL(url, prefersInApp: true)
-                    } else {
-                        openURL(url)
-                    }
-                    return .handled
-                }
-
-                openDestination(.init(rawValue: identifier))
-                return .handled
-            })
+                })
     }
 }

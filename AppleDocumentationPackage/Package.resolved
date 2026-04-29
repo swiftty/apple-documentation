@@ -1,5 +1,5 @@
 {
-  "originHash" : "ab81ba0a9602151b5a094bbc61dff179eb0ac46428aca265312b18e5f29bfa63",
+  "originHash" : "1d06f3ec0c5f7a78ee97c12b90fefca852c21f4f1f5fd7639ec739670cb671f1",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -134,6 +134,15 @@
       "state" : {
         "revision" : "87e50f483c54e6efd60e885f7f5aa946cee68023",
         "version" : "1.2.1"
+      }
+    },
+    {
+      "identity" : "swift-format-plugin",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftty/swift-format-plugin.git",
+      "state" : {
+        "revision" : "962d1a34765c0eff20a4a13d6e6c1128c20c61c5",
+        "version" : "1.0.0"
       }
     },
     {

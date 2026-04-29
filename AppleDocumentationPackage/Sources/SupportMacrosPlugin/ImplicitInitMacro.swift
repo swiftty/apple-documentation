@@ -14,7 +14,8 @@ public struct ImplicitInitMacro: MemberMacro {
         if let accessLevelSyntax = node.arguments?
             .as(LabeledExprListSyntax.self)?
             .first(where: { $0.label?.trimmed.description == "accessLevel" })?
-            .expression.as(StringLiteralExprSyntax.self) {
+            .expression.as(StringLiteralExprSyntax.self)
+        {
             let value = accessLevelSyntax.segments.trimmed
 
             accessLevel = "\(value)"
@@ -35,7 +36,8 @@ public struct ImplicitInitMacro: MemberMacro {
 
         let variables: [Variable] = members.compactMap { member in
             guard let variable = member.decl.as(VariableDeclSyntax.self)?.bindings.first,
-                  let type = variable.typeAnnotation?.type else { return nil }
+                let type = variable.typeAnnotation?.type
+            else { return nil }
             return (variable.pattern.trimmed, type.trimmed, variable.initializer?.value)
         }
 

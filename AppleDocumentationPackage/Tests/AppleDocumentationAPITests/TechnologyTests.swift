@@ -7,33 +7,33 @@ struct TechnologyTests {
     @Test
     func test_DiffAvailability() throws {
         let json = """
-        {
-            "minor": {
-                "change": "modified",
-                "platform": "Xcode",
-                "versions": [
-                    "14.3",
-                    "15.0 beta 3"
-                ]
-            },
-            "major": {
-                "change": "modified",
-                "platform": "Xcode",
-                "versions": [
-                    "14.0",
-                    "15.0 beta 3"
-                ]
-            },
-            "beta": {
-                "change": "modified",
-                "platform": "Xcode",
-                "versions": [
-                    "15.0 beta 2",
-                    "15.0 beta 3"
-                ]
+            {
+                "minor": {
+                    "change": "modified",
+                    "platform": "Xcode",
+                    "versions": [
+                        "14.3",
+                        "15.0 beta 3"
+                    ]
+                },
+                "major": {
+                    "change": "modified",
+                    "platform": "Xcode",
+                    "versions": [
+                        "14.0",
+                        "15.0 beta 3"
+                    ]
+                },
+                "beta": {
+                    "change": "modified",
+                    "platform": "Xcode",
+                    "versions": [
+                        "15.0 beta 2",
+                        "15.0 beta 3"
+                    ]
+                }
             }
-        }
-        """.data(using: .utf8) ?? Data()
+            """.data(using: .utf8) ?? Data()
 
         typealias DiffAvailability = Technology.DiffAvailability
         let data = try JSONDecoder().decode([DiffAvailability.Key: DiffAvailability.Payload].self, from: json)
