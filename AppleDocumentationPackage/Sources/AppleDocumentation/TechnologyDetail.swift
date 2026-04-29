@@ -65,9 +65,7 @@ nonisolated public enum InlineContent: Hashable, Sendable {
     }
 }
 
-nonisolated
-    public enum BlockContent: Hashable, Sendable
-{
+nonisolated public enum BlockContent: Hashable, Sendable {
     case paragraph(Paragraph)
     case heading(Heading)
     case aside(Aside)
