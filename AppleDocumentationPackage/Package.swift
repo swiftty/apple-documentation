@@ -251,7 +251,7 @@ for target in package.targets {
                 target.swiftSettings = swiftSettings
             }
             swiftSettings += [
-//                .defaultIsolation(MainActor.self),
+.defaultIsolation(MainActor.self),
                 .enableUpcomingFeature("InternalImportsByDefault"),
                 .enableUpcomingFeature("NonisolatedNonsendingByDefault")
             ]

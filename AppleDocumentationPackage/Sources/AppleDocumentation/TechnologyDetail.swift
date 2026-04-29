@@ -2,7 +2,7 @@ public import Foundation
 import SupportMacros
 
 @ImplicitInit
-public struct TechnologyDetail: Sendable {
+nonisolated public struct TechnologyDetail: Sendable {
     public var metadata: Metadata
     public var abstract: [InlineContent]
     public var primaryContents: [PrimaryContent]
@@ -13,7 +13,7 @@ public struct TechnologyDetail: Sendable {
     public var diffAvailability: Technology.DiffAvailability
 }
 
-public enum InlineContent: Hashable, Sendable {
+nonisolated public enum InlineContent: Hashable, Sendable {
     case text(Text)
     case codeVoice(CodeVoice)
     case strong(Strong)
@@ -65,7 +65,9 @@ public enum InlineContent: Hashable, Sendable {
     }
 }
 
-public enum BlockContent: Hashable, Sendable {
+nonisolated
+    public enum BlockContent: Hashable, Sendable
+{
     case paragraph(Paragraph)
     case heading(Heading)
     case aside(Aside)
@@ -134,7 +136,7 @@ public enum BlockContent: Hashable, Sendable {
 
 extension TechnologyDetail {
     @ImplicitInit
-    public struct Metadata: Sendable {
+    nonisolated public struct Metadata: Sendable {
         public var title: String
         public var role: String
         public var roleHeading: String?
@@ -142,7 +144,7 @@ extension TechnologyDetail {
         public var externalID: String?
 
         @ImplicitInit
-        public struct Platform: Sendable {
+        nonisolated public struct Platform: Sendable {
             public var name: String
             public var introducedAt: String
             public var current: String?
@@ -151,18 +153,18 @@ extension TechnologyDetail {
     }
 
     @ImplicitInit
-    public struct PrimaryContent: Hashable, Sendable {
+    nonisolated public struct PrimaryContent: Hashable, Sendable {
         public var content: [BlockContent]
         public var declarations: [Declaration]
         public var parameters: [Parameter]
 
         @ImplicitInit
-        public struct Declaration: Hashable, Sendable {
+        nonisolated public struct Declaration: Hashable, Sendable {
             public var tokens: [Fragment]
         }
 
         @ImplicitInit
-        public struct Parameter: Hashable, Sendable {
+        nonisolated public struct Parameter: Hashable, Sendable {
             public var name: String
             public var content: [BlockContent]
         }
@@ -195,14 +197,14 @@ extension TechnologyDetail {
     }
 
     @ImplicitInit
-    public struct SeeAlso: Hashable, Sendable {
+    nonisolated public struct SeeAlso: Hashable, Sendable {
         public var title: String
         public var generated: Bool
         public var identifiers: [Technology.Identifier]
     }
 
     @ImplicitInit
-    public struct Reference: Hashable, Sendable {
+    nonisolated public struct Reference: Hashable, Sendable {
         public var identifier: Technology.Identifier
         public var title: String?
         public var url: String?
@@ -215,7 +217,7 @@ extension TechnologyDetail {
         public var beta: Bool
 
         @ImplicitInit
-        public struct ImageVariant: Hashable, Sendable {
+        nonisolated public struct ImageVariant: Hashable, Sendable {
             public var url: URL
             public var traits: [Trait]
 
@@ -227,7 +229,7 @@ extension TechnologyDetail {
     }
 
     @ImplicitInit
-    public struct Fragment: Hashable, Sendable {
+    nonisolated public struct Fragment: Hashable, Sendable {
         public var text: String
         public var kind: Kind
         public var identifier: Technology.Identifier?
