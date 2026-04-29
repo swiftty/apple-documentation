@@ -117,9 +117,10 @@ extension WithUIStack {
             self = .init(wrappedValue: nil)
             return
         }
-        self = .init(currentState: other.newState.opt(),
-                     oldState: other.oldState.opt(),
-                     initialValue: other.initialValue)
+        self = .init(
+            currentState: other.newState.opt(),
+            oldState: other.oldState.opt(),
+            initialValue: other.initialValue)
     }
 
     private init(currentState: State, oldState: State, initialValue: T) {

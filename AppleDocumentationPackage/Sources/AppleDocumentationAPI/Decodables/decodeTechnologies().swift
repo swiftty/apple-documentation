@@ -119,9 +119,9 @@ private struct Result: Decodable {
             }
             .compactMap { tech -> Technology? in
                 guard tech.destination.isActive,
-                      let ref = root.references[tech.destination.identifier],
-                      case .topic(let topic) = ref.content,
-                      let abstract = topic.abstract.first
+                    let ref = root.references[tech.destination.identifier],
+                    case .topic(let topic) = ref.content,
+                    let abstract = topic.abstract.first
                 else { return nil }
 
                 return Technology(

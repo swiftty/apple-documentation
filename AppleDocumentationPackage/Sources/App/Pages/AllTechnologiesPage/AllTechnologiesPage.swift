@@ -18,7 +18,7 @@ public struct AllTechnologiesPage: View {
             let filterText = filterText.lowercased()
             return allTechnologies?
                 .filter { $0.title.lowercased().contains(filterText) }
-            ?? []
+                ?? []
         }
     }
 
@@ -44,10 +44,10 @@ public struct AllTechnologiesPage: View {
             }
         }
         #if canImport(UIKit)
-        .searchable(
-            text: $filterText.animation(),
-            prompt: Text("Filter on this page")
-        )
+            .searchable(
+                text: $filterText.animation(),
+                prompt: Text("Filter on this page")
+            )
         #endif
         .toolbar {
             let isEmpty = diffAvailability?.isEmpty ?? true

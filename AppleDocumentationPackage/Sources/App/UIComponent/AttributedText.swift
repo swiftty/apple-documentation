@@ -25,13 +25,15 @@ public struct AttributedText: Hashable {
     }
 
     fileprivate func render() -> Text {
-        let text = if let link = attributes.link {
-            Text(.init("[\(string)](\(link.absoluteString))"))
-        } else {
-            Text(verbatim: string)
-        }
+        let text =
+            if let link = attributes.link {
+                Text(.init("[\(string)](\(link.absoluteString))"))
+            } else {
+                Text(verbatim: string)
+            }
 
-        return text
+        return
+            text
             .font(attributes.font)
             .bold(attributes.bold)
             .italic(attributes.italic)

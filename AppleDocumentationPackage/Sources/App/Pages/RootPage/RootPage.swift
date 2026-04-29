@@ -20,12 +20,14 @@ public struct RootPage: View {
                 }
         }
         #if canImport(UIKit)
-        .fullScreenCover(item: $modalContext) { _ in }
+            .fullScreenCover(item: $modalContext) { _ in }
         #endif
         .extractDestination()
-        .environment(\.openDestination, OpenDestinationAction { identifier in
-            router.navigationPath.append(.technologyDetail(for: identifier))
-        })
+        .environment(
+            \.openDestination,
+            OpenDestinationAction { identifier in
+                router.navigationPath.append(.technologyDetail(for: identifier))
+            })
     }
 }
 

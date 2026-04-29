@@ -144,18 +144,20 @@ private struct InnerView: View {
         case .heading(let heading):
             var attributes = attributes
             attributes.bold = true
-            attributes.font = switch heading.level {
-            case 1: .title
-            case 2: .title2
-            case 3: .title3
-            default: attributes.font
-            }
-            builder.insert(.paragraph(
-                .init(
-                    texts: [.init(string: heading.text, attributes: attributes)],
-                    options: .init(headingLevel: (1...3).contains(heading.level) ? heading.level : nil)
-                )
-            ))
+            attributes.font =
+                switch heading.level {
+                case 1: .title
+                case 2: .title2
+                case 3: .title3
+                default: attributes.font
+                }
+            builder.insert(
+                .paragraph(
+                    .init(
+                        texts: [.init(string: heading.text, attributes: attributes)],
+                        options: .init(headingLevel: (1...3).contains(heading.level) ? heading.level : nil)
+                    )
+                ))
 
         case .aside(let aside):
             var childBuilder = ContentBuilder()
@@ -237,15 +239,20 @@ private struct InnerView: View {
         case .image(let image):
             guard let ref = references[image.identifier] else { return }
 
-            builder.insert(.image(ref.variants.map {
-                .init(url: $0.url, traits: Set($0.traits.compactMap { trait in
-                    switch trait {
-                    case .dark: .dark
-                    case .light: .light
-                    default: nil
-                    }
-                }))
-            }))
+            builder.insert(
+                .image(
+                    ref.variants.map {
+                        .init(
+                            url: $0.url,
+                            traits: Set(
+                                $0.traits.compactMap { trait in
+                                    switch trait {
+                                    case .dark: .dark
+                                    case .light: .light
+                                    default: nil
+                                    }
+                                }))
+                    }))
 
         case .inlineHead(let inlineHead):
             var attributes = attributes

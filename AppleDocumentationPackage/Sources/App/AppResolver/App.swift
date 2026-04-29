@@ -11,9 +11,9 @@ import FirebaseCrashlytics
 
 public struct App: SwiftUI.App {
     #if canImport(UIKit)
-    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+        @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     #elseif canImport(AppKit)
-    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+        @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     #endif
 
     @State var router = Router(provider: RoutingProviderImpl())
@@ -31,25 +31,25 @@ public struct App: SwiftUI.App {
 }
 
 #if canImport(UIKit)
-private final class AppDelegate: UIResponder, UIApplicationDelegate {
-    lazy var appleDocClient = AppleDocClient.live(session: .shared)
+    private final class AppDelegate: UIResponder, UIApplicationDelegate {
+        lazy var appleDocClient = AppleDocClient.live(session: .shared)
 
-    func application(
-        _ application: UIApplication,
-        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
-    ) -> Bool {
-        FirebaseApp.configure()
-        return true
+        func application(
+            _ application: UIApplication,
+            didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+        ) -> Bool {
+            FirebaseApp.configure()
+            return true
+        }
     }
-}
 #elseif canImport(AppKit)
-private final class AppDelegate: NSResponder, NSApplicationDelegate {
-    lazy var appleDocClient = AppleDocClient.live(session: .shared)
+    private final class AppDelegate: NSResponder, NSApplicationDelegate {
+        lazy var appleDocClient = AppleDocClient.live(session: .shared)
 
-    func applicationDidFinishLaunching(_ notification: Notification) {
-        FirebaseApp.configure()
+        func applicationDidFinishLaunching(_ notification: Notification) {
+            FirebaseApp.configure()
+        }
     }
-}
 #endif
 
 private struct RoutingProviderImpl: RoutingProvider {

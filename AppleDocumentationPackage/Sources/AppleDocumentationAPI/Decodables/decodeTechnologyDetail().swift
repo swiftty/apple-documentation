@@ -148,16 +148,17 @@ private enum RawBlockContent: Decodable {
     init(from decoder: any Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         let type = try c.decode(String.self, forKey: .type)
-        self = switch type {
-        case "paragraph": try .paragraph(.init(from: decoder))
-        case "heading": try .heading(.init(from: decoder))
-        case "aside": try .aside(.init(from: decoder))
-        case "orderedList": try .orderedList(.init(from: decoder))
-        case "unorderedList": try .unorderedList(.init(from: decoder))
-        case "codeListing": try .codeListing(.init(from: decoder))
-        case "links": try .links(.init(from: decoder))
-        default: .unknown(type)
-        }
+        self =
+            switch type {
+            case "paragraph": try .paragraph(.init(from: decoder))
+            case "heading": try .heading(.init(from: decoder))
+            case "aside": try .aside(.init(from: decoder))
+            case "orderedList": try .orderedList(.init(from: decoder))
+            case "unorderedList": try .unorderedList(.init(from: decoder))
+            case "codeListing": try .codeListing(.init(from: decoder))
+            case "links": try .links(.init(from: decoder))
+            default: .unknown(type)
+            }
     }
 
     var blockContent: BlockContent {
@@ -235,16 +236,17 @@ private enum RawInlineContent: Decodable {
     init(from decoder: any Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         let type = try c.decode(String.self, forKey: .type)
-        self = switch type {
-        case "text": try .text(.init(from: decoder))
-        case "codeVoice": try .codeVoice(.init(from: decoder))
-        case "image": try .image(.init(from: decoder))
-        case "reference": try .reference(.init(from: decoder))
-        case "strong": try .strong(.init(from: decoder))
-        case "emphasis": try .emphasis(.init(from: decoder))
-        case "inlineHead": try .inlineHead(.init(from: decoder))
-        default: .unknown(type)
-        }
+        self =
+            switch type {
+            case "text": try .text(.init(from: decoder))
+            case "codeVoice": try .codeVoice(.init(from: decoder))
+            case "image": try .image(.init(from: decoder))
+            case "reference": try .reference(.init(from: decoder))
+            case "strong": try .strong(.init(from: decoder))
+            case "emphasis": try .emphasis(.init(from: decoder))
+            case "inlineHead": try .inlineHead(.init(from: decoder))
+            default: .unknown(type)
+            }
     }
 
     var inlineContent: InlineContent {
@@ -309,16 +311,17 @@ private enum RawTopic: Decodable {
 
     init(from decoder: any Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
-        self = switch try c.decodeIfPresent(Kind.self, forKey: .kind) {
-        case .taskGroup:
-            try .taskGroup(TaskGroup(from: decoder))
+        self =
+            switch try c.decodeIfPresent(Kind.self, forKey: .kind) {
+            case .taskGroup:
+                try .taskGroup(TaskGroup(from: decoder))
 
-        case .relationships:
-            try .relationships(Relationship(from: decoder))
+            case .relationships:
+                try .relationships(Relationship(from: decoder))
 
-        case nil:
-            try .document(Document(from: decoder))
-        }
+            case nil:
+                try .document(Document(from: decoder))
+            }
     }
 
     var topic: TechnologyDetail.Topic {
@@ -364,18 +367,19 @@ private struct RawFragment: Decodable {
     }
 
     var fragment: TechnologyDetail.Fragment {
-        let kind: TechnologyDetail.Fragment.Kind = switch kind {
-        case .text: .text
-        case .keyword: .keyword
-        case .identifier: .identifier
-        case .label: .label
-        case .typeIdentifier: .typeIdentifier
-        case .genericParameter: .genericParameter
-        case .internalParam: .internalParam
-        case .externalParam: .externalParam
-        case .attribute: .attribute
-        case .number: .number
-        }
+        let kind: TechnologyDetail.Fragment.Kind =
+            switch kind {
+            case .text: .text
+            case .keyword: .keyword
+            case .identifier: .identifier
+            case .label: .label
+            case .typeIdentifier: .typeIdentifier
+            case .genericParameter: .genericParameter
+            case .internalParam: .internalParam
+            case .externalParam: .externalParam
+            case .attribute: .attribute
+            case .number: .number
+            }
         return .init(text: text, kind: kind, identifier: identifier)
     }
 }
