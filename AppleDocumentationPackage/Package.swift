@@ -77,7 +77,6 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-syntax.git", from: "603.0.1"),
 
         .package(url: "https://github.com/swiftty/XcodeGenBinary.git", from: "2.45.4"),
-        .package(url: "https://github.com/swiftty/SwiftLintBinary.git", exact: "0.63.2"),
         .package(url: "https://github.com/swiftty/swift-format-plugin.git", from: "1.0.0")
     ],
     targets: [
@@ -237,7 +236,6 @@ package.targets.forEach { target in
         ]
     }
     target.plugins += [
-        .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintBinary"),
         .plugin(name: "Lint", package: "swift-format-plugin")
     ]
 }

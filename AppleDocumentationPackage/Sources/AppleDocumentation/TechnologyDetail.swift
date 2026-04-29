@@ -220,7 +220,7 @@ extension TechnologyDetail {
             public var traits: [Trait]
 
             public enum Trait: String, RawRepresentable, Hashable, Sendable {
-                case x1 = "1x", x2 = "2x"  // swiftlint:disable:this identifier_name
+                case x1 = "1x", x2 = "2x"
                 case light, dark
             }
         }

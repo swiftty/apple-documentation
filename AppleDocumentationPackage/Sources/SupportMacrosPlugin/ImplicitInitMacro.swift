@@ -31,7 +31,6 @@ public struct ImplicitInitMacro: MemberMacro {
         members: MemberBlockItemListSyntax,
         accessLevel: String?
     ) throws -> InitializerDeclSyntax {
-        // swiftlint:disable:next large_tuple
         typealias Variable = (name: PatternSyntax, type: TypeSyntax, initializer: ExprSyntax?)
 
         let variables: [Variable] = members.compactMap { member in

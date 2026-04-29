@@ -16,7 +16,6 @@ private struct Result: Decodable {
     var technologies: [Technology]
     var diffAvailability: Technology.DiffAvailability
 
-    // swiftlint:disable:next function_body_length
     init(from decoder: any Decoder) throws {
         struct RawTechnology: Decodable {
             var title: String
