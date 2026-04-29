@@ -77,7 +77,8 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-syntax.git", from: "603.0.1"),
 
         .package(url: "https://github.com/swiftty/XcodeGenBinary.git", from: "2.45.4"),
-        .package(url: "https://github.com/swiftty/swift-format-plugin.git", from: "1.0.0")
+        .package(url: "https://github.com/swiftty/swift-format-plugin.git", from: "1.0.0"),
+        .package(url: "https://github.com/swiftty/swift-project-starter.git", from: "0.0.1")
     ],
     targets: [
         .target(
