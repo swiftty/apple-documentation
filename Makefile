@@ -23,3 +23,7 @@ unittest:
 .PHONY: resolve
 resolve:
 	$(call SWIFT, package) resolve
+
+.PHONY: init
+init:
+	$(call SWIFT, package) plugin --allow-writing-to-directory . starter init --project application --project-name apple-documentation --package-path $(PACKAGE_DIR)

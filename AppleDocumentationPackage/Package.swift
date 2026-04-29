@@ -1,4 +1,4 @@
-// swift-tools-version: 6.1
+// swift-tools-version: 6.3
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import CompilerPluginSupport
@@ -76,9 +76,11 @@ let package = Package(
 
         .package(url: "https://github.com/apple/swift-syntax.git", from: "603.0.1"),
 
-        .package(url: "https://github.com/swiftty/XcodeGenBinary.git", from: "2.45.4"),
-        .package(url: "https://github.com/swiftty/swift-format-plugin.git", from: "1.0.0"),
-        .package(url: "https://github.com/swiftty/swift-project-starter.git", from: "0.0.1")
+        .package(url: "https://github.com/swiftty/swift-project-starter.git", from: "0.0.1"),
+        // AUTO GENERATED ↓: swift-project-starter: deps
+        .package(url: "https://github.com/swiftty/XcodeGenBinary", from: "2.45.3"),
+        .package(url: "https://github.com/swiftty/swift-format-plugin", from: "1.0.0")
+        // AUTO GENERATED ↑: swift-project-starter: deps
     ],
     targets: [
         .target(
@@ -183,7 +185,7 @@ let package = Package(
                 "UIComponent"
             ]
         ),
-        
+
         .target(
             feature: .pages,
             name: "AllTechnologiesPage",
@@ -229,18 +231,6 @@ extension Optional {
     }
 }
 
-package.targets.forEach { target in
-    if target.type != .macro {
-        target.swiftSettings += [
-            .enableUpcomingFeature("ExistentialAny"),
-            .enableUpcomingFeature("InternalImportsByDefault")
-        ]
-    }
-    target.plugins += [
-        .plugin(name: "Lint", package: "swift-format-plugin")
-    ]
-}
-
 let isDEBUG = true
 if isDEBUG {
     package.targets.forEach {
@@ -251,3 +241,30 @@ if isDEBUG {
         ]
     }
 }
+
+// AUTO GENERATED ↓: swift-project-starter: settings
+for target in package.targets {
+    if [.executable, .test, .regular].contains(target.type) {
+        do {
+            var swiftSettings = target.swiftSettings ?? []
+            defer {
+                target.swiftSettings = swiftSettings
+            }
+            swiftSettings += [
+//                .defaultIsolation(MainActor.self),
+                .enableUpcomingFeature("InternalImportsByDefault"),
+                .enableUpcomingFeature("NonisolatedNonsendingByDefault")
+            ]
+        }
+        do {
+            var plugins = target.plugins ?? []
+            defer {
+                target.plugins = plugins
+            }
+            plugins += [
+                .plugin(name: "Lint", package: "swift-format-plugin")
+            ]
+        }
+    }
+}
+// AUTO GENERATED ↑: swift-project-starter: settings

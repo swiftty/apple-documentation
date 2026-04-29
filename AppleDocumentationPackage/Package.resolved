@@ -1,5 +1,5 @@
 {
-  "originHash" : "2f7c934368f0182c2333ef498a3f927e1b2d5926f0d259290b3fef818758e1d1",
+  "originHash" : "6762fb8b02a6a089136417610c3ae223300a5270e33be8d6f0c622456e3c92e2",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -152,6 +152,15 @@
       "state" : {
         "revision" : "0a5bc04095a675662cf24757cc0640aa2204253b",
         "version" : "1.0.2"
+      }
+    },
+    {
+      "identity" : "swift-project-starter",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftty/swift-project-starter.git",
+      "state" : {
+        "revision" : "29742c1fd07aad9f4ff904e39718597c707e7c7b",
+        "version" : "0.1.1"
       }
     },
     {
