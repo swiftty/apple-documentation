@@ -78,7 +78,7 @@ let package = Package(
 
         .package(url: "https://github.com/swiftty/swift-project-starter.git", from: "0.0.1"),
         // AUTO GENERATED ↓: swift-project-starter: deps
-        .package(url: "https://github.com/swiftty/XcodeGenBinary", from: "2.45.3"),
+        .package(url: "https://github.com/swiftty/XcodeGenBinary", from: "2.45.4"),
         .package(url: "https://github.com/swiftty/swift-format-plugin", from: "1.0.0")
         // AUTO GENERATED ↑: swift-project-starter: deps
     ],
