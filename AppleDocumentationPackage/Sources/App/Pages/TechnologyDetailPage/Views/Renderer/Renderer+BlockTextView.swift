@@ -1,7 +1,5 @@
 import SwiftUI
 import AppleDocumentation
-import Nuke
-import NukeUI
 import SupportMacros
 import UIComponent
 
@@ -9,6 +7,8 @@ extension EnvironmentValues {
     @Entry
     var references: [Technology.Identifier: TechnologyDetail.Reference] = [:]
 }
+
+// MARK: -
 
 struct BlockTextView: View {
     let block: BlockContent
@@ -51,45 +51,8 @@ extension View {
 }
 
 // MARK: -
+
 private struct InnerView: View {
-    enum Content: Hashable {
-        case paragraph(ParagraphItem)
-        case orderedList([[ListItem]])
-        case unorderedList([[ListItem]])
-        case aside(name: String?, style: String, contents: [Content])
-        case image([ImageVariant])
-        case codeListing(syntax: String?, code: [String])
-        case links(style: String, items: [TechnologyDetail.Reference])
-
-        struct ParagraphItem: Hashable {
-            var texts: [AttributedText]
-            var options = Options()
-
-            struct Options: Hashable {
-                var headingLevel: Int?
-            }
-        }
-
-        struct ListItem: Hashable {
-            var block: BlockContent
-            var attributes: AttributedText.Attributes
-        }
-
-        struct ImageVariant: Hashable {
-            var url: URL
-            var traits: Set<Trait>
-
-            enum Trait: Hashable {
-                case dark, light
-            }
-
-            func isMatching(scheme: ColorScheme) -> Bool {
-                return scheme == .dark && traits.contains(.dark)
-                    || scheme == .light && traits.contains(.light)
-            }
-        }
-    }
-
     let block: BlockContent
     let attributes: AttributedText.Attributes
 
@@ -99,23 +62,23 @@ private struct InnerView: View {
         ContentsRenderer(contents: contents)
     }
 
-    private var contents: [Content] {
-        var builder = ContentBuilder()
+    private var contents: [DocumentData] {
+        var builder = DocumentDataBuilder()
         buildContents(block, attributes: attributes, into: &builder)
         builder.commit()
         return builder.contents
     }
 
-    private struct ContentBuilder {
-        private(set) var contents: [Content] = []
+    private struct DocumentDataBuilder {
+        private(set) var contents: [DocumentData] = []
         private var cursor: [AttributedText] = []
 
-        mutating func insert(_ content: Content) {
+        mutating func insert(_ content: DocumentData) {
             commit()
             contents.append(content)
         }
 
-        mutating func insert(_ values: [AttributedText], content: Content? = nil) {
+        mutating func insert(_ values: [AttributedText], content: DocumentData? = nil) {
             cursor.append(contentsOf: values)
             if let content {
                 insert(content)
@@ -133,7 +96,7 @@ private struct InnerView: View {
     private func buildContents(
         _ block: BlockContent,
         attributes: AttributedText.Attributes,
-        into builder: inout ContentBuilder
+        into builder: inout DocumentDataBuilder
     ) {
         switch block {
         case .paragraph(let paragraph):
@@ -160,7 +123,7 @@ private struct InnerView: View {
                 ))
 
         case .aside(let aside):
-            var childBuilder = ContentBuilder()
+            var childBuilder = DocumentDataBuilder()
             for block in aside.contents {
                 buildContents(block, attributes: attributes, into: &childBuilder)
             }
@@ -170,7 +133,7 @@ private struct InnerView: View {
         case .orderedList(let unorderedList):
             let list = unorderedList.items.map { item in
                 item.content.map {
-                    Content.ListItem(block: $0, attributes: attributes)
+                    DocumentData.ListItem(block: $0, attributes: attributes)
                 }
             }
             builder.insert(.orderedList(list))
@@ -178,7 +141,7 @@ private struct InnerView: View {
         case .unorderedList(let unorderedList):
             let list = unorderedList.items.map { item in
                 item.content.map {
-                    Content.ListItem(block: $0, attributes: attributes)
+                    DocumentData.ListItem(block: $0, attributes: attributes)
                 }
             }
             builder.insert(.unorderedList(list))
@@ -202,7 +165,7 @@ private struct InnerView: View {
     private func buildContents(
         _ inline: InlineContent,
         attributes: AttributedText.Attributes,
-        into builder: inout ContentBuilder
+        into builder: inout DocumentDataBuilder
     ) {
         switch inline {
         case .text(let text):
@@ -273,146 +236,41 @@ private struct InnerView: View {
 }
 
 // MARK: -
+
 private struct ContentsRenderer: View {
-    let contents: [InnerView.Content]
+    let contents: [DocumentData]
 
     var body: some View {
         ForEach(contents, id: \.self) { content in
             switch content {
             case .paragraph(let paragraph):
-                Text { next in
-                    for text in paragraph.texts {
-                        next(text)
-                    }
-                }
-                .headingLevel(paragraph.options.headingLevel)
+                ParagraphView(paragraph: paragraph, headingLevel: paragraph.options.headingLevel)
 
             case .orderedList(let items):
-                VStack(alignment: .leading) {
-                    ForEach(items.indexed()) { items in
-                        HStack(alignment: .firstTextBaseline) {
-                            Text("\(items.index + 1).")
-                            VStack(alignment: .leading) {
-                                ForEach(items.element.indexed()) { item in
-                                    InnerView(block: item.element.block, attributes: item.element.attributes)
-                                }
-                            }
-                        }
-                    }
+                OrderedListView(items: items) { block, attrs in
+                    InnerView(block: block, attributes: attrs)
                 }
 
             case .unorderedList(let items):
-                VStack(alignment: .leading) {
-                    ForEach(items.indexed()) { items in
-                        HStack(alignment: .firstTextBaseline) {
-                            Text("•")
-                            VStack(alignment: .leading) {
-                                ForEach(items.element.indexed()) { item in
-                                    InnerView(block: item.element.block, attributes: item.element.attributes)
-                                }
-                            }
-                        }
-                    }
+                UnorderedListView(items: items) { block, attrs in
+                    InnerView(block: block, attributes: attrs)
                 }
 
             case .aside(let name, let style, let contents):
-                asideView(name: name, style: style, contents: contents)
+                AsideView(name: name, style: style) {
+                    ContentsRenderer(contents: contents)
+                }
 
             case .image(let variants):
-                HStack {
-                    ImageView(variants: variants)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                }
+                ImageView(variants: variants)
+                    .frame(maxWidth: .infinity, alignment: .center)
 
             case .codeListing(_, let code):
-                ScrollView(.horizontal, showsIndicators: false) {
-                    Text(code.joined(separator: "\n"))
-                        .fixedSize(horizontal: false, vertical: true)
-                        .tint(.init(r: 218, g: 186, b: 255))
-                }
-                .contentMargins(16)
-                .background {
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .fill(.tertiary)
-                }
+                CodeListView(syntax: nil, code: code)
 
-            case .links(_, let items):
-                VStack(alignment: .leading, spacing: 16) {
-                    ForEach(items.indexed()) { item in
-                        ReferenceView(reference: item.element)
-                    }
-                }
+            case .links(let style, let items):
+                LinksView(style: style, items: items)
             }
         }
-    }
-
-    private func asideView(name: String?, style: String, contents: [InnerView.Content]) -> some View {
-        func parameters() -> (name: String?, fill: AnyShapeStyle, border: AnyShapeStyle) {
-            switch style {
-            case "important":
-                return (
-                    name ?? "Important",
-                    AnyShapeStyle(.yellow.opacity(0.2)),
-                    AnyShapeStyle(.yellow)
-                )
-            default:
-                return (
-                    name,
-                    AnyShapeStyle(.tertiary.opacity(0.3)),
-                    AnyShapeStyle(.quaternary)
-                )
-            }
-        }
-
-        let style = parameters()
-
-        return VStack(alignment: .leading) {
-            if let name = style.name {
-                Text(name)
-                    .foregroundStyle(.primary)
-                    .font(.body.bold())
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            ContentsRenderer(contents: contents)
-        }
-        .padding()
-        .tint(.primary)
-        .background {
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(style.fill)
-                .stroke(style.border)
-        }
-    }
-}
-
-private struct ImageView: View {
-    @Environment(\.displayScale) var displayScale
-    @Environment(\.colorScheme) var colorScheme
-
-    let variants: [InnerView.Content.ImageVariant]
-
-    var body: some View {
-        if let url = findURL() {
-            LazyImage(url: url) { state in
-                state.image?
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(maxWidth: state.imageContainer.map { $0.image.size.width / displayScale })
-            }
-        } else {
-            Color.clear
-                .overlay {
-                    Image(systemName: "exclamationmark.triangle")
-                }
-                .aspectRatio(CGSize(width: 3, height: 2), contentMode: .fit)
-                .border(.yellow)
-        }
-    }
-
-    private func findURL() -> URL? {
-        for variant in variants where variant.isMatching(scheme: colorScheme) {
-            return variant.url
-        }
-        return variants.first?.url
     }
 }
