@@ -12,10 +12,14 @@ enum Feature {
 
     var path: String {
         switch self {
-        case .app: "Sources/App"
-        case .dependencies: "Sources/App/Dependencies"
-        case .pages: "Sources/App/Pages"
-        case .developments: "Sources/App/Developments"
+        case .app:
+            "Sources/App"
+        case .dependencies:
+            "Sources/App/Dependencies"
+        case .pages:
+            "Sources/App/Pages"
+        case .developments:
+            "Sources/App/Developments"
         }
     }
 }
@@ -234,8 +238,12 @@ extension Optional {
 let isDEBUG = true
 if isDEBUG {
     package.targets.forEach {
-        guard $0.path?.hasPrefix("Sources/App") ?? false else { return }
-        guard $0.name != "DevelopmentAssets" else { return }
+        guard $0.path?.hasPrefix("Sources/App") ?? false else {
+            return
+        }
+        guard $0.name != "DevelopmentAssets" else {
+            return
+        }
         $0.dependencies += [
             "DevelopmentAssets"
         ]
@@ -251,9 +259,13 @@ for target in package.targets {
                 target.swiftSettings = swiftSettings
             }
             swiftSettings += [
-.defaultIsolation(MainActor.self),
+                .defaultIsolation(MainActor.self),
                 .enableUpcomingFeature("InternalImportsByDefault"),
-                .enableUpcomingFeature("NonisolatedNonsendingByDefault")
+                .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+                .enableUpcomingFeature("MemberImportVisibility"),
+                .enableUpcomingFeature("InferIsolatedConformances"),
+                .enableUpcomingFeature("ImmutableWeakCaptures"),
+                .enableUpcomingFeature("ExistentialAny")
             ]
         }
         do {
