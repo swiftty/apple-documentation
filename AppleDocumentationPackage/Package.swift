@@ -74,7 +74,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/kean/Nuke.git", from: "13.0.4", traits: [.defaults]),
+        .package(url: "https://github.com/kean/Nuke.git", from: "13.0.5", traits: [.defaults]),
         .package(url: "https://github.com/apple/swift-algorithms.git", from: "1.2.1"),
         .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "12.12.1"),
 
