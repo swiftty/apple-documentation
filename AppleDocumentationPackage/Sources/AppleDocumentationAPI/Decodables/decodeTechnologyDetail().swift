@@ -389,7 +389,7 @@ private struct RawImageVariant: Decodable {
     var traits: [Trait]
 
     enum Trait: String, RawRepresentable, Decodable {
-        case x1 = "1x", x2 = "2x"
+        case x1 = "1x", x2 = "2x", x3 = "3x"
         case light, dark
     }
 
@@ -400,6 +400,7 @@ private struct RawImageVariant: Decodable {
                 switch $0 {
                 case .x1: .x1
                 case .x2: .x2
+                case .x3: .x3
                 case .dark: .dark
                 case .light: .light
                 }
