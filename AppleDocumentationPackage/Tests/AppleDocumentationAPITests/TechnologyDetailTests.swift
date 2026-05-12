@@ -18,7 +18,7 @@ struct TechnologyDetailTests {
      */
     @Test(arguments: [
         "accelerate",
-        // "accessibility",
+        "accessibility",
         "accessoryliveactivities",
         "accessorynotifications",
         "accessorysetupkit",
