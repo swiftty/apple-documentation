@@ -4,13 +4,13 @@ import AppleDocumentation
 @testable import AppleDocumentationAPI
 
 struct TechnologyDetailTests {
-    /**
+    /*
      ```
      curl -s https://developer.apple.com/tutorials/data/documentation/technologies.json \
      | jq -r '
        .sections[].groups[].technologies[].destination.identifier
        | select(startswith("doc://"))
-       | (split("/") | last | ascii_downcase) as $xxx
+       | sub("doc://[^/]*\/documentation/"; "") | ascii_downcase as $xxx
        | "https://developer.apple.com/tutorials/data/documentation/\($xxx).json"
      ' \
      | sort -u
