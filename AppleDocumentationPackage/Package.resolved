@@ -159,8 +159,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftty/swift-project-starter.git",
       "state" : {
-        "revision" : "1eb72923d390e5f38e6bb413e352411843b38305",
-        "version" : "0.2.1"
+        "revision" : "6256933eec18d026b28bdc64e661b9e9962df8eb",
+        "version" : "0.3.0"
       }
     },
     {
