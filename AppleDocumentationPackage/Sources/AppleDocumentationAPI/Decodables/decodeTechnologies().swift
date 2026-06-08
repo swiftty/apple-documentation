@@ -2,7 +2,7 @@ public import Foundation
 public import AppleDocumentation
 import Algorithms
 
-public func decodeTechnologies(from data: Data) throws -> (
+nonisolated public func decodeTechnologies(from data: Data) throws -> (
     technologies: [Technology],
     diffAvailability: Technology.DiffAvailability
 ) {
@@ -12,7 +12,7 @@ public func decodeTechnologies(from data: Data) throws -> (
 
 // MARK: -
 
-private struct Result: Decodable {
+nonisolated private struct Result: Decodable {
     var technologies: [Technology]
     var diffAvailability: Technology.DiffAvailability
 

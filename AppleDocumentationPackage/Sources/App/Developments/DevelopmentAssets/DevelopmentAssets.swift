@@ -15,7 +15,7 @@ package import AppleDocumentation
 import AppleDocumentationAPI
 
 extension TechnologyDetail {
-    package static func from(json data: Data?) throws -> Self {
+    nonisolated package static func from(json data: Data?) throws -> Self {
         try decodeTechnologyDetail(from: data ?? Data())
     }
 }
