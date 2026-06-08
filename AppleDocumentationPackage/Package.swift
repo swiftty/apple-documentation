@@ -78,7 +78,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-algorithms.git", from: "1.2.1"),
         .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "12.14.0"),
 
-        .package(url: "https://github.com/apple/swift-syntax.git", from: "603.0.1"),
+        .package(url: "https://github.com/apple/swift-syntax.git", from: "603.0.2"),
 
         .package(url: "https://github.com/swiftty/swift-project-starter.git", from: "0.3.0"),
         // AUTO GENERATED ↓: swift-project-starter: deps
