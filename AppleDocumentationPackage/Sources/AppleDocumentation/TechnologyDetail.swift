@@ -174,20 +174,20 @@ extension TechnologyDetail {
         case relationships(Relationship)
 
         @ImplicitInit
-        public struct Document: Hashable, Sendable {
+        nonisolated public struct Document: Hashable, Sendable {
             public var title: String
             public var identifiers: [Technology.Identifier]
         }
 
         @ImplicitInit
-        public struct TaskGroup: Hashable, Sendable {
+        nonisolated public struct TaskGroup: Hashable, Sendable {
             public var title: String
             public var identifiers: [Technology.Identifier]
             public var anchor: String
         }
 
         @ImplicitInit
-        public struct Relationship: Hashable, Sendable {
+        nonisolated public struct Relationship: Hashable, Sendable {
             public var title: String
             public var identifiers: [Technology.Identifier]
             public var type: String

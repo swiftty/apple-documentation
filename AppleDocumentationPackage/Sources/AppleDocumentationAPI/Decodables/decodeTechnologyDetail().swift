@@ -1,12 +1,12 @@
 public import Foundation
 public import AppleDocumentation
 
-public func decodeTechnologyDetail(from data: Data) throws -> TechnologyDetail {
+nonisolated public func decodeTechnologyDetail(from data: Data) throws -> TechnologyDetail {
     let result = try JSONDecoder().decode(Result.self, from: data)
     return result.technologyDetail
 }
 
-private struct Result: Decodable {
+nonisolated private struct Result: Decodable {
     var technologyDetail: TechnologyDetail
 
     init(from decoder: any Decoder) throws {
@@ -57,7 +57,7 @@ private struct Result: Decodable {
     }
 }
 
-private struct RawTechnologyDetail: Decodable {
+nonisolated private struct RawTechnologyDetail: Decodable {
     var metadata: RawMetadata
     var abstract: [RawInlineContent]?
     var primaryContentSections: [PrimaryContentSection]?
@@ -74,7 +74,7 @@ private struct RawTechnologyDetail: Decodable {
     }
 }
 
-private struct RawMetadata: Decodable {
+nonisolated private struct RawMetadata: Decodable {
     var title: String
     var role: String
     var roleHeading: String?
@@ -89,7 +89,7 @@ private struct RawMetadata: Decodable {
     }
 }
 
-private enum RawBlockContent: Decodable {
+nonisolated private enum RawBlockContent: Decodable {
     case paragraph(Paragraph)
     case heading(Heading)
     case aside(Aside)
@@ -190,7 +190,7 @@ private enum RawBlockContent: Decodable {
     }
 }
 
-private enum RawInlineContent: Decodable {
+nonisolated private enum RawInlineContent: Decodable {
     case text(Text)
     case codeVoice(CodeVoice)
     case image(Image)
@@ -278,7 +278,7 @@ private enum RawInlineContent: Decodable {
     }
 }
 
-private enum RawTopic: Decodable {
+nonisolated private enum RawTopic: Decodable {
     case document(Document)
     case taskGroup(TaskGroup)
     case relationships(Relationship)
@@ -336,13 +336,13 @@ private enum RawTopic: Decodable {
     }
 }
 
-private struct RawSeeAlso: Decodable {
+nonisolated private struct RawSeeAlso: Decodable {
     var title: String
     var generated: Bool?
     var identifiers: [Technology.Identifier]
 }
 
-private struct RawReference: Decodable {
+nonisolated private struct RawReference: Decodable {
     var identifier: Technology.Identifier
     var title: String?
     var type: String
@@ -356,7 +356,7 @@ private struct RawReference: Decodable {
     var beta: Bool?
 }
 
-private struct RawFragment: Decodable {
+nonisolated private struct RawFragment: Decodable {
     var text: String
     var kind: Kind
     var identifier: Technology.Identifier?
@@ -384,7 +384,7 @@ private struct RawFragment: Decodable {
     }
 }
 
-private struct RawImageVariant: Decodable {
+nonisolated private struct RawImageVariant: Decodable {
     var url: URL
     var traits: [Trait]
 
@@ -409,7 +409,7 @@ private struct RawImageVariant: Decodable {
     }
 }
 
-private struct RawDeclaration: Decodable {
+nonisolated private struct RawDeclaration: Decodable {
     var languages: [String]
     var platforms: [String]
     var tokens: [RawFragment]
@@ -419,7 +419,7 @@ private struct RawDeclaration: Decodable {
     }
 }
 
-private struct RawParameter: Decodable {
+nonisolated private struct RawParameter: Decodable {
     var name: String
     var content: [RawBlockContent]
 

@@ -26,6 +26,7 @@ struct BlockTextView: View {
     var body: some View {
         VStack(alignment: .leading) {
             InnerView(block: block, attributes: attributes)
+                .textSelection(.enabled)
         }
     }
 }
