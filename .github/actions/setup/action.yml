@@ -20,7 +20,7 @@ runs:
       shell: bash
       run: |
         # renovate-xcodereleases: runs-on=macos-26
-        sudo xcode-select --switch "/Applications/Xcode_26.5.app"
+        sudo xcode-select --switch "/Applications/Xcode_26.6.app"
     - name: Prepare project
       shell: bash
       run: |
