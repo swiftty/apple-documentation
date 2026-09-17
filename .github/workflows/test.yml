@@ -2,13 +2,13 @@ name: test
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
-  mac-os:
+  unittest:
     runs-on: macos-26
     steps:
       - uses: actions/checkout@v7
