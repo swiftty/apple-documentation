@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/firebase-ios-sdk.git",
       "state" : {
-        "revision" : "42e81d245e30e49ea6a5830cf2842d44a1591270",
-        "version" : "12.15.0"
+        "revision" : "8c29ca981990a32e626c8617544fa65d22b1834f",
+        "version" : "12.19.2"
       }
     },
     {
@@ -114,8 +114,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kean/Nuke.git",
       "state" : {
-        "revision" : "158366dcdfbda52da33d419ef16ad2d00a609e9e",
-        "version" : "13.1.0"
+        "revision" : "30f7a7e72e0607d304fbf69c799474bd5fb6d1ce",
+        "version" : "13.2.0"
       }
     },
     {
