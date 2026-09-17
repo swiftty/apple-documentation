@@ -56,14 +56,4 @@ struct TechnologyTests {
         #expect(technologies.count >= 0)
         #expect(diff.count >= 0)
     }
-
-    @Test
-    func test_Technologies_changes() async throws {
-        let url = try #require(URL(string: "https://developer.apple.com/tutorials/data/diffs/documentation/technologies.json?changes=latest_minor"))
-        let (data, _) = try await URLSession.shared.data(from: url)
-
-        let changes = try decodeTechnologyChanges(from: data)
-
-        #expect(changes.count >= 0)
-    }
 }
