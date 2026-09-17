@@ -104,7 +104,6 @@ nonisolated private struct Result: Decodable {
         struct Root: Decodable {
             var sections: [RawSection]
             var references: [Technology.Identifier: RawReference]
-            var diffAvailability: [Technology.DiffAvailability.Key: Technology.DiffAvailability.Payload]
         }
 
         let root = try Root(from: decoder)
@@ -135,6 +134,6 @@ nonisolated private struct Result: Decodable {
                     )
                 )
             }
-        diffAvailability = .init(root.diffAvailability)
+        diffAvailability = .init([:])
     }
 }
