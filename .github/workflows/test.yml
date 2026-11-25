@@ -9,7 +9,7 @@ on:
 
 jobs:
   unittest:
-    runs-on: macos-26
+    runs-on: xcode-27
     steps:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
